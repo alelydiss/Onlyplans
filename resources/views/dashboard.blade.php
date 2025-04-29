@@ -1,6 +1,8 @@
-<x-app-layout>
+@extends('layouts.app')
 
-  <body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white font-sans antialiased">
+@section('content')
+
+  <div class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white font-sans antialiased">
   
   <!-- Banner -->
   <div class="text-center bg-cover bg-center py-20 md:py-32" style="background-image: url('img/banner1.png');">
@@ -20,7 +22,7 @@
       </div>
       </div>
   </div>
-
+  
   <!-- Categorías -->
   <section class="px-4 md:px-6 py-8 md:py-10">
     <h3 class="text-lg md:text-xl font-bold mb-4 md:mb-6">Explora todas las <span class="text-purple-600">Categorías</span></h3>
@@ -187,27 +189,5 @@
       </a>
     </div>
   </section>
-
-
-  <!-- Footer -->
-  <footer class="bg-gray-100 dark:bg-gray-800 text-sm text-gray-600 dark:text-gray-400 px-4 md:px-6 py-8 md:py-10">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-    <div>
-      <h4 class="font-bold mb-2">OnlyPlans</h4>
-      <p>Descubre eventos y actividades cerca de ti.</p>
-    </div>
-    <div>
-      <h4 class="font-bold mb-2">Enlaces</h4>
-      <ul>
-      <li><a href="#" class="hover:underline">Términos</a></li>
-      <li><a href="#" class="hover:underline">Política de Privacidad</a></li>
-      </ul>
-    </div>
-    <div>
-      <h4 class="font-bold mb-2">Síguenos</h4>
-      <p>Twitter, Instagram, Facebook</p>
-    </div>
-    </div>
-  </footer>
-  </body>
-</x-app-layout>
+</div>
+  @endsection

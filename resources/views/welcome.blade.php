@@ -4,20 +4,33 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>OnlyPlans</title>
+    <link rel="icon" href="{{ asset('img/logo2.png') }}" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white font-sans antialiased">
     <!-- Header -->
-    <header class="bg-purple-700 dark:bg-gray-800 text-white px-6 py-4">
-      <div class="flex justify-between items-center">
-      <img src="img/logo.png" alt="Logo" class="w-75 h-6 object-contain" />
-      <nav class="space-x-6">
-        <a href="{{ route('login') }}" class="bg-white text-purple-700 px-4 py-1  rounded hover:bg-gray-200 font-semibold transition">
-        Iniciar sesión
-        </a>
-      </nav>
+    <header class="bg-[#1f1a38] dark:bg-gray-800 text-white shadow-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+    
+          <!-- Logo -->
+          <div class="flex items-center space-x-3">
+            <a href="{{ route('welcome') }}" class="flex items-center space-x-2">
+              <img src="/img/logo.png" alt="Logo Onlyplans" class="h-6 w-75 object-contain">
+            </a>
+          </div>
+    
+          <!-- Botón de login -->
+          <nav class="space-x-6">
+            <a href="{{ route('login') }}" class="bg-white text-purple-700 px-4 py-1 rounded hover:bg-gray-200 font-semibold transition">
+              Iniciar sesión
+            </a>
+          </nav>
+    
+        </div>
       </div>
     </header>
+    
 
     <!-- Banner -->
     <div class="text-center bg-cover bg-center py-32" style="background-image: url('img/banner1.png');">
