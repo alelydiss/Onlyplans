@@ -1,39 +1,93 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('password.store') }}">
-        @csrf
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Onlyplans - Restablecer Contraseña</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" />
+</head>
+<body class="bg-white dark:bg-gray-900 min-h-screen flex items-center justify-center p-4">
 
-        <!-- Password Reset Token -->
-        <input type="hidden" name="token" value="{{ $request->route('token') }}">
+  <div class="w-full max-w-3xl shadow-lg rounded-xl overflow-hidden animate-fade-in bg-white dark:bg-gray-900 p-8 text-gray-800 dark:text-gray-100 relative">
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $request->email)" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+    <!-- Botón cerrar -->
+    <a href="{{ route('welcome') }}" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 dark:hover:text-white text-2xl">
+      &times;
+    </a>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-            <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+    <h2 class="text-2xl font-bold mb-4">Restablecer Contraseña</h2>
+    <p class="mb-6 text-sm text-gray-600 dark:text-gray-400">
+      Introduce tu nueva contraseña y confírmala a continuación.
+    </p>
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+    <form method="POST" action="{{ route('password.store') }}" class="space-y-4">
+      @csrf
 
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                                type="password"
-                                name="password_confirmation" required autocomplete="new-password" />
+      <!-- Token oculto -->
+      <input type="hidden" name="token" value="{{ $request->route('token') }}">
 
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
+      <!-- Email -->
+      <div>
+        <label for="email" class="block text-sm font-medium">Correo Electrónico</label>
+        <input id="email" type="email" name="email" value="{{ old('email', $request->email) }}" required autofocus
+          class="w-full mt-1 px-4 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:ring-2 focus:ring-purple-500 dark:text-white placeholder-gray-500" />
+        @error('email')
+          <div class="text-sm text-red-500 mt-1">{{ $message }}</div>
+        @enderror
+      </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Reset Password') }}
-            </x-primary-button>
-        </div>
+      <!-- Contraseña -->
+      <div>
+        <label for="password" class="block text-sm font-medium">Nueva Contraseña</label>
+        <input id="password" type="password" name="password" required autocomplete="new-password"
+          class="w-full mt-1 px-4 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:ring-2 focus:ring-purple-500 dark:text-white placeholder-gray-500" />
+        @error('password')
+          <div class="text-sm text-red-500 mt-1">{{ $message }}</div>
+        @enderror
+      </div>
+
+      <!-- Confirmar contraseña -->
+      <div>
+        <label for="password_confirmation" class="block text-sm font-medium">Confirmar Contraseña</label>
+        <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password"
+          class="w-full mt-1 px-4 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:ring-2 focus:ring-purple-500 dark:text-white placeholder-gray-500" />
+        @error('password_confirmation')
+          <div class="text-sm text-red-500 mt-1">{{ $message }}</div>
+        @enderror
+      </div>
+
+      <!-- Botón -->
+      <div class="flex justify-end">
+        <button type="submit"
+          class="bg-[#1f1a38] dark:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-[#2d255c] dark:hover:bg-purple-800 transition">
+          Restablecer Contraseña
+        </button>
+      </div>
     </form>
-</x-guest-layout>
+  </div>
+
+  <style>
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+
+    @layer utilities {
+      .animate-fade-in {
+        animation: fade-in 0.6s ease-out forwards;
+      }
+
+      @keyframes fade-in {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    }
+  </style>
+</body>
+</html>

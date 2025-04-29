@@ -8,10 +8,10 @@
   </head>
   <body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white font-sans antialiased">
     <!-- Header -->
-    <header class="bg-purple-700 dark:bg-gray-800 text-white px-6 py-4 h-[90px]">
+    <header class="bg-purple-700 dark:bg-gray-800 text-white px-6 py-4">
       <div class="flex justify-between items-center">
-      <img src="img/logo.png" alt="Logo" class="w-48 object-contain mt-[-65px]" />
-      <nav class="space-x-6 mt-[-65px]">
+      <img src="img/logo.png" alt="Logo" class="w-75 h-6 object-contain" />
+      <nav class="space-x-6">
         <a href="{{ route('login') }}" class="bg-white text-purple-700 px-4 py-1  rounded hover:bg-gray-200 font-semibold transition">
         Iniciar sesión
         </a>

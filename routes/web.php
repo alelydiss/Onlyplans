@@ -4,11 +4,6 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\GoogleController;
 
-Route::get('/login/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
-Route::get('/login/google/callback', [GoogleController::class, 'handleGoogleCallback']);
-
-
-
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
@@ -27,4 +22,16 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::get('/mapa', function () {
+    return view('mapa');
+})->name('mapa');
+
 require __DIR__.'/auth.php';
+
+Route::get('/auth/google/redirect', [GoogleController::class, 'redirect'])->name('google.redirect');
+
+Route::get('/auth/google/callback', [GoogleController::class, 'callback'])->name('google.callback');
+
+Route::get('/evento', function () {
+    return view('evento');
+});

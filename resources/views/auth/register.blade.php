@@ -27,10 +27,10 @@
 
       <h2 class="text-2xl font-bold mb-6">Crear Cuenta</h2>
 
-      <button class="w-full flex items-center justify-center gap-2 border border-gray-300 dark:border-gray-600 rounded-lg py-2 mb-6 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+      <a href="{{ route('google.redirect') }}" class="w-full flex items-center justify-center gap-2 border border-gray-300 dark:border-gray-600 rounded-lg py-2 mb-6 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
         <i class="bi bi-google"></i>
-        Registrarse con Google
-      </button>
+        Registrate con Google
+      </a>
 
       <form method="POST" action="{{ route('register') }}" class="space-y-4">
         @csrf

@@ -27,7 +27,7 @@
 
       <h2 class="text-2xl font-bold mb-6">Iniciar Sesión</h2>
 
-      <a href="{{ route('google.login') }}" class="w-full flex items-center justify-center gap-2 border border-gray-300 dark:border-gray-600 rounded-lg py-2 mb-6 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+      <a href="{{ route('google.redirect') }}" class="w-full flex items-center justify-center gap-2 border border-gray-300 dark:border-gray-600 rounded-lg py-2 mb-6 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
         <i class="bi bi-google"></i>
         Iniciar sesión con Google
       </a>
