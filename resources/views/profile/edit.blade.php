@@ -1,13 +1,7 @@
-<!DOCTYPE html>
-<html lang="es" x-data="themeSwitcher()" x-init="initTheme()" :class="{ 'dark': darkMode }">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Perfil - Onlyplans</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/alpinejs" defer></script>
-</head>
-<body class="bg-gray-100 dark:bg-gray-900 min-h-screen text-gray-800 dark:text-gray-100">
+@extends('layouts.app')
+
+@section('content')
+<div class="bg-gray-100 dark:bg-gray-900 min-h-screen text-gray-800 dark:text-gray-100">
 
   <!-- Header -->
   <header class="bg-white dark:bg-gray-800 shadow">
@@ -15,13 +9,6 @@
       <h2 class="text-xl font-semibold leading-tight">
         {{ __('Perfil') }}
       </h2>
-      <!-- Botón de tema -->
-      <button id="darkModeToggle" class="fixed bottom-4 right-4 p-3 rounded-full bg-purple-600 text-white shadow-lg z-50">
-        <span id="icon">🌙</span>
-      </button>
-      
-      
-      
     </div>
   </header>
 
@@ -52,24 +39,6 @@
 
     </div>
   </main>
-  <script>
-    const html = document.documentElement;
-    const toggleBtn = document.getElementById('darkModeToggle');
-    const icon = document.getElementById('icon');
-  
-    // Cargar el tema guardado
-    if (localStorage.getItem('theme') === 'dark') {
-      html.classList.add('dark');
-      icon.textContent = '☀️';
-    }
-  
-    toggleBtn.addEventListener('click', () => {
-      html.classList.toggle('dark');
-      const isDark = html.classList.contains('dark');
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-      icon.textContent = isDark ? '☀️' : '🌙';
-    });
-  </script>
+</div>
+@endsection
 
-</body>
-</html>

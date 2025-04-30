@@ -1,14 +1,7 @@
-<!-- resources/views/evento.blade.php -->
+@extends('layouts.app')
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Puro Latino 2025</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-50">
+@section('content')
+<div class="bg-gray-50">
 
     <!-- Imagen Principal -->
     <div class="w-full">
@@ -100,9 +93,7 @@
     </div>
 
     <!-- Footer -->
-    <footer class="mt-12 p-6 text-center text-gray-500 text-sm">
-        © {{ date('Y') }} OnlyPlans. Todos los derechos reservados.
-    </footer>
 
-</body>
-</html>
+
+</div>
+@endsection
