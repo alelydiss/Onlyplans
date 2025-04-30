@@ -35,3 +35,8 @@ Route::get('/auth/google/callback', [GoogleController::class, 'callback'])->name
 Route::get('/evento', function () {
     return view('evento');
 });
+
+Route::get('/password/success', function () {
+    return view('auth.passwords.success');
+})->name('password.success');
+
