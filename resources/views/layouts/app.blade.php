@@ -21,6 +21,7 @@
     </button>
     
      <!-- Footer -->
+     @if (!request()->routeIs('profile.edit'))
      <footer class="bg-gray-100 dark:bg-gray-800 text-sm text-gray-600 dark:text-gray-400 px-4 md:px-6 py-10">
         <div class="max-w-5xl mx-auto text-center space-y-10">
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -63,6 +64,7 @@
           </div>
         </div>
       </footer>
+        @endif
       
 </body>
 <script>
