@@ -3,10 +3,13 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="{{ asset('img/logo2.png') }}" type="image/png">
     <title>Onlyplans</title>
     @vite('resources/css/app.css')
+    @vite('resources/js/app.js')
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src=""></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
 </head>
@@ -15,14 +18,15 @@
 
     <main>
         @yield('content')
-    </main>
-    <button id="toggle-dark" class="fixed bottom-4 right-4 w-14 h-14 bg-white dark:bg-gray-800 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-700 rounded-full shadow-xl hover:scale-105 hover:shadow-2xl transition-all duration-300 ease-in-out flex items-center justify-center text-xl">
+        
+      </main>
+      <button id="toggle-dark" class="fixed bottom-4 right-4 w-14 h-14 bg-white dark:bg-gray-800 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-700 rounded-full shadow-xl hover:scale-105 hover:shadow-2xl transition-all duration-300 ease-in-out flex items-center justify-center text-xl">
         <span id="theme-icon" class="transition-transform duration-300">🌙</span>
-    </button>
-    
-     <!-- Footer -->
-     @if (!request()->routeIs('profile.edit'))
-     <footer class="bg-gray-100 dark:bg-gray-800 text-sm text-gray-600 dark:text-gray-400 px-4 md:px-6 py-10">
+      </button>
+      
+      <!-- Footer -->
+      @if (!request()->routeIs('profile.edit'))
+      <footer class="bg-gray-100 dark:bg-gray-800 text-sm text-gray-600 dark:text-gray-400 px-4 md:px-6 py-10">
         <div class="max-w-5xl mx-auto text-center space-y-10">
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <!-- OnlyPlans -->
@@ -30,7 +34,7 @@
               <h4 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">OnlyPlans</h4>
               <p class="text-gray-600 dark:text-gray-400">Descubre eventos y actividades cerca de ti.</p>
             </div>
-      
+            
             <!-- Enlaces -->
             <div>
               <h4 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Enlaces</h4>
@@ -39,7 +43,7 @@
                 <li><a href="#" class="hover:text-indigo-600 hover:underline transition">Política de Privacidad</a></li>
               </ul>
             </div>
-      
+            
             <!-- Redes Sociales -->
             <div>
               <h4 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Síguenos</h4>
@@ -56,22 +60,23 @@
               </div>
             </div>
           </div>
-      
+          
           <hr class="border-gray-300 dark:border-gray-700">
-      
+          
           <div class="text-gray-500 text-xs">
             © {{ date('Y') }} <span class="font-medium">OnlyPlans</span>. Todos los derechos reservados.
           </div>
         </div>
       </footer>
-        @endif
+      @endif
       
-</body>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
+      @yield('scripts')
+    </body>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
         const button = document.getElementById('toggle-dark');
         const icon = document.getElementById('theme-icon');
-
+        
         // Cambiar el tema
         button.addEventListener('click', () => {
             document.documentElement.classList.toggle('dark');

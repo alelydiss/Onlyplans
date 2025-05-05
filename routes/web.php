@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\ChatController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -40,3 +41,4 @@ Route::get('/password/success', function () {
     return view('auth.passwords.success');
 })->name('password.success');
 
+Route::post('/send-message', [ChatController::class, 'send']);

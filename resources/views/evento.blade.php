@@ -11,7 +11,7 @@
 
     <!-- Contenedor principal -->
     <div class="max-w-5xl mx-auto px-6 py-10 space-y-10">
-        <!-- Resto del contenido... -->
+         <!-- Resto del contenido... -->
 
 
         <!-- Cabecera: Título + Acciones -->
@@ -105,35 +105,81 @@
             </p>
         </div>
 
-        <!-- Chat vacío -->
+        <!-- Chat -->
         <div class="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg">
             <h3 class="text-lg font-semibold mb-4">Chat</h3>
-            <form class="space-y-4">
+            <form id="chat-form" class="space-y-4">
                 <div class="flex items-center space-x-2">
-                    <input type="text" name="message" class="flex-1 p-2 border border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Escribe tu mensaje...">
+                    <input id="chat-input" type="text" name="message" class="flex-1 p-2 border border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Escribe tu mensaje...">
                     <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition">Enviar</button>
                 </div>
             </form>
+            <!-- Aquí se insertarán los mensajes recibidos -->
+            <div id="chat-messages" class="mt-4 space-y-2"></div>
         </div>
 
         <!-- Otros Eventos -->
         <div class="mb-20">
             <h2 class="text-2xl font-semibold mb-6">Otros Eventos que Podrían Gustarte</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                @foreach ([
-                    ['titulo' => 'Fiesta de Verano en la Playa', 'fecha' => '25 - 26 Jul', 'ubicacion' => 'Playa de la Victoria'],
-                    ['titulo' => 'Ruta en bici por el Río', 'fecha' => '31 Jul', 'ubicacion' => 'Sevilla - La Rinconada'],
-                    ['titulo' => 'Mercado de Artesanía Local', 'fecha' => '7 Ago', 'ubicacion' => 'Centro Histórico']
-                ] as $evento)
+                @foreach ([ /* datos omitidos */ ] as $evento)
                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 hover:shadow-lg transition duration-300">
-                    <img src="https://via.placeholder.com/400x200" class="rounded mb-2" alt="{{ $evento['titulo'] }}">
+                    <img src="{{ asset('img/evento-placeholder.jpg') }}" class="rounded mb-2" alt="{{ $evento['titulo'] }}">
                     <h3 class="font-semibold">{{ $evento['titulo'] }}</h3>
                     <p class="text-gray-600 dark:text-gray-400 text-sm">{{ $evento['fecha'] }} - {{ $evento['ubicacion'] }}</p>
                 </div>
                 @endforeach
             </div>
         </div>
-
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('chat-form');
+    const input = document.getElementById('chat-input');
+    const messagesContainer = document.getElementById('chat-messages');
+
+    if (!form || !input || !messagesContainer) {
+        console.error("No se encontró el formulario, input o contenedor de mensajes.");
+        return;
+    }
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const message = input.value.trim();
+        if (!message) return;
+
+        try {
+            await fetch('/send-message', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                },
+                body: JSON.stringify({ message }),
+            });
+
+            input.value = '';
+        } catch (error) {
+            console.error('Error enviando mensaje:', error);
+        }
+    });
+
+    if (typeof Echo !== 'undefined') {
+        Echo.channel('chat')
+            .listen('.message.sent', (e) => {
+                const div = document.createElement('div');
+                div.textContent = e.message;
+                div.className = "p-2 bg-white dark:bg-gray-700 rounded text-sm shadow";
+                messagesContainer.appendChild(div);
+            });
+    } else {
+        console.warn('Echo no está disponible. Asegúrate de incluir app.js y configurarlo con Laravel Echo.');
+    }
+});
+</script>
 @endsection
