@@ -134,7 +134,9 @@
   <section class="bg-cover bg-center text-white px-6 py-12 text-center" style="background-image: url('img/banner2.png');">
     <h3 class="text-xl font-bold mb-4">¡Eventos especialmente seleccionados para ti!</h3>
     <p class="mb-6 text-sm">Filtrados según tus intereses y ubicación. ¡No te los pierdas!</p>
-    <button class="bg-purple-600 px-6 py-2 rounded-md hover:bg-purple-700 transition">Empieza ahora →</button>
+    <a href="{{ route('eventosPersonalizados') }}" class="bg-purple-600 px-6 py-2 rounded-md hover:bg-purple-700 transition">
+      Empieza ahora →
+    </a>
   </section>
 
   <!-- Eventos Online -->

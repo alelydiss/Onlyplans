@@ -35,3 +35,7 @@ Route::get('/auth/google/callback', [GoogleController::class, 'callback'])->name
 Route::get('/evento', function () {
     return view('evento');
 });
+
+Route::get('/eventosPersonalizados', function () {
+    return view('eventosPersonalizados');
+})->name('eventosPersonalizados');
