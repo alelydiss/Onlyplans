@@ -7,12 +7,13 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
     /**
-     * Display the user's profile form.
+     * Mostrar el formulario de edición del perfil.
      */
     public function edit(Request $request): View
     {
@@ -22,23 +23,44 @@ class ProfileController extends Controller
     }
 
     /**
-     * Update the user's profile information.
+     * Actualizar la información del perfil del usuario.
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        // Validar y obtener los datos
+        $data = $request->validated();
+
+        // Manejar la imagen de perfil si se ha subido
+        if ($request->hasFile('profile_photo')) {
+            $file = $request->file('profile_photo');
+            $path = $file->store('avatars', 'public'); // guarda en /storage/app/public/avatars
+            $user->avatar = $path;
         }
 
-        $request->user()->save();
+        // Guardar el resto de la información
+        $user->fill([
+            'name' => $data['name'],
+            'last_name' => $data['last_name'] ?? null,
+            'phone' => $data['phone'] ?? null,
+            'address' => $data['address'] ?? null,
+            'city' => $data['city'] ?? null,
+            'country' => $data['country'] ?? null,
+        ]);
+
+        // Si el correo ha cambiado, se marca como no verificado
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
+
+        $user->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
     /**
-     * Delete the user's account.
+     * Eliminar la cuenta del usuario.
      */
     public function destroy(Request $request): RedirectResponse
     {

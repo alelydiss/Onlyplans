@@ -1,39 +1,9 @@
-<!DOCTYPE html>
-<html lang="es" class="dark">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>OnlyPlans</title>
-    <link rel="icon" href="{{ asset('img/logo2.png') }}" type="image/png">
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white font-sans antialiased">
-    <!-- Header -->
-    <header class="bg-[#1f1a38] dark:bg-gray-800 text-white shadow-md">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16">
-    
-          <!-- Logo -->
-          <div class="flex items-center space-x-3">
-            <a href="{{ route('welcome') }}" class="flex items-center space-x-2">
-              <img src="/img/logo.png" alt="Logo Onlyplans" class="h-6 w-75 object-contain">
-            </a>
-          </div>
-    
-          <!-- Botón de login -->
-          <nav class="space-x-6">
-            <a href="{{ route('login') }}" class="bg-white text-purple-700 px-4 py-1 rounded hover:bg-gray-200 font-semibold transition">
-              Iniciar sesión
-            </a>
-          </nav>
-    
-        </div>
-      </div>
-    </header>
-    
+@extends('layouts.app')
 
+@section('content')
+  <div class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white font-sans antialiased">
     <!-- Banner -->
-    <div class="text-center bg-cover bg-center py-32" style="background-image: url('img/banner1.png');">
+    <div class="text-center bg-cover bg-center py-32 animate__animated animate__fadeInDown" style="background-image: url('img/banner1.png');">
       <h2 class="text-5xl font-bold text-white">Descubre planes increíbles cerca de ti</h2>
       <p class="mt-6 text-xl text-white">Eventos, fiestas, ferias, talleres y mucho más en tu ciudad</p>
 
@@ -54,8 +24,8 @@
     <!-- Categorías -->
     <section class="px-6 py-10">
       <h3 class="text-xl font-bold mb-6">Explora todas las <span class="text-purple-600">Categorías</span></h3>
-      <div class="flex overflow-x-auto gap-6">
-      @foreach([
+      <div class="flex overflow-x-auto gap-6 animate__animated animate__fadeInUp">
+        @foreach([
         ['nombre' => 'Entretenimiento', 'imagen' => 'https://via.placeholder.com/80?text=Entretenimiento'],
         ['nombre' => 'Educativo & Empresarial', 'imagen' => 'https://via.placeholder.com/80?text=Educación'],
         ['nombre' => 'Cultural & Artisitico', 'imagen' => 'https://via.placeholder.com/80?text=Cultura'],
@@ -75,7 +45,7 @@
     <section class="px-6 pb-10">
       <h3 class="text-xl font-bold mb-6">Eventos Más Populares</h3>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-white dark:bg-gray-700 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300 group relative">
+        <div class="bg-white dark:bg-gray-700 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300 group relative animate__animated animate__zoomIn">
           <a href="#">
             <img class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
               src="img/evento1.png" alt="Evento destacado" />
@@ -197,28 +167,6 @@
       <button class="px-6 py-2 border border-purple-600 text-purple-600 rounded-md hover:bg-purple-600 hover:text-white transition">Ver Más</button>
     </div>
   </section>
+</div>
 
-  <!-- Footer -->
-  <footer class="bg-gray-100 dark:bg-gray-800 text-sm text-gray-600 dark:text-gray-400 px-6 py-10">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-      <div>
-        <h4 class="font-bold mb-2">OnlyPlans</h4>
-        <p>Descubre eventos y actividades cerca de ti.</p>
-      </div>
-      <div>
-        <h4 class="font-bold mb-2">Enlaces</h4>
-        <ul>
-          <li><a href="#" class="hover:underline">Términos</a></li>
-          <li><a href="#" class="hover:underline">Política de Privacidad</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="font-bold mb-2">Síguenos</h4>
-        <p>Twitter, Instagram, Facebook</p>
-      </div>
-    </div>
-  </footer>
-</body>
-</html>
-
-
+@endsection

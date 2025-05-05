@@ -76,7 +76,7 @@
   </script>
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/@googlemaps/extended-component-library/0.6.11/index.min.js"></script>
 
-  <div class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white font-sans antialiased">
+  <div class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white font-sans antialiased h-[800px] mt-[-32px]">
 
     <!-- Título -->
     <header class="text-center my-8 px-4">

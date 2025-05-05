@@ -1,13 +1,7 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Onlyplans - Iniciar Sesión</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" />
-</head>
-<body class="bg-white dark:bg-gray-900 min-h-screen flex items-center justify-center p-4">
+@extends('layouts.login')
+
+@section('content')
+<div class="bg-white dark:bg-gray-900 min-h-screen flex items-center justify-center p-4">
 
   <div class="w-full max-w-5xl flex flex-col md:flex-row shadow-lg rounded-xl overflow-hidden animate-fade-in">
 
@@ -31,6 +25,16 @@
         <i class="bi bi-google"></i>
         Iniciar sesión con Google
       </a>
+
+      @if ($errors->any())
+      <div class="mb-4 text-red-600">
+        <ul class="list-disc list-inside text-sm">
+          @foreach ($errors->all() as $error)
+          <li>{{ $error }}</li>
+          @endforeach
+        </ul>
+      </div>
+      @endif
 
       <form method="POST" action="{{ route('login') }}" class="space-y-4">
         @csrf
@@ -111,5 +115,5 @@
       }
     }
   </style>
-</body>
-</html>
+</div>
+@endsection

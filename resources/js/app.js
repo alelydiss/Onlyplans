@@ -1,7 +1,14 @@
 import './bootstrap';
 
-import Alpine from 'alpinejs';
+window.Echo.channel('chat')
+    .listen('.message.sent', (e) => {
+        console.log('📨 Nuevo mensaje:', e.message);
 
-window.Alpine = Alpine;
-
-Alpine.start();
+        // Opcional: mostrar en el DOM
+        const chatBox = document.getElementById('chat-box');
+        if (chatBox) {
+            const msg = document.createElement('div');
+            msg.textContent = e.message;
+            chatBox.appendChild(msg);
+        }
+    });

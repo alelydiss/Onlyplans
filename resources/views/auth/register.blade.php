@@ -1,13 +1,7 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Onlyplans - Registrarse</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" />
-</head>
-<body class="bg-white dark:bg-gray-900 min-h-screen flex items-center justify-center p-4">
+@extends('layouts.login')
+
+@section('content')
+<div class="bg-white dark:bg-gray-900 min-h-screen flex items-center justify-center p-4">
 
   <div class="w-full max-w-5xl flex flex-col md:flex-row shadow-lg rounded-xl overflow-hidden animate-fade-in">
 
@@ -35,19 +29,24 @@
       <form method="POST" action="{{ route('register') }}" class="space-y-4">
         @csrf
 
+        @if ($errors->any())
+      <div class="mb-4 text-red-600">
+        <ul class="list-disc list-inside text-sm">
+          @foreach ($errors->all() as $error)
+          <li>{{ $error }}</li>
+          @endforeach
+        </ul>
+      </div>
+      @endif
         <!-- Nombre -->
         <input id="name" name="name" type="text" value="{{ old('name') }}" placeholder="Nombre completo" required
           class="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:ring-2 focus:ring-purple-500 dark:text-white placeholder-gray-500" />
-        @error('name')
-          <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-        @enderror
+ 
 
         <!-- Email -->
         <input id="email" type="email" name="email" value="{{ old('email') }}" placeholder="Correo" required
           class="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:ring-2 focus:ring-purple-500 dark:text-white placeholder-gray-500" />
-        @error('email')
-          <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-        @enderror
+
 
         <!-- Password -->
         <div class="relative">
@@ -57,9 +56,7 @@
             <i id="eye1" class="bi bi-eye-slash"></i>
           </button>
         </div>
-        @error('password')
-          <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-        @enderror
+
 
         <!-- Confirmar contraseña -->
         <div class="relative">
@@ -120,5 +117,5 @@
       }
     }
   </style>
-</body>
-</html>
+</div>
+@endsection
