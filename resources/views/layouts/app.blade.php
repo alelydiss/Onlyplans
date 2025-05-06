@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    
     <link rel="icon" href="{{ asset('img/logo2.png') }}" type="image/png">
     <title>Onlyplans</title>
     @vite('resources/css/app.css')
@@ -20,8 +21,10 @@
         @yield('content')
         
       </main>
-      <button id="toggle-dark" class="fixed bottom-4 right-4 w-14 h-14 bg-white dark:bg-gray-800 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-700 rounded-full shadow-xl hover:scale-105 hover:shadow-2xl transition-all duration-300 ease-in-out flex items-center justify-center text-xl">
-        <span id="theme-icon" class="transition-transform duration-300">🌙</span>
+      <button id="toggle-dark"
+        class="fixed bottom-4 right-4 w-14 h-14 bg-white dark:bg-gray-900 text-gray-700 dark:text-yellow-300 border border-gray-300 dark:border-gray-700 rounded-full shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 ease-in-out flex items-center justify-center text-2xl focus:outline-none focus:ring-4 focus:ring-indigo-300 dark:focus:ring-indigo-700"
+        aria-label="Cambiar tema">
+        <span id="theme-icon" class="transition-transform duration-300 ease-in-out">🌙</span>
       </button>
       
       <!-- Footer -->

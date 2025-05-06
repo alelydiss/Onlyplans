@@ -1,19 +1,25 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
-use App\Events\MessageSent;
+    // app/Http/Controllers/ChatController.php
+    use App\Models\Message;
+    use App\Events\MessageSent;
+    use Illuminate\Http\Request;
 
 class ChatController extends Controller
 {
-    public function send(Request $request)
-    {
-        $message = $request->input('message');
 
-        // Emitir evento
-        broadcast(new MessageSent($message));
 
-        return response()->json(['status' => 'ok']);
-    }
+public function send(Request $request)
+{
+    $message = Message::create([
+        'user_id' => auth()->id(),
+        'content' => $request->content,
+    ]);
+
+    broadcast(new MessageSent($message))->toOthers();
+
+    return response()->json(['status' => 'Mensaje enviado']);
+}
+
 }
