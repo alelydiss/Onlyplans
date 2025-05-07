@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
 </head>
-<body class="antialiased">
+<body class="antialiased dark:bg-gray-900">
     @include('layouts.navigation')
 
     <main>

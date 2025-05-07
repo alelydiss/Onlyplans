@@ -24,25 +24,18 @@
   </div>
   
   <!-- Categorías -->
-  <section class="px-4 md:px-6 py-8 md:py-10">
-    <h3 class="text-lg md:text-xl font-bold mb-4 md:mb-6">Explora todas las <span class="text-purple-600">Categorías</span></h3>
-    <div class="flex overflow-x-auto gap-4 md:gap-6">
-    @foreach([
-      ['nombre' => 'Entretenimiento', 'imagen' => 'https://via.placeholder.com/80?text=Entretenimiento'],
-      ['nombre' => 'Educativo & Empresarial', 'imagen' => 'https://via.placeholder.com/80?text=Educación'],
-      ['nombre' => 'Cultural & Artisitico', 'imagen' => 'https://via.placeholder.com/80?text=Cultura'],
-      ['nombre' => 'Deportes', 'imagen' => 'https://via.placeholder.com/80?text=Deportes'],
-      ['nombre' => 'Tecnología', 'imagen' => 'https://via.placeholder.com/80?text=Tecnología'],
-      ['nombre' => 'Viajes & Aventura', 'imagen' => 'https://via.placeholder.com/80?text=Viajes']
-    ] as $categoria)
-      <div class="text-center hover:scale-105 transition">
-      <img src="{{ $categoria['imagen'] }}" alt="{{ $categoria['nombre'] }}" class="rounded-full w-16 h-16 md:w-20 md:h-20 object-cover mx-auto" />
-      <p class="text-sm md:text-base">{{ $categoria['nombre'] }}</p>
-      </div>
-    @endforeach
+  <section class="px-4 md:px-6 py-8 md:py-10 w-full">
+    <h3 class="text-lg md:text-xl font-bold mb-4 md:mb-6 text-center">Explora todas las <span class="text-purple-600">Categorías</span></h3>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
+      @foreach($categorias as $categoria)
+        <div class="text-center hover:scale-105 transition">
+            <img src="{{ asset($categoria->foto) }}" alt="{{ $categoria->nombre }}" class="rounded-full w-16 h-16 md:w-20 md:h-20 object-cover mx-auto" />
+            <p class="text-sm md:text-base">{{ $categoria->nombre }}</p>
+        </div>
+      @endforeach
     </div>
   </section>
-
+  
   <!-- Eventos Populares -->
   <section class="px-4 md:px-6 pb-8 md:pb-10">
     <h3 class="text-lg md:text-xl font-bold mb-4 md:mb-6">Eventos Más Populares</h3>

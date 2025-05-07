@@ -4,22 +4,27 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\CategoriaController;
+use App\Models\Categoria;
 use App\Events\MessageSent;
 use Illuminate\Http\Request;
 use App\Models\Message;
 
 
 Route::get('/', function () {
-    return view('welcome');
+    // Obtener las categorías directamente en la ruta
+    $categorias = Categoria::all();
+    return view('welcome', compact('categorias')); // Pasar las categorías a la vista
 })->name('welcome');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::get('/categorias', [CategoriaController::class, 'index'])->name('categorias');
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    // Obtener las categorías directamente en la ruta
+    $categorias = Categoria::all();
+    return view('dashboard', compact('categorias')); // Pasar las categorías a la vista
 })->middleware(['auth', 'verified'])->name('dashboard');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -53,21 +58,23 @@ Route::get('/password/success', function () {
     return view('auth.passwords.success');
 })->name('password.success');
 
-// routes/web.php
-Route::post('/chat/send', [ChatController::class, 'send'])->middleware('auth');
-Route::middleware('auth')->post('/send-message', [ChatController::class, 'send']);
-Route::post('/send-message', function (Request $request) {
-    $request->validate(['message' => 'required|string']);
+Route::get('/categorias', [CategoriaController::class, 'index']);
 
-    $message = Message::create([
-        'user_id' => auth()->id(),
-        'message' => $request->message,
-    ]);
+// // routes/web.php
+// Route::post('/chat/send', [ChatController::class, 'send'])->middleware('auth');
+// Route::middleware('auth')->post('/send-message', [ChatController::class, 'send']);
+// Route::post('/send-message', function (Request $request) {
+//     $request->validate(['message' => 'required|string']);
 
-    broadcast(new MessageSent($message))->toOthers();
+//     $message = Message::create([
+//         'user_id' => auth()->id(),
+//         'message' => $request->message,
+//     ]);
 
-    return response()->json(['status' => 'ok']);
-})->middleware('auth');
+//     broadcast(new MessageSent($message))->toOthers();
+
+//     return response()->json(['status' => 'ok']);
+// })->middleware('auth');
 
 
 
