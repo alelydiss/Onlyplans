@@ -49,19 +49,20 @@
 
             <div class="mb-4">
                 <label class="block mb-2 font-medium">¿Qué tipo de evento estás realizando?</label>
-                <div class="flex space-x-4">
-                    <label class="flex items-center p-4 border rounded cursor-pointer bg-blue-50 space-x-2 flex-col gap-3 pl-10 pr-10">
-                        <img src="img/boleto.png" alt="Icono Boleto" class="w-40 h-40">
-                        <input type="radio" name="tipo_evento" value="ticket" class="mr-2">
-                        <span>Evento con Ticket</span>
+                <div class="grid grid-cols-2 gap-4">
+                    <label class="flex flex-col items-center justify-center p-6 border rounded cursor-pointer bg-blue-50 w-full min-w-[250px] text-center">
+                        <img src="img/boleto.png" alt="Icono Boleto" class="w-16 h-16 mb-2">
+                        <input type="radio" name="tipo_evento" value="ticket" class="mb-2">
+                        <span class="text-lg font-medium">Evento con Ticket</span>
                     </label>
-                    <label class="flex items-center p-4 border rounded bg-blue-50 cursor-pointer space-x-2 flex-col gap-3 pl-10 pr-10">
-                        <img src="img/gratis.png" alt="Icono Gratis" class="w-40 h-40">
-                        <input type="radio" name="tipo_evento" value="gratis" class="mr-2">
-                        <span>Evento Gratis</span>
+                    <label class="flex flex-col items-center justify-center p-6 border rounded cursor-pointer w-full min-w-[250px] text-center">
+                        <img src="img/gratis.png" alt="Icono Gratis" class="w-16 h-16 mb-2">
+                        <input type="radio" name="tipo_evento" value="gratis" class="mb-2">
+                        <span class="text-lg font-medium">Evento Gratis</span>
                     </label>
                 </div>
             </div>
+            
             
 
             <div class="mb-4">
