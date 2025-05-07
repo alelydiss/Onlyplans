@@ -3,14 +3,14 @@
         <h2 class="text-3xl font-semibold text-gray-900 dark:text-gray-100">Información de la Cuenta</h2>
     </header>
 
-    <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="space-y-10">
+    {{-- Formulario solo para subir avatar --}}
+    <form id="avatarForm" method="POST" action="{{ route('profile.avatar.update') }}" enctype="multipart/form-data">
         @csrf
-        @method('PATCH')
 
-        <!-- Foto de Perfil -->
         <div class="flex flex-col items-center gap-2">
-            <label for="profile_photo" class="relative cursor-pointer group">
-                <img src="{{ $user->profile_photo_url ?? asset('avatars/default_avatar.png') }}"
+            <label for="avatar" class="relative cursor-pointer group">
+                <img id="previewAvatar"
+                     src="{{ $user->avatar ? asset('storage/' . $user->avatar) : asset('avatars/default_avatar.png') }}"
                      class="w-28 h-28 rounded-full border-2 border-gray-300 dark:border-gray-600 object-cover"
                      alt="Foto de perfil">
                 <div class="absolute bottom-0 right-0 bg-white dark:bg-gray-700 rounded-full p-1 shadow-md">
@@ -19,10 +19,16 @@
                         <path d="M12 12a2 2 0 11-4 0 2 2 0 014 0z"/>
                     </svg>
                 </div>
-                <input id="profile_photo" name="profile_photo" type="file" class="hidden" accept="image/*">
+                <input id="avatar" name="avatar" type="file" class="hidden" accept="image/*">
             </label>
-            <p class="text-sm text-gray-600 dark:text-gray-400">Foto de Perfil</p>
+            <p class="text-sm text-gray-600 dark:text-gray-400">Haz clic en la foto para cambiarla</p>
         </div>
+    </form>
+
+    {{-- Formulario del resto del perfil --}}
+    <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="space-y-10 mt-10">
+        @csrf
+        @method('PATCH')
 
         <!-- Información del perfil -->
         <div>
@@ -32,13 +38,13 @@
                     <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombre:</label>
                     <input type="text" name="name" id="name" required
                            value="{{ old('name', $user->name ?? '') }}"
-                           class="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring focus:ring-indigo-200 dark:focus:ring-indigo-500">
+                           class="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                 </div>
                 <div>
                     <label for="last_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Apellido:</label>
                     <input type="text" name="last_name" id="last_name"
                            value="{{ old('last_name', $user->last_name ?? '') }}"
-                           class="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring focus:ring-indigo-200 dark:focus:ring-indigo-500">
+                           class="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                 </div>
             </div>
         </div>
@@ -52,25 +58,25 @@
                     <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Teléfono:</label>
                     <input type="text" name="phone" id="phone"
                            value="{{ old('phone', $user->phone ?? '') }}"
-                           class="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring focus:ring-indigo-200 dark:focus:ring-indigo-500">
+                           class="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                 </div>
                 <div>
                     <label for="address" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Dirección:</label>
                     <input type="text" name="address" id="address"
                            value="{{ old('address', $user->address ?? '') }}"
-                           class="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring focus:ring-indigo-200 dark:focus:ring-indigo-500">
+                           class="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                 </div>
                 <div>
                     <label for="city" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Ciudad/Pueblo:</label>
                     <input type="text" name="city" id="city"
                            value="{{ old('city', $user->city ?? '') }}"
-                           class="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring focus:ring-indigo-200 dark:focus:ring-indigo-500">
+                           class="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                 </div>
                 <div>
                     <label for="country" class="block text-sm font-medium text-gray-700 dark:text-gray-300">País:</label>
                     <input type="text" name="country" id="country"
                            value="{{ old('country', $user->country ?? '') }}"
-                           class="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring focus:ring-indigo-200 dark:focus:ring-indigo-500">
+                           class="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                 </div>
             </div>
         </div>
@@ -95,3 +101,4 @@
         </div>
     </form>
 </section>
+

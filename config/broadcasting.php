@@ -1,9 +1,11 @@
 <?php
 
 return [
-    'default' => env('BROADCAST_CONNECTION', 'null'),
+
+    'default' => env('BROADCAST_DRIVER', 'null'),
 
     'connections' => [
+
         'pusher' => [
             'driver' => 'pusher',
             'key' => env('PUSHER_APP_KEY'),
@@ -12,9 +14,20 @@ return [
             'options' => [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
                 'useTLS' => true,
+                'host' => env('PUSHER_HOST', null),
+                'port' => env('PUSHER_PORT', 443),
+                'scheme' => env('PUSHER_SCHEME', 'https'),
+                'encrypted' => true,
             ],
         ],
-        'log' => ['driver' => 'log'],
-        'null' => ['driver' => 'null'],
+
+        'log' => [
+            'driver' => 'log',
+        ],
+
+        'null' => [
+            'driver' => 'null',
+        ],
+
     ],
 ];
