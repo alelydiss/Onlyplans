@@ -41,6 +41,10 @@ Route::get('/eventosPersonalizados', function () {
     return view('eventosPersonalizados');
 })->name('eventosPersonalizados');
 
+Route::get('/crearEvento', function () {
+    return view('crearEvento');
+})->name('crearEvento');
+
 Route::get('/password/success', function () {
     return view('auth.passwords.success');
 })->name('password.success');

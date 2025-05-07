@@ -175,17 +175,17 @@
       <!-- Icono + Texto -->
       <div class="flex items-center text-left mb-8 md:mb-0">
         <div>
-          <h3 class="text-2xl font-bold mb-2">Crea un evento con Eventify</h3>
+          <h3 class="text-2xl font-bold mb-2">Crea un evento con OnlyPlans</h3>
           <p class="text-sm max-w-md">¿Tienes un espectáculo, evento, actividad o una gran experiencia? Colabora con nosotros y regístrate en Eventify.</p>
         </div>
       </div>
   
       <!-- Botón -->
-      <a href="#" class="inline-flex items-center bg-white text-purple-700 font-semibold px-5 py-3 rounded-md shadow-md hover:bg-gray-100 transition">
+      <a href="{{ route('crearEvento') }}" class="inline-flex items-center bg-white text-purple-700 font-semibold px-5 py-3 rounded-md shadow-md hover:bg-gray-100 transition">
         <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
           <path d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2h-1V3a1 1 0 00-1-1H6zM18 9H2v7a2 2 0 002 2h12a2 2 0 002-2V9z"/>
         </svg>
-        Create Event
+        Crear Evento
       </a>
     </div>
   </section>
