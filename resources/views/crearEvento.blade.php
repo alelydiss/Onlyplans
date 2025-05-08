@@ -12,33 +12,35 @@
 
             <div class="mb-4">
                 <label class="block mb-1 font-medium text-gray-700 dark:text-gray-200">Título del Evento</label>
-                <input type="text" name="titulo" class="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Introduce el nombre del evento">
+                <input type="text" name="titulo" class="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Introduce el nombre del evento" required>
             </div>
 
             <div class="mb-4">
                 <label class="block mb-1 font-medium text-gray-700 dark:text-gray-200">Categoría del Evento</label>
-                <select name="categoria" class="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg">
+                <select name="categoria" class="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg" required>
                     <option value="">Seleccione una</option>
-                    <!-- Agrega opciones aquí -->
-                </select>
+                    @foreach($categorias as $categoria)
+                        <option value="{{ $categoria->id }}">{{ $categoria->nombre }}</option>
+                    @endforeach
+                </select>                
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
                     <label class="block mb-1 font-medium text-gray-700 dark:text-gray-200">Fecha de Inicio</label>
-                    <input type="date" name="fecha_inicio" class="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg">
+                    <input type="date" name="fecha_inicio" class="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg" required>
                 </div>
                 <div>
                     <label class="block mb-1 font-medium text-gray-700 dark:text-gray-200">Fecha de Cierre</label>
-                    <input type="date" name="fecha_fin" class="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg">
+                    <input type="date" name="fecha_fin" class="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg" required>
                 </div>
                 <div>
                     <label class="block mb-1 font-medium text-gray-700 dark:text-gray-200">Hora de Inicio</label>
-                    <input type="time" name="hora_inicio" class="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg">
+                    <input type="time" name="hora_inicio" class="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg" required>
                 </div>
                 <div>
                     <label class="block mb-1 font-medium text-gray-700 dark:text-gray-200">Hora de Cierre</label>
-                    <input type="time" name="hora_fin" class="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg">
+                    <input type="time" name="hora_fin" class="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg" required>
                 </div>
             </div>
 
@@ -59,12 +61,12 @@
                 <div class="grid sm:grid-cols-2 gap-4">
                     <label class="flex flex-col items-center justify-center p-6 border border-gray-300 dark:border-gray-600 rounded-2xl cursor-pointer bg-blue-50 dark:bg-gray-700 transition hover:shadow-lg">
                         <img src="/img/boleto.png" alt="Icono Boleto" class="w-16 h-16 mb-2">
-                        <input type="radio" name="tipo_evento" value="ticket" class="mb-2 tipo-evento">
+                        <input type="radio" name="tipo_evento" value="ticket" class="mb-2 tipo-evento" required>
                         <span class="text-lg font-medium text-gray-800 dark:text-gray-100">Evento con Ticket</span>
                     </label>
                     <label class="flex flex-col items-center justify-center p-6 border border-gray-300 dark:border-gray-600 rounded-2xl cursor-pointer bg-gray-50 dark:bg-gray-700 transition hover:shadow-lg">
                         <img src="/img/gratis.png" alt="Icono Gratis" class="w-16 h-16 mb-2">
-                        <input type="radio" name="tipo_evento" value="gratis" class="mb-2 tipo-evento">
+                        <input type="radio" name="tipo_evento" value="gratis" class="mb-2 tipo-evento" required>
                         <span class="text-lg font-medium text-gray-800 dark:text-gray-100">Evento Gratis</span>
                     </label>
                 </div>

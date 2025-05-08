@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\EventController;
 use App\Models\Categoria;
 use App\Events\MessageSent;
 use Illuminate\Http\Request;
@@ -36,6 +37,9 @@ Route::get('/mapa', function () {
     return view('mapa');
 })->name('mapa');
 
+Route::get('/mapa', [EventController::class, 'showEventos'])->name('mapa');
+
+
 require __DIR__.'/auth.php';
 
 Route::get('/auth/google/redirect', [GoogleController::class, 'redirect'])->name('google.redirect');
@@ -51,8 +55,13 @@ Route::get('/eventosPersonalizados', function () {
 })->name('eventosPersonalizados');
 
 Route::get('/crearEvento', function () {
-    return view('crearEvento');
-})->name('crearEvento');
+    $categorias = Categoria::all();
+    return view('crearEvento', compact('categorias'));
+})->middleware('auth')->name('crearEvento');
+
+Route::get('/crearEvento', [EventController::class, 'create'])->name('crearEvento'); // Mostrar formulario
+Route::post('/crearEvento', [EventController::class, 'store']); // Guardar evento
+
 
 Route::get('/password/success', function () {
     return view('auth.passwords.success');

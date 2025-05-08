@@ -11,23 +11,28 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('eventos', function (Blueprint $table) {
+        Schema::create('events', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('category_id');
             $table->string('titulo');
-            $table->text('descripcion')->nullable();
-            $table->string('tipo_evento'); // 'gratis' o 'ticket'
+            $table->date('fecha_inicio');
+            $table->date('fecha_fin');
+            $table->time('hora_inicio');
+            $table->time('hora_fin');
+            $table->string('tipo_evento');
             $table->decimal('precio', 8, 2)->nullable();
+            $table->text('descripcion');
             $table->string('ubicacion')->nullable();
-            $table->decimal('latitud', 10, 7)->nullable();
-            $table->decimal('longitud', 10, 7)->nullable();
-            $table->dateTime('fecha_hora');
+            $table->decimal('lat', 10, 7)->nullable();
+            $table->decimal('lng', 10, 7)->nullable();
+            $table->string('banner')->nullable();
             $table->timestamps();
-
+        
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('category_id')->references('id')->on('categorias')->onDelete('cascade');
         });
     }
-
 
     /**
      * Reverse the migrations.
