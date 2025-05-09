@@ -131,7 +131,7 @@
                 asientoSeleccionado === zona.nombre ? 'border-purple-600 bg-purple-50 dark:bg-purple-800 text-purple-700 dark:text-white font-semibold' : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300',
                 !zona.disponible && 'opacity-40 cursor-not-allowed'
               ]"
-              :disabled="!zona.disponible"
+              :disabled="!zona.disponible"  
               @click="asientoSeleccionado = zona.nombre"
               x-text="zona.nombre"
             ></button>

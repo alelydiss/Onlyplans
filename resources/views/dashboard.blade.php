@@ -39,7 +39,7 @@
       <h3 class="text-2xl md:text-3xl font-bold mb-6 text-left">Eventos Más Populares</h3>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="bg-white dark:bg-gray-700 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300 group relative animate__animated animate__zoomIn">
-          <a href="#">
+          <a href="{{ url('/evento') }}">
             <img class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
               src="img/evento1.png" alt="Evento destacado" />
           </a>
