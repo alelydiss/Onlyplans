@@ -27,4 +27,9 @@ public function category()
 {
     return $this->belongsTo(Categoria::class, 'category_id');
 }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class); // Un evento pertenece a un usuario
+    }
 }

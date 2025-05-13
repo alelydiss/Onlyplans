@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Event;
+use App\Models\Order;
 use App\Models\Categoria;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Pagination\Paginator;
@@ -65,6 +66,39 @@ class EventController extends Controller
 
         return redirect()->route('crearEvento')->with('success', 'Evento creado con éxito!');
     }
+
+public function show($id)
+{
+    $evento = Event::with('category', 'user')->findOrFail($id);
+    return view('evento', compact('evento'));
+}
+
+public function comprar(Request $request, $id)
+{
+    $request->validate([
+        'nombre' => 'required|string|max:255',
+        'correo' => 'required|email',
+        'telefono' => 'nullable|string|max:20',
+        'cantidad' => 'required|integer|min:1',
+        'zona' => 'required|string',
+    ]);
+
+    $total = $request->cantidad * 600; // Asumiendo precio fijo
+
+    Order::create([
+        'event_id' => $id,
+        'nombre' => $request->nombre,
+        'correo' => $request->correo,
+        'telefono' => $request->telefono,
+        'cantidad' => $request->cantidad,
+        'zona' => $request->zona,
+        'total' => $total,
+    ]);
+
+    return response()->json(['message' => 'Compra registrada correctamente.']);
+}
+
+
 
     
     public function showEventos()
