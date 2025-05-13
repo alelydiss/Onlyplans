@@ -22,5 +22,9 @@ class Event extends Model
         'lng',
         'banner',
     ];
-    
+
+public function category()
+{
+    return $this->belongsTo(Categoria::class, 'category_id');
+}
 }

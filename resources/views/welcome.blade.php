@@ -8,17 +8,15 @@
       <p class="mt-6 text-xl text-white animate__animated animate__fadeInUp animate__delay-1s">Eventos, fiestas, ferias, talleres y mucho más en tu ciudad</p>
 
       <!-- Buscador -->
-      <div class="mt-10 flex justify-center animate__animated animate__fadeInUp animate__delay-2s">
-        <div class="bg-white dark:bg-gray-700 p-6 rounded shadow flex w-full max-w-4xl space-x-4">
-          <input type="text" placeholder="Buscar evento, ciudad o categoría" class="flex-1 text-black px-6 py-4 border rounded dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition" />
-          <select class="px-6 py-4 border text-black rounded dark:bg-gray-700 dark:text-white focus:outline-none transition">
-            <option>Ubicación</option>
-            <option>Madrid</option>
-            <option>Barcelona</option>
-          </select>
-          <button class="bg-purple-600 text-white px-8 py-4 rounded hover:bg-purple-700 transition">Buscar</button>
+      <div class="mt-8 flex justify-center">
+        <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-xl flex flex-col sm:flex-row gap-4 w-full max-w-5xl">
+            <input type="text" placeholder="Buscar evento, ciudad o categoría"
+                class="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500" />
+            <button class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg transition font-medium shadow">
+                Buscar
+            </button>
         </div>
-      </div>
+    </div>
     </div>
 
     <!-- Categorías -->

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\Categoria;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Pagination\Paginator;
+
 
 class EventController extends Controller
 {
@@ -67,8 +69,55 @@ class EventController extends Controller
     
     public function showEventos()
     {
-        $eventos = Event::select('titulo', 'lat', 'lng', 'ubicacion')->get();
+        $eventos = Event::select('id', 'titulo', 'lat', 'lng', 'ubicacion')->get();
         return view('mapa', compact('eventos'));
     }
+
+    public function index()
+    {
+        $categorias = Categoria::all(); // Para los filtros
+        $eventos = Event::with('category')->paginate(6); // Carga las categorías de cada evento
+
+        return view('eventosPersonalizados', compact('eventos', 'categorias'));
+    }
+
+    public function ordenar(Request $request)
+    {
+        $query = Event::with('category');
+
+        // Búsqueda
+        if ($request->filled('q')) {
+            $q = $request->input('q');
+            $query->where('titulo', 'like', "%{$q}%")
+                ->orWhere('ubicacion', 'like', "%{$q}%")
+                ->orWhereHas('category', function ($subQuery) use ($q) {
+                    $subQuery->where('nombre', 'like', "%{$q}%");
+                });
+        }
+
+        // Ordenamiento
+        switch ($request->input('orden')) {
+            case 'nombre':
+                $query->orderBy('titulo');
+                break;
+            case 'precio_asc':
+                $query->orderBy('precio', 'asc');
+                break;
+            case 'precio_desc':
+                $query->orderBy('precio', 'desc');
+                break;
+            default: // fecha
+                $query->orderBy('fecha_inicio', 'asc');
+                break;
+        }
+
+        $eventos = $query->paginate(6)->appends($request->query());
+
+        $categorias = \App\Models\Categoria::all();
+
+        return view('eventosPersonalizados', compact('eventos', 'categorias'));
+    }
+
+    
 }
 

@@ -48,11 +48,15 @@ Route::get('/auth/google/callback', [GoogleController::class, 'callback'])->name
 
 Route::get('/evento', function () {
     return view('evento');
-});
+})->name('evento');
 
 Route::get('/eventosPersonalizados', function () {
     return view('eventosPersonalizados');
 })->name('eventosPersonalizados');
+
+Route::get('/eventosPersonalizados', [EventController::class, 'index'])->name('eventosPersonalizados');
+
+Route::get('/eventos', [EventController::class, 'ordenar'])->name('eventos');
 
 Route::get('/crearEvento', function () {
     $categorias = Categoria::all();
