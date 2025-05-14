@@ -67,12 +67,6 @@ class EventController extends Controller
         return redirect()->route('crearEvento')->with('success', 'Evento creado con éxito!');
     }
 
-public function show($id)
-{
-    $evento = Event::with('category', 'user')->findOrFail($id);
-    return view('evento', compact('evento'));
-}
-
 public function comprar(Request $request, $id)
 {
     $request->validate([
@@ -100,11 +94,17 @@ public function comprar(Request $request, $id)
 
 
 
-    
-    public function showEventos()
+        public function mostrar($id = null)
     {
-        $eventos = Event::select('id', 'titulo', 'lat', 'lng', 'ubicacion')->get();
-        return view('mapa', compact('eventos'));
+        if ($id) {
+            // Mostrar un evento específico
+            $evento = Event::with('category', 'user')->findOrFail($id);
+            return view('evento', compact('evento'));
+        } else {
+            // Mostrar todos los eventos en el mapa
+            $eventosmapa = Event::all();
+            return view('mapa', compact('eventosmapa'));
+        }
     }
 
     public function index()
