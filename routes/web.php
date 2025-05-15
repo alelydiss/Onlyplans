@@ -33,8 +33,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/mapa', [EventController::class, 'showEventos'])->name('mapa');
+Route::get('/mapa', function () {
+    return view('mapa');
+})->name('mapa');
 
+Route::get('/mapa', [EventController::class, 'mostrar'])->name('mapa');
 
 require __DIR__.'/auth.php';
 
@@ -42,15 +45,27 @@ Route::get('/auth/google/redirect', [GoogleController::class, 'redirect'])->name
 
 Route::get('/auth/google/callback', [GoogleController::class, 'callback'])->name('google.callback');
 
-Route::get('/evento/{id}', [EventController::class, 'show'])->name('evento');
 
+Route::get('/evento', function () {
+    return view('evento');
+})->name('evento');
 
+Route::get('/evento/{id}', [EventController::class, 'mostrar'])->name('evento');
+
+Route::get('/eventosPersonalizados', function () {
+    return view('eventosPersonalizados');
+})->name('eventosPersonalizados');
 
 Route::get('/eventosPersonalizados', [EventController::class, 'index'])->name('eventosPersonalizados');
 
 // RUTA CORRECTA PARA FILTROS Y LISTADO
 Route::get('/eventos', [EventController::class, 'index'])->name('eventos');
 
+
+Route::get('/crearEvento', function () {
+    $categorias = Categoria::all();
+    return view('crearEvento', compact('categorias'));
+})->middleware('auth')->name('crearEvento');
 
 Route::get('/crearEvento', [EventController::class, 'create'])->name('crearEvento'); // Mostrar formulario
 Route::post('/crearEvento', [EventController::class, 'store']); // Guardar evento
@@ -60,9 +75,7 @@ Route::get('/password/success', function () {
     return view('auth.passwords.success');
 })->name('password.success');
 
-
-Route::post('/eventos/{id}/comprar', [EventController::class, 'comprar'])->name('eventos.comprar');
-
+Route::get('/categorias', [CategoriaController::class, 'index']);
 
 // // routes/web.php
 // Route::post('/chat/send', [ChatController::class, 'send'])->middleware('auth');
