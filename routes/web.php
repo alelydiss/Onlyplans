@@ -48,7 +48,9 @@ Route::get('/evento/{id}', [EventController::class, 'show'])->name('evento');
 
 Route::get('/eventosPersonalizados', [EventController::class, 'index'])->name('eventosPersonalizados');
 
-Route::get('/eventos', [EventController::class, 'ordenar'])->name('eventos');
+// RUTA CORRECTA PARA FILTROS Y LISTADO
+Route::get('/eventos', [EventController::class, 'index'])->name('eventos');
+
 
 Route::get('/crearEvento', [EventController::class, 'create'])->name('crearEvento'); // Mostrar formulario
 Route::post('/crearEvento', [EventController::class, 'store']); // Guardar evento

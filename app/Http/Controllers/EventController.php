@@ -107,13 +107,74 @@ public function comprar(Request $request, $id)
         return view('mapa', compact('eventos'));
     }
 
-    public function index()
-    {
-        $categorias = Categoria::all(); // Para los filtros
-        $eventos = Event::with('category')->paginate(6); // Carga las categorías de cada evento
+    public function index(Request $request)
+{
+    $query = Event::with('category');
 
-        return view('eventosPersonalizados', compact('eventos', 'categorias'));
+    // Búsqueda por título, ubicación o nombre de categoría
+    if ($request->filled('q')) {
+        $q = $request->input('q');
+        $query->where(function ($subQuery) use ($q) {
+            $subQuery->where('titulo', 'like', "%{$q}%")
+                     ->orWhere('ubicacion', 'like', "%{$q}%")
+                     ->orWhereHas('category', function ($catQuery) use ($q) {
+                         $catQuery->where('nombre', 'like', "%{$q}%");
+                     });
+        });
     }
+
+    // Filtro por precio
+    if ($request->has('precio')) {
+        $precios = $request->input('precio');
+        if (in_array('gratis', $precios) && !in_array('pago', $precios)) {
+            $query->where('precio', 0);
+        } elseif (in_array('pago', $precios) && !in_array('gratis', $precios)) {
+            $query->where('precio', '>', 0);
+        }
+        // Si ambos están marcados, no se aplica filtro
+    }
+
+    // Filtro por fecha
+    if ($request->has('fecha')) {
+        $fechas = $request->input('fecha');
+        $today = now()->startOfDay();
+
+        if (in_array('hoy', $fechas)) {
+            $query->whereDate('fecha_inicio', $today);
+        } elseif (in_array('semana', $fechas)) {
+            $query->whereBetween('fecha_inicio', [$today, $today->copy()->endOfWeek()]);
+        } elseif (in_array('mes', $fechas)) {
+            $query->whereBetween('fecha_inicio', [$today, $today->copy()->endOfMonth()]);
+        }
+    }
+
+    // Filtro por categorías
+    if ($request->has('categorias')) {
+        $query->whereIn('category_id', $request->input('categorias'));
+    }
+
+    // Ordenamiento
+    switch ($request->input('orden')) {
+        case 'nombre':
+            $query->orderBy('titulo');
+            break;
+        case 'precio_asc':
+            $query->orderBy('precio', 'asc');
+            break;
+        case 'precio_desc':
+            $query->orderBy('precio', 'desc');
+            break;
+        default:
+            $query->orderBy('fecha_inicio', 'asc');
+    }
+
+    // Paginar y mantener parámetros
+    $eventos = $query->paginate(6)->appends($request->query());
+    $categorias = Categoria::all();
+
+    return view('eventosPersonalizados', compact('eventos', 'categorias'));
+}
+
 
     public function ordenar(Request $request)
     {
