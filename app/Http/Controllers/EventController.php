@@ -213,6 +213,21 @@ public function comprar(Request $request, $id)
         return view('eventosPersonalizados', compact('eventos', 'categorias'));
     }
 
+    public function chat(Request $request, Event $evento)
+    {
+        // Aquí recibes el mensaje y lo procesas
+        $mensaje = $request->input('mensaje');
+
+        // Guardar mensaje en BD o emitir evento para broadcast, ejemplo simple:
+        // Suponiendo que tienes modelo Message con user_id, event_id, message, etc.
+        $chatMessage = $evento->messages()->create([
+            'user_id' => Auth::id(),
+            'message' => $mensaje,
+        ]);
+
+        // Retorna OK para frontend
+        return response()->json(['status' => 'ok', 'message' => $mensaje]);
+    }
     
 }
 

@@ -52,6 +52,10 @@ Route::get('/evento', function () {
 
 Route::get('/evento/{id}', [EventController::class, 'mostrar'])->name('evento');
 
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::post('/eventos/{id}/comprar', [EventController::class, 'procesarCompra'])
+         ->name('eventos.comprar');
+});
 Route::get('/eventosPersonalizados', function () {
     return view('eventosPersonalizados');
 })->name('eventosPersonalizados');
@@ -77,23 +81,18 @@ Route::get('/password/success', function () {
 
 Route::get('/categorias', [CategoriaController::class, 'index']);
 
-// // routes/web.php
-// Route::post('/chat/send', [ChatController::class, 'send'])->middleware('auth');
-// Route::middleware('auth')->post('/send-message', [ChatController::class, 'send']);
-// Route::post('/send-message', function (Request $request) {
-//     $request->validate(['message' => 'required|string']);
-
-//     $message = Message::create([
-//         'user_id' => auth()->id(),
-//         'message' => $request->message,
-//     ]);
-
-//     broadcast(new MessageSent($message))->toOthers();
-
-//     return response()->json(['status' => 'ok']);
-// })->middleware('auth');
-
-
+Route::post('/eventos/{evento}/chat', [EventController::class, 'chat'])->name('eventos.chat');
 
 Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
 
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    Route::get('/', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+});
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    Route::get('/categorias', [AdminCategoriaController::class, 'index'])->name('admin.categorias');
+    Route::get('/usuarios', [AdminUsuarioController::class, 'index'])->name('admin.usuarios');
+    Route::get('/eventos', [AdminEventoController::class, 'index'])->name('admin.eventos');
+});

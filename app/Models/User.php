@@ -66,4 +66,10 @@ class User extends Authenticatable
 
         Mail::to($this->email)->send(new CustomResetPasswordMail($url, $this));
     }
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
 }

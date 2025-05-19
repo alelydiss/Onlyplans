@@ -32,4 +32,10 @@ public function category()
     {
         return $this->belongsTo(User::class); // Un evento pertenece a un usuario
     }
+// En app/Models/Evento.php
+public function mensajes()
+{
+    return $this->hasMany(Message::class)->latest();
+}
+
 }
