@@ -204,7 +204,7 @@
                             <button @click="paso = 3" class="text-purple-600 hover:underline">← Atrás</button>
                             <button 
                                 @click="
-                                    fetch('{{ route('eventos', $evento->id) }}', {
+                                    fetch('{{ route('eventos.comprar', $evento->id) }}', {
                                         method: 'POST',
                                         headers: {
                                             'Content-Type': 'application/json',
@@ -229,6 +229,8 @@
                             >
                                 Confirmar compra
                             </button>
+
+
                         </div>
                     </div>
                 </div>

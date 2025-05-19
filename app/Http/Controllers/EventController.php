@@ -87,6 +87,7 @@ public function comprar(Request $request, $id)
         'cantidad' => $request->cantidad,
         'zona' => $request->zona,
         'total' => $total,
+        'user_id' => Auth::id()
     ]);
 
     return response()->json(['message' => 'Compra registrada correctamente.']);
@@ -228,6 +229,15 @@ public function comprar(Request $request, $id)
         // Retorna OK para frontend
         return response()->json(['status' => 'ok', 'message' => $mensaje]);
     }
+
+
+public function misEntradas()
+{
+    $orders = Order::with('event')->where('user_id', Auth::id())->latest()->get();
+    return view('tickets', compact('orders'));
+}
+
+
     
 }
 
