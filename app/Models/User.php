@@ -72,4 +72,21 @@ class User extends Authenticatable
         return $this->role === 'admin';
     }
 
+    public function favoritos()
+{
+    return $this->hasMany(Favorito::class);
+}
+public function eventosFavoritos()
+{
+    return $this->hasManyThrough(
+        Event::class,
+        Favorito::class,
+        'user_id',      // Foreign key on Favorito table
+        'id',           // Local key on Evento table
+        'id',           // Local key on User table
+        'evento_id'     // Foreign key on Favorito table
+    );
+}
+
+
 }

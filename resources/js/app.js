@@ -1,4 +1,5 @@
 import './bootstrap';
+import './favorite.js';
 
 window.Echo.channel('chat')
     .listen('.message.sent', (e) => {

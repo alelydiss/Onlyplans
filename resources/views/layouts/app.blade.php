@@ -8,7 +8,7 @@
     <link rel="icon" href="{{ asset('img/logo2.png') }}" type="image/png">
     <title>Onlyplans</title>
     @vite('resources/css/app.css')
-    @vite('resources/js/app.js')
+    @vite(['resources/js/app.js'])
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src=""></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>

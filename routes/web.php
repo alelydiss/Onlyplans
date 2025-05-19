@@ -6,7 +6,9 @@ use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\FavoritoController;
 use App\Models\Categoria;
+use App\Models\Event;
 use App\Events\MessageSent;
 use Illuminate\Http\Request;
 use App\Models\Message;
@@ -21,10 +23,11 @@ Route::get('/', function () {
 Route::get('/categorias', [CategoriaController::class, 'index'])->name('categorias');
 
 Route::get('/dashboard', function () {
-    // Obtener las categorías directamente en la ruta
     $categorias = Categoria::all();
-    return view('dashboard', compact('categorias')); // Pasar las categorías a la vista
+    $eventos = Event::latest()->take(6)->get();
+    return view('dashboard', compact('categorias', 'eventos'));
 })->middleware(['auth', 'verified'])->name('dashboard');
+
 
 
 Route::middleware('auth')->group(function () {
@@ -49,6 +52,8 @@ Route::get('/auth/google/callback', [GoogleController::class, 'callback'])->name
 Route::get('/evento', function () {
     return view('evento');
 })->name('evento');
+
+Route::post('/evento/{evento}/favorito', [FavoritoController::class, 'toggle'])->middleware('auth')->name('evento.favorito');
 
 Route::get('/evento/{id}', [EventController::class, 'mostrar'])->name('evento');
 
@@ -96,3 +101,5 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/usuarios', [AdminUsuarioController::class, 'index'])->name('admin.usuarios');
     Route::get('/eventos', [AdminEventoController::class, 'index'])->name('admin.eventos');
 });
+
+Route::get('/favoritos', [FavoritoController::class, 'index'])->name('favoritos');
