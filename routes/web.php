@@ -75,6 +75,9 @@ Route::post('/eventos/{id}/comprar', [EventController::class, 'comprar'])->name(
 # MIS  ENTRADAS
 Route::get('/mis-tickets', [App\Http\Controllers\EventController::class, 'misEntradas'])->name('tickets.index')->middleware('auth');
 
+#DESCARGAR ENTRADAS
+Route::get('/ticket/download/{order}', [App\Http\Controllers\EventController::class, 'downloadTicket'])->name('ticket.download');
+
 
 
 

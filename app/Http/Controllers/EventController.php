@@ -8,7 +8,7 @@ use App\Models\Order;
 use App\Models\Categoria;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Pagination\Paginator;
-
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class EventController extends Controller
 {
@@ -241,6 +241,30 @@ public function misEntradas()
     return view('tickets', compact('orders'));
 }
 
+
+
+public function downloadTicket($orderId)
+{
+    $order = Order::with('event')->findOrFail($orderId);
+
+    $pdf = Pdf::loadView('ticket-pdf', compact('order'));
+
+    return $pdf->download('entrada_' . $order->id . '.pdf');
+}
+
+
+public function generarPDF($orderId)
+{
+    $order = Order::with('event')->findOrFail($orderId);
+
+    // Generar URL del QR
+    $qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?data=' . urlencode('https://onlyplans.com/ticket/' . $order->id) . '&size=200x200';
+
+    // Pasar a la vista
+    $pdf = PDF::loadView('tickets.pdf', compact('order', 'qrUrl'));
+
+    return $pdf->stream('entrada.pdf');
+}
 
     
 }
