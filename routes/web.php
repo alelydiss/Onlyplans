@@ -7,6 +7,11 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\FavoritoController;
+use App\Http\Controllers\InterestController;
+use App\Http\Controllers\Admin\AdminUsuarioController;
+use App\Http\Controllers\Admin\AdminEventoController;
+use App\Http\Controllers\Admin\AdminCategoriaController;
+use App\Http\Controllers\UserPreferenceController;
 use App\Models\Categoria;
 use App\Models\Event;
 use App\Events\MessageSent;
@@ -17,7 +22,8 @@ use App\Models\Message;
 Route::get('/', function () {
     // Obtener las categorías directamente en la ruta
     $categorias = Categoria::all();
-    return view('welcome', compact('categorias')); // Pasar las categorías a la vista
+     $eventos = Event::latest()->take(6)->get();
+    return view('welcome', compact('categorias', 'eventos'));
 })->name('welcome');
 
 Route::get('/categorias', [CategoriaController::class, 'index'])->name('categorias');
@@ -39,6 +45,12 @@ Route::middleware('auth')->group(function () {
 Route::get('/mapa', function () {
     return view('mapa');
 })->name('mapa');
+
+Route::get('/intereses', function () {
+    $categorias = Categoria::all();
+    return view('intereses', compact('categorias'));
+})->name('intereses');
+
 
 Route::get('/mapa', [EventController::class, 'mostrar'])->name('mapa');
 
@@ -108,3 +120,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 });
 
 Route::get('/favoritos', [FavoritoController::class, 'index'])->name('favoritos');
+
+Route::post('/guardar-preferencias', [UserPreferenceController::class, 'store'])->name('preferencias.store');
+

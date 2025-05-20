@@ -60,9 +60,15 @@
                 >
                     Comprar Ticket
                 </button>
-                <div class="text-gray-600 dark:text-gray-300 text-right">
-                    Entrada: 600€ por entrada
-                </div>
+                @if($evento->tipo_evento === 'gratis')
+                    <div class="text-gray-600 dark:text-gray-300 text-right">
+                        Entrada: Gratis para todos
+                    </div>
+                @else
+                    <div class="text-gray-600 dark:text-gray-300 text-right">
+                        Entrada: {{ $evento->precio }} $ por entrada
+                    </div>
+                @endif
             </div>
         </div>
 
@@ -120,7 +126,7 @@
         {{-- Modal de compra --}}
         <div
             x-show="mostrarModal"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
+            class="fixed inset-0 top-0 left-0 w-screen h-screen z-10 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm mt-10"
             x-transition
         >
             <div
@@ -139,7 +145,7 @@
                         <div class="flex justify-between items-center border rounded-lg p-4">
                             <div>
                                 <p class="font-medium">Ticket</p>
-                                <p class="text-sm text-gray-500">600,00 €</p>
+                                <p class="text-sm text-gray-500">{{ $evento->precio }} €</p>
                             </div>
                             <div class="flex items-center space-x-2">
                                 <button @click="if (cantidad > 1) cantidad--" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-xl">−</button>
@@ -149,7 +155,12 @@
                         </div>
                         <div class="flex justify-between mt-4 text-sm">
                             <span>Cant: <strong x-text="cantidad"></strong></span>
-                            <span>Total: <strong x-text="cantidad * 600 + ' €'"></strong></span>
+                            <span>
+                                Total: 
+                                <strong 
+                                    x-text="(cantidad * {{ $evento->precio }}) + ' €'">
+                                </strong>
+                            </span>
                         </div>
                         <button @click="paso = 2" class="mt-6 w-full py-3 rounded-lg bg-purple-600 text-white font-semibold hover:opacity-90">Siguiente →</button>
                     </div>
