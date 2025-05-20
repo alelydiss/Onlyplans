@@ -191,51 +191,64 @@
 
                     {{-- Paso 4 --}}
                     <div x-show="paso === 4" x-transition>
-                        <h2 class="text-xl font-semibold">Resumen del pedido</h2>
-                        <div class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm space-y-2">
-                            <p><strong>Nombre:</strong> <span x-text="nombre"></span></p>
-                            <p><strong>Correo:</strong> <span x-text="correo"></span></p>
-                            <p><strong>Teléfono:</strong> <span x-text="telefono"></span></p>
-                            <p><strong>Cantidad:</strong> <span x-text="cantidad"></span></p>
-                            <p><strong>Asiento:</strong> <span x-text="asientoSeleccionado"></span></p>
-                            <p><strong>Total:</strong> <span x-text="cantidad * 600 + ' €'"></span></p>
-                        </div>
-                        <div class="flex justify-between mt-6">
-                            <button @click="paso = 3" class="text-purple-600 hover:underline">← Atrás</button>
-                            <button 
-                                @click="
-                                    fetch('{{ route('eventos.comprar', $evento->id) }}', {
-                                        method: 'POST',
-                                        headers: {
-                                            'Content-Type': 'application/json',
-                                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                                        },
-                                        body: JSON.stringify({
-                                            nombre,
-                                            correo,
-                                            telefono,
-                                            cantidad,
-                                            zona: asientoSeleccionado
-                                        })
-                                    })
-                                    .then(r => r.json())
-                                    .then(data => {
-                                        alert(data.message);
-                                        mostrarModal = false;
-                                    })
-                                    .catch(() => alert('Error al procesar la compra'));
-                                "
-                                class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg transition"
-                            >
-                                Confirmar compra
-                            </button>
+    <h2 class="text-xl font-semibold">Resumen del pedido</h2>
+    <div class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm space-y-2">
+        <p><strong>Nombre:</strong> <span x-text="nombre"></span></p>
+        <p><strong>Correo:</strong> <span x-text="correo"></span></p>
+        <p><strong>Teléfono:</strong> <span x-text="telefono"></span></p>
+        <p><strong>Cantidad:</strong> <span x-text="cantidad"></span></p>
+        <p><strong>Asiento:</strong> <span x-text="asientoSeleccionado"></span></p>
+        <p><strong>Total:</strong> <span x-text="cantidad * 600 + ' €'"></span></p>
+    </div>
 
+    <!-- Método de pago -->
+    <div class="mt-4">
+        <label class="block mb-2 font-semibold">Selecciona método de pago:</label>
+        <select x-model="metodoPago" class="w-full p-3 border rounded-lg">
+            <option value="" disabled selected>-- Elige una opción --</option>
+            <option value="tarjeta">Tarjeta de crédito</option>
+            <option value="paypal">PayPal</option>
+            <option value="transferencia">Transferencia bancaria</option>
+        </select>
+        <p x-show="!metodoPago" class="text-red-600 mt-1 text-sm">Debes seleccionar un método de pago.</p>
+    </div>
 
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="flex justify-between mt-6">
+        <button @click="paso = 3" class="text-purple-600 hover:underline">← Atrás</button>
+        <button 
+            :disabled="!metodoPago"
+            @click="
+                if(metodoPago) {
+                    fetch('{{ route('eventos.comprar', $evento->id) }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            nombre,
+                            correo,
+                            telefono,
+                            cantidad,
+                            zona: asientoSeleccionado,
+                            metodo_pago: metodoPago
+                        })
+                    })
+                    .then(r => r.json())
+                    .then(data => {
+                        alert(data.message);
+                        mostrarModal = false;
+                    })
+                    .catch(() => alert('Error al procesar la compra'));
+                }
+            "
+            class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+            Confirmar compra
+        </button>
+    </div>
+</div>
+
         {{-- Fin Modal --}}
     </div>
 </div>
