@@ -5,6 +5,7 @@
   x-data="{ open: false }" 
   x-cloak 
   class="flex flex-col md:flex-row min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 overflow-hidden"
+
 >
   <!-- Mobile Sidebar Toggle -->
   <button 
@@ -28,7 +29,7 @@
     x-transition:leave="transition transform ease-in duration-200"
     x-transition:leave-start="translate-x-0 opacity-100 scale-100"
     x-transition:leave-end="-translate-x-full opacity-0 scale-95"
-    class="fixed md:relative top-0 left-0 z-50 w-3/4 md:w-1/4 h-full md:h-auto bg-white dark:bg-gray-800 border-b md:border-r flex flex-col justify-between md:block shadow-2xl md:shadow-none"
+    class="fixed md:relative top-0 left-0 z-10 w-3/4 md:w-1/4 h-full md:h-auto bg-white dark:bg-gray-800 border-b md:border-r flex flex-col justify-between md:block shadow-2xl md:shadow-none"
   >
     <!-- Botón X móvil -->
     <div class="md:hidden flex justify-end p-4">

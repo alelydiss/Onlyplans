@@ -77,7 +77,11 @@ public function comprar(Request $request, $id)
         'zona' => 'required|string',
     ]);
 
-    $total = $request->cantidad * 600; // Asumiendo precio fijo
+    // Obtener el evento y su precio
+    $evento = Event::findOrFail($id);
+    $precioTicket = $evento->precio ?? 0;
+
+    $total = $request->cantidad * $precioTicket;
 
     Order::create([
         'event_id' => $id,

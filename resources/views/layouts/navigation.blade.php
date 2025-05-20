@@ -283,7 +283,7 @@
                                 </span>
                             </template>
                         </a>
-
+                        @endif
                         
                         <!-- Menú desplegable de usuario mejorado -->
                         <div class="relative ml-2" x-data="{ open: false }" @click.away="open = false">
@@ -315,15 +315,7 @@
                                     </svg>
                                     Perfil
                                 </a>
-                                @if(Auth::user()->role === 'admin')
-                                    <a href="{{ route('admin.settings') }}" class="flex items-center px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50/50 dark:hover:bg-gray-700/50 transition-colors duration-200">
-                                        <svg class="w-4 h-4 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                        </svg>
-                                        Configuración
-                                    </a>
-                                @endif
+                               
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
                                     <button type="submit" class="flex items-center w-full text-left px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50/50 dark:hover:bg-gray-700/50 transition-colors duration-200 border-t border-gray-100 dark:border-gray-700">
@@ -335,7 +327,7 @@
                                 </form>
                             </div>
                         </div>
-                    @endif
+                    
                 </div>
 
                 <!-- Menú móvil - Botón hamburguesa con animación mejorada -->
@@ -439,15 +431,15 @@
                     </svg>
                     <span>Mapa</span>
                 </a>
-                <a href="" class="flex items-center space-x-3 py-2 px-3 rounded-lg text-sm font-medium transition-colors duration-200
+                <a href="{{ route('favoritos') }}" class="flex items-center space-x-3 py-2 px-3 rounded-lg text-sm font-medium transition-colors duration-200
                     {{ request()->routeIs('favoritos') ? 'bg-purple-50 dark:bg-gray-700 text-purple-600 dark:text-purple-400' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                     </svg>
                     <span>Favoritos</span>
                 </a>
-                <a href="" class="flex items-center space-x-3 py-2 px-3 rounded-lg text-sm font-medium transition-colors duration-200
-                    {{ request()->routeIs('tickets') ? 'bg-purple-50 dark:bg-gray-700 text-purple-600 dark:text-purple-400' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50' }}">
+                <a href="{{ route('tickets.index') }}" class="flex items-center space-x-3 py-2 px-3 rounded-lg text-sm font-medium transition-colors duration-200
+                    {{ request()->routeIs('tickets.index') ? 'bg-purple-50 dark:bg-gray-700 text-purple-600 dark:text-purple-400' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
                     </svg>
@@ -463,15 +455,6 @@
                     </svg>
                     <span>Perfil</span>
                 </a>
-                @if(Auth::user()->role === 'admin')
-                    <a href="{{ route('admin.settings') }}" class="flex items-center space-x-3 py-2 px-3 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors duration-200">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                        <span>Configuración</span>
-                    </a>
-                @endif
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="flex items-center w-full space-x-3 py-2 px-3 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors duration-200">
