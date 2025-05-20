@@ -244,7 +244,7 @@
                         </a>
                         
                         <!-- Nueva pestaña de Tickets -->
-                        <a href=""
+                        <a href="{{ route('tickets.index') }}"
                             class="relative px-4 py-2 group"
                             x-data="{ particles: [] }"
                             @mouseenter="
@@ -262,13 +262,13 @@
                                 setTimeout(() => { particles = [] }, 1500);
                             ">
                             <span class="relative z-10 flex items-center text-sm font-medium transition-all duration-300
-                                {{ request()->routeIs('tickets') ? 'text-purple-500 dark:text-purple-400' : 'text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white' }}">
+                                {{ request()->routeIs('tickets.index') ? 'text-purple-500 dark:text-purple-400' : 'text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white' }}">
                                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
                                 </svg>
                                 Tickets
                             </span>
-                            <span class="{{ request()->routeIs('tickets') ? 'opacity-100' : 'opacity-0 group-hover:opacity-50' }} absolute inset-x-1 -bottom-px h-px bg-gradient-to-r from-purple-500/0 via-purple-500 to-purple-500/0 transition-opacity duration-300"></span>
+                            <span class="{{ request()->routeIs('tickets.index') ? 'opacity-100' : 'opacity-0 group-hover:opacity-50' }} absolute inset-x-1 -bottom-px h-px bg-gradient-to-r from-purple-500/0 via-purple-500 to-purple-500/0 transition-opacity duration-300"></span>
                             
                             <template x-for="particle in particles" :key="particle.id">
                                 <span class="absolute rounded-full pointer-events-none"
@@ -431,15 +431,15 @@
                     </svg>
                     <span>Mapa</span>
                 </a>
-                <a href="" class="flex items-center space-x-3 py-2 px-3 rounded-lg text-sm font-medium transition-colors duration-200
+                <a href="{{ route('favoritos') }}" class="flex items-center space-x-3 py-2 px-3 rounded-lg text-sm font-medium transition-colors duration-200
                     {{ request()->routeIs('favoritos') ? 'bg-purple-50 dark:bg-gray-700 text-purple-600 dark:text-purple-400' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                     </svg>
                     <span>Favoritos</span>
                 </a>
-                <a href="" class="flex items-center space-x-3 py-2 px-3 rounded-lg text-sm font-medium transition-colors duration-200
-                    {{ request()->routeIs('tickets') ? 'bg-purple-50 dark:bg-gray-700 text-purple-600 dark:text-purple-400' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50' }}">
+                <a href="{{ route('tickets.index') }}" class="flex items-center space-x-3 py-2 px-3 rounded-lg text-sm font-medium transition-colors duration-200
+                    {{ request()->routeIs('tickets.index') ? 'bg-purple-50 dark:bg-gray-700 text-purple-600 dark:text-purple-400' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
                     </svg>
