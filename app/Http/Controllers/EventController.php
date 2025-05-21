@@ -50,7 +50,7 @@ class EventController extends Controller
         $evento->hora_inicio = $request->hora_inicio;
         $evento->hora_fin = $request->hora_fin;
         $evento->tipo_evento = $request->tipo_evento;
-        $evento->precio = $request->precio;
+        $evento->precio = $request->tipo_evento === 'gratis' ? 0 : $request->precio;
         $evento->descripcion = $request->descripcion;
         $evento->ubicacion = $request->ubicacion; // Se agrega ubicación
         $evento->lat = $request->latitud;  // Latitud
@@ -64,7 +64,7 @@ class EventController extends Controller
         // Guardar el evento en la base de datos
         $evento->save();
 
-        return redirect()->route('crearEvento')->with('success', 'Evento creado con éxito!');
+        return redirect()->route('mapa')->with('success', 'Evento creado con éxito!');
     }
 
 public function comprar(Request $request, $id)

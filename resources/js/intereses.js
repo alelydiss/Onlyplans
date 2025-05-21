@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
        if (
     btn.dataset.category === pref.category &&
-    btn.textContent.trim() === pref.value
+    btn.dataset.value === pref.value
 )
  {
             matched = true;
@@ -103,9 +103,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const selectedInterests = [];
         document.querySelectorAll('.interest-btn.bg-indigo-600, .interest-btn.dark\\:bg-indigo-700').forEach(btn => {
             selectedInterests.push({
-                category: btn.dataset.category,
-                value: btn.dataset.value,
-                text: btn.textContent.trim()
+            category: btn.dataset.category,
+            value: btn.dataset.value,
+            text: btn.dataset.value
             });
         });
 
@@ -127,7 +127,9 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             console.log(data);
+            setTimeout(() => {
             saveBtn.innerHTML = originalHTML;
+            }, 1200);
         })
         .catch(error => {
             console.error('Error al guardar preferencias:', error);
