@@ -15,7 +15,7 @@
             </div>
             <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">No tienes tickets aún</h3>
             <p class="text-gray-600 dark:text-gray-300 max-w-md mx-auto">Cuando compres entradas para eventos, aparecerán aquí para que puedas gestionarlas.</p>
-            <a href="{{ route('events.index') }}" class="mt-6 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 transition-all duration-300 transform hover:-translate-y-1">
+            <a href="{{ route('eventos') }}" class="mt-6 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 transition-all duration-300 transform hover:-translate-y-1">
                 Explorar Eventos
             </a>
         </div>

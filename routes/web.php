@@ -28,12 +28,9 @@ Route::get('/', function () {
 
 Route::get('/categorias', [CategoriaController::class, 'index'])->name('categorias');
 
-Route::get('/dashboard', function () {
-    $categorias = Categoria::all();
-    $eventos = Event::latest()->take(6)->get();
-    return view('dashboard', compact('categorias', 'eventos'));
-})->middleware(['auth', 'verified'])->name('dashboard');
-
+Route::get('/dashboard', [EventController::class, 'mostrarDashboard'])
+->middleware(['auth', 'verified'])
+->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

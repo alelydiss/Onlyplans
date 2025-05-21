@@ -9,14 +9,14 @@
 
       <!-- Buscador -->
       <div class="mt-8 flex justify-center">
-        <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-xl flex flex-col sm:flex-row gap-4 w-full max-w-5xl">
-            <input type="text" placeholder="Buscar evento, ciudad o categoría"
-                class="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500" />
-            <button class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg transition font-medium shadow">
-                Buscar
-            </button>
+            <form method="GET" action="{{ route('eventos') }}" class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-xl flex flex-col sm:flex-row gap-4 w-full max-w-5xl">
+                <input type="text" name="q" value="{{ request('q') }}" placeholder="Buscar evento, ciudad o categoría"
+                    class="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500" />
+                <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg transition font-medium shadow">
+                    Buscar
+                </button>
+            </form>
         </div>
-    </div>
     </div>
 
     <!-- Categorías -->
@@ -33,7 +33,7 @@
     </section>
 
     <!-- Ultimos eventos -->
-    <section class="px-6 pb-10 animate__animated animate__fadeInUp">
+    <section class="px-6 pb-10 animate__animated animate__fadeInUp mt-5">
       <h3 class="text-2xl md:text-3xl font-bold mb-6 text-left">Ultimos Eventos</h3>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         @foreach($eventos as $evento)
@@ -43,7 +43,7 @@
                 src="{{ $evento->banner ? asset('storage/' . $evento->banner) : asset('img/default-banner.jpg') }}"
                 alt="{{ $evento->titulo }}" />
             </a>
-            <button 
+            <button
               id="favorito-btn-{{ $evento->id }}"
               onclick="toggleFavorito({{ $evento->id }})"
               data-evento-id="{{ $evento->id }}"
@@ -116,11 +116,11 @@
       </a>
     </section>
 
-    <!-- Eventos Online -->
-    <<section class="px-6 pb-10 animate__animated animate__fadeInUp">
-      <h3 class="text-2xl md:text-3xl font-bold mb-6 text-left">Ultimos Eventos</h3>
+    <!-- Eventos Para ti -->
+    <section class="px-6 pb-10 animate__animated animate__fadeInUp mt-5">
+      <h3 class="text-2xl md:text-3xl font-bold mb-6 text-left">Eventos Para ti</h3>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        @foreach($eventos as $evento)
+        @foreach($eventosPersonalizados as $evento)
           <div class="bg-white dark:bg-gray-700 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300 group relative animate__animated animate__zoomIn">
             <a href="{{ route('evento', $evento->id) }}">
               <img class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"

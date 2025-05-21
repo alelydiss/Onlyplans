@@ -49,9 +49,13 @@
 
             {{-- Botón Comprar y favorito --}}
             <div class="w-full md:w-auto flex flex-col items-end space-y-3">
-                <button onclick="this.classList.toggle('text-purple-600')" class="text-gray-400 hover:scale-110 transition">
-                    <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
-                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                <button 
+                    id="favorito-btn-{{ $evento->id }}"
+                    onclick="toggleFavorito({{ $evento->id }})"
+                    data-evento-id="{{ $evento->id }}"
+                    class=" top-3 right-3 p-2 bg-white dark:bg-gray-800 rounded-full shadow hover:scale-110 transition {{ Auth::user() && Auth::user()->favoritos->contains('evento_id', $evento->id) ? 'text-purple-600' : 'text-gray-400' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
                     </svg>
                 </button>
                 <button

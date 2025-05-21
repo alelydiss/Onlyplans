@@ -115,6 +115,15 @@
             @forelse($eventos as $evento)
                 <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm hover:shadow-2xl transition duration-300 transform hover:-translate-y-1 flex flex-col sm:flex-row overflow-hidden border border-gray-200 dark:border-gray-800">
                     <!-- Imagen -->
+                    <button 
+                        id="favorito-btn-{{ $evento->id }}"
+                        onclick="toggleFavorito({{ $evento->id }})"
+                        data-evento-id="{{ $evento->id }}"
+                        class="absolute top-3 right-3 p-2 bg-white dark:bg-gray-800 rounded-full shadow hover:scale-110 transition {{ Auth::user() && Auth::user()->favoritos->contains('evento_id', $evento->id) ? 'text-purple-600' : 'text-gray-400' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                    </button>
                     <div class="relative w-full sm:w-56 h-56 flex-shrink-0">
                         <img src="{{ asset('storage/' . $evento->banner) }}" alt="{{ $evento->titulo }}"
                             class="w-full h-full object-cover">

@@ -271,51 +271,104 @@ public function generarPDF($orderId)
 public function mostrarPreferencias()
 {
     $user = Auth::user();
-
     $preferences = $user->preferences;
 
-    $query = Event::query();
+$query = Event::query();
 
-    foreach ($preferences as $pref) {
-        switch ($pref->category) {
-            case 'categoría':
-                // Aquí asumimos que el campo "value" contiene el nombre de la categoría
-                $query->whereHas('category', function ($q) use ($pref) {
-                    $q->where('nombre', $pref->value);
-                });
-                break;
+foreach ($preferences as $pref) {
+    switch ($pref->category) {
+        case 'category':
+            // value guarda el ID de la categoría
+            $query->orWhere('category_id', $pref->value);
+            break;
 
-            case 'precio':
-                if (strtolower($pref->value) === 'gratis') {
-                    $query->where('precio', 0);
-                } else {
-                    $query->where('precio', '>', 0);
-                }
-                break;
+        case 'price':
+            if (strtolower($pref->value) === 'gratis') {
+                $query->orWhere('precio', 0);
+            } else {
+                $query->orWhere('precio', '>', 0);
+            }
+            break;
 
-            case 'date':
-                $hoy = Carbon::today();
+        case 'date':
+            $hoy = Carbon::today();
 
-                if (strtolower($pref->value) === 'hoy') {
-                    $query->whereDate('fecha_inicio', $hoy);
-                } elseif (strtolower($pref->value) === 'esta semana') {
-                    $query->whereBetween('fecha_inicio', [$hoy, $hoy->copy()->endOfWeek()]);
-                } elseif (strtolower($pref->value) === 'este mes') {
-                    $query->whereBetween('fecha_inicio', [$hoy, $hoy->copy()->endOfMonth()]);
-                }
-                break;
-        }
+            if (strtolower($pref->value) === 'hoy') {
+                $query->orWhereDate('fecha_inicio', $hoy);
+            } elseif (strtolower($pref->value) === 'esta semana') {
+                $query->orWhereBetween('fecha_inicio', [$hoy, $hoy->copy()->endOfWeek()]);
+            } elseif (strtolower($pref->value) === 'este mes') {
+                $query->orWhereBetween('fecha_inicio', [$hoy, $hoy->copy()->endOfMonth()]);
+            }
+            break;
+    }
+}
+
+$eventosPersonalizados = $query->latest()->take(9)->get();
+
+$eventos = Event::latest()->take(9)->get(); // Eventos normales
+$categorias = Categoria::all();
+
+return view('dashboard', compact('eventos', 'categorias', 'eventosPersonalizados'));
+
+    
+}
+
+public function mostrarDashboard()
+{
+$user = Auth::user();
+$categorias = Categoria::all();
+$eventos = Event::latest()->take(6)->get();
+
+$preferences = $user->preferences;
+
+$query = Event::query();
+
+// Agrupar preferencias por tipo
+$categoryPrefs = $preferences->where('category', 'category')->pluck('value');
+$pricePrefs = $preferences->where('category', 'price')->pluck('value');
+$datePrefs = $preferences->where('category', 'date')->pluck('value');
+
+// Aplicar filtros solo si hay preferencias
+if ($preferences->isNotEmpty()) {
+
+    if ($categoryPrefs->isNotEmpty()) {
+        $query->whereIn('category_id', $categoryPrefs);
     }
 
-    if ($preferences->isEmpty()) {
-    $eventosPreferencias = Event::latest()->take(9)->get();
-} else {
+    if ($pricePrefs->isNotEmpty()) {
+        $query->where(function ($q) use ($pricePrefs) {
+            foreach ($pricePrefs as $value) {
+                if (strtolower($value) === 'gratis') {
+                    $q->orWhere('precio', 0);
+                } else {
+                    $q->orWhere('precio', '>', 0);
+                }
+            }
+        });
+    }
 
-    $eventosPreferencias = $query->latest()->take(9)->get();
-}
-    return view('dashboard', compact('eventosPreferencias'));
-    
-}
-    
+    if ($datePrefs->isNotEmpty()) {
+        $hoy = Carbon::today();
+        $query->where(function ($q) use ($datePrefs, $hoy) {
+            foreach ($datePrefs as $value) {
+                $value = strtolower($value);
+                if ($value === 'hoy') {
+                    $q->orWhereDate('fecha_inicio', $hoy);
+                } elseif ($value === 'esta semana') {
+                    $q->orWhereBetween('fecha_inicio', [$hoy, $hoy->copy()->endOfWeek()]);
+                } elseif ($value === 'este mes') {
+                    $q->orWhereBetween('fecha_inicio', [$hoy, $hoy->copy()->endOfMonth()]);
+                }
+            }
+        });
+    }
 }
 
+$eventosPersonalizados = $preferences->isEmpty()
+    ? collect()
+    : $query->latest()->take(6)->get();
+
+return view('dashboard', compact('categorias', 'eventos', 'eventosPersonalizados'));
+}
+}
