@@ -18,7 +18,7 @@ class EventController extends Controller
     {
         // Obtener todas las categorías para pasarlas al formulario
         $categorias = Categoria::all();
-        
+
         // Mostrar el formulario de creación de evento y pasar las categorías
         return view('crearEvento', compact('categorias'));
     }
@@ -69,39 +69,37 @@ class EventController extends Controller
         return redirect()->route('mapa')->with('success', 'Evento creado con éxito!');
     }
 
-public function comprar(Request $request, $id)
-{
-    $request->validate([
-        'nombre' => 'required|string|max:255',
-        'correo' => 'required|email',
-        'telefono' => 'nullable|string|max:20',
-        'cantidad' => 'required|integer|min:1',
-        'zona' => 'required|string',
-    ]);
+    public function comprar(Request $request, $id)
+    {
+        $request->validate([
+            'nombre' => 'required|string|max:255',
+            'correo' => 'required|email',
+            'telefono' => 'nullable|string|max:20',
+            'cantidad' => 'required|integer|min:1',
+            'zona' => 'required|string',
+        ]);
 
-    // Obtener el evento y su precio
-    $evento = Event::findOrFail($id);
-    $precioTicket = $evento->precio ?? 0;
+        // Obtener el evento y su precio
+        $evento = Event::findOrFail($id);
+        $precioTicket = $evento->precio ?? 0;
 
-    $total = $request->cantidad * $precioTicket;
+        $total = $request->cantidad * $precioTicket;
 
-    Order::create([
-        'event_id' => $id,
-        'nombre' => $request->nombre,
-        'correo' => $request->correo,
-        'telefono' => $request->telefono,
-        'cantidad' => $request->cantidad,
-        'zona' => $request->zona,
-        'total' => $total,
-        'user_id' => Auth::id()
-    ]);
+        Order::create([
+            'event_id' => $id,
+            'nombre' => $request->nombre,
+            'correo' => $request->correo,
+            'telefono' => $request->telefono,
+            'cantidad' => $request->cantidad,
+            'zona' => $request->zona,
+            'total' => $total,
+            'user_id' => Auth::id()
+        ]);
 
-    return response()->json(['message' => 'Compra registrada correctamente.']);
-}
+        return response()->json(['message' => 'Compra registrada correctamente.']);
+    }
 
-
-
-        public function mostrar($id = null)
+    public function mostrar($id = null)
     {
         if ($id) {
             // Mostrar un evento específico
@@ -115,72 +113,76 @@ public function comprar(Request $request, $id)
     }
 
     public function index(Request $request)
-{
-    $query = Event::with('category');
+    {
+        $query = Event::with('category');
 
-    // Búsqueda por título, ubicación o nombre de categoría
-    if ($request->filled('q')) {
-        $q = $request->input('q');
-        $query->where(function ($subQuery) use ($q) {
-            $subQuery->where('titulo', 'like', "%{$q}%")
-                     ->orWhere('ubicacion', 'like', "%{$q}%")
-                     ->orWhereHas('category', function ($catQuery) use ($q) {
-                         $catQuery->where('nombre', 'like', "%{$q}%");
-                     });
-        });
-    }
-
-    // Filtro por precio
-    if ($request->has('precio')) {
-        $precios = $request->input('precio');
-        if (in_array('gratis', $precios) && !in_array('pago', $precios)) {
-            $query->where('precio', 0);
-        } elseif (in_array('pago', $precios) && !in_array('gratis', $precios)) {
-            $query->where('precio', '>', 0);
+        // Búsqueda por título, ubicación o nombre de categoría
+        if ($request->filled('q')) {
+            $q = $request->input('q');
+            $query->where(function ($subQuery) use ($q) {
+                $subQuery->where('titulo', 'like', "%{$q}%")
+                    ->orWhere('ubicacion', 'like', "%{$q}%")
+                    ->orWhereHas('category', function ($catQuery) use ($q) {
+                        $catQuery->where('nombre', 'like', "%{$q}%");
+                    });
+            });
         }
-        // Si ambos están marcados, no se aplica filtro
-    }
 
-    // Filtro por fecha
-    if ($request->has('fecha')) {
-        $fechas = $request->input('fecha');
-        $today = now()->startOfDay();
-
-        if (in_array('hoy', $fechas)) {
-            $query->whereDate('fecha_inicio', $today);
-        } elseif (in_array('semana', $fechas)) {
-            $query->whereBetween('fecha_inicio', [$today, $today->copy()->endOfWeek()]);
-        } elseif (in_array('mes', $fechas)) {
-            $query->whereBetween('fecha_inicio', [$today, $today->copy()->endOfMonth()]);
+        // Filtro por precio
+        if ($request->has('precio')) {
+            $precios = $request->input('precio');
+            if (in_array('gratis', $precios) && !in_array('pago', $precios)) {
+                $query->where('precio', 0);
+            } elseif (in_array('pago', $precios) && !in_array('gratis', $precios)) {
+                $query->where('precio', '>', 0);
+            }
+            // Si ambos están marcados, no se aplica filtro
         }
+
+        // Filtro por fecha
+        if ($request->has('fecha')) {
+            $fechas = $request->input('fecha');
+            $today = now()->startOfDay();
+
+            if (in_array('hoy', $fechas)) {
+                $query->whereDate('fecha_inicio', $today);
+            } elseif (in_array('semana', $fechas)) {
+                $query->whereBetween('fecha_inicio', [$today, $today->copy()->endOfWeek()]);
+            } elseif (in_array('mes', $fechas)) {
+                $query->whereBetween('fecha_inicio', [$today, $today->copy()->endOfMonth()]);
+            }
+        }
+
+        if ($request->has('categoria')) {
+            $categoriaId = $request->input('categoria');
+            $query->where('category_id', $categoriaId);
+        } elseif ($request->has('categorias')) {
+            $categoriasIds = $request->input('categorias');
+            $query->whereIn('category_id', $categoriasIds);
+        }
+
+
+        // Ordenamiento
+        switch ($request->input('orden')) {
+            case 'nombre':
+                $query->orderBy('titulo');
+                break;
+            case 'precio_asc':
+                $query->orderBy('precio', 'asc');
+                break;
+            case 'precio_desc':
+                $query->orderBy('precio', 'desc');
+                break;
+            default:
+                $query->orderBy('fecha_inicio', 'asc');
+        }
+
+        // Paginar y mantener parámetros
+        $eventos = $query->paginate(6)->appends($request->query());
+        $categorias = Categoria::all();
+
+        return view('eventosPersonalizados', compact('eventos', 'categorias'));
     }
-
-    // Filtro por categorías
-    if ($request->has('categorias')) {
-        $query->whereIn('category_id', $request->input('categorias'));
-    }
-
-    // Ordenamiento
-    switch ($request->input('orden')) {
-        case 'nombre':
-            $query->orderBy('titulo');
-            break;
-        case 'precio_asc':
-            $query->orderBy('precio', 'asc');
-            break;
-        case 'precio_desc':
-            $query->orderBy('precio', 'desc');
-            break;
-        default:
-            $query->orderBy('fecha_inicio', 'asc');
-    }
-
-    // Paginar y mantener parámetros
-    $eventos = $query->paginate(6)->appends($request->query());
-    $categorias = Categoria::all();
-
-    return view('eventosPersonalizados', compact('eventos', 'categorias'));
-}
 
 
     public function ordenar(Request $request)
@@ -237,138 +239,136 @@ public function comprar(Request $request, $id)
     }
 
 
-public function misEntradas()
-{
-    $orders = Order::with('event')->where('user_id', Auth::id())->latest()->get();
-    return view('tickets', compact('orders'));
-}
-
-
-
-public function downloadTicket($orderId)
-{
-    $order = Order::with('event')->findOrFail($orderId);
-
-    $pdf = Pdf::loadView('ticket-pdf', compact('order'));
-
-    return $pdf->download('entrada_' . $order->id . '.pdf');
-}
-
-
-public function generarPDF($orderId)
-{
-    $order = Order::with('event')->findOrFail($orderId);
-
-    // Generar URL del QR
-    $qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?data=' . urlencode('https://onlyplans.com/ticket/' . $order->id) . '&size=200x200';
-
-    // Pasar a la vista
-    $pdf = PDF::loadView('tickets.pdf', compact('order', 'qrUrl'));
-
-    return $pdf->stream('entrada.pdf');
-}
-
-public function mostrarPreferencias()
-{
-    $user = Auth::user();
-    $preferences = $user->preferences;
-
-$query = Event::query();
-
-foreach ($preferences as $pref) {
-    switch ($pref->category) {
-        case 'category':
-            // value guarda el ID de la categoría
-            $query->orWhere('category_id', $pref->value);
-            break;
-
-        case 'price':
-            if (strtolower($pref->value) === 'gratis') {
-                $query->orWhere('precio', 0);
-            } else {
-                $query->orWhere('precio', '>', 0);
-            }
-            break;
-
-        case 'date':
-            $hoy = Carbon::today();
-
-            if (strtolower($pref->value) === 'hoy') {
-                $query->orWhereDate('fecha_inicio', $hoy);
-            } elseif (strtolower($pref->value) === 'esta semana') {
-                $query->orWhereBetween('fecha_inicio', [$hoy, $hoy->copy()->endOfWeek()]);
-            } elseif (strtolower($pref->value) === 'este mes') {
-                $query->orWhereBetween('fecha_inicio', [$hoy, $hoy->copy()->endOfMonth()]);
-            }
-            break;
-    }
-}
-
-$eventosPersonalizados = $query->latest()->take(9)->get();
-
-$eventos = Event::latest()->take(9)->get(); // Eventos normales
-$categorias = Categoria::all();
-
-return view('dashboard', compact('eventos', 'categorias', 'eventosPersonalizados'));
-
-    
-}
-
-public function mostrarDashboard()
-{
-$user = Auth::user();
-$categorias = Categoria::all();
-$eventos = Event::latest()->take(6)->get();
-
-$preferences = $user->preferences;
-
-$query = Event::query();
-
-// Agrupar preferencias por tipo
-$categoryPrefs = $preferences->where('category', 'category')->pluck('value');
-$pricePrefs = $preferences->where('category', 'price')->pluck('value');
-$datePrefs = $preferences->where('category', 'date')->pluck('value');
-
-// Aplicar filtros solo si hay preferencias
-if ($preferences->isNotEmpty()) {
-
-    if ($categoryPrefs->isNotEmpty()) {
-        $query->whereIn('category_id', $categoryPrefs);
+    public function misEntradas()
+    {
+        $orders = Order::with('event')->where('user_id', Auth::id())->latest()->get();
+        return view('tickets', compact('orders'));
     }
 
-    if ($pricePrefs->isNotEmpty()) {
-        $query->where(function ($q) use ($pricePrefs) {
-            foreach ($pricePrefs as $value) {
-                if (strtolower($value) === 'gratis') {
-                    $q->orWhere('precio', 0);
-                } else {
-                    $q->orWhere('precio', '>', 0);
-                }
-            }
-        });
+
+
+    public function downloadTicket($orderId)
+    {
+        $order = Order::with('event')->findOrFail($orderId);
+
+        $pdf = Pdf::loadView('ticket-pdf', compact('order'));
+
+        return $pdf->download('entrada_' . $order->id . '.pdf');
     }
 
-    if ($datePrefs->isNotEmpty()) {
-        $hoy = Carbon::today();
-        $query->where(function ($q) use ($datePrefs, $hoy) {
-            foreach ($datePrefs as $value) {
-                $value = strtolower($value);
-                if ($value === 'hoy') {
-                    $q->orWhereDate('fecha_inicio', $hoy);
-                } elseif ($value === 'esta semana') {
-                    $q->orWhereBetween('fecha_inicio', [$hoy, $hoy->copy()->endOfWeek()]);
-                } elseif ($value === 'este mes') {
-                    $q->orWhereBetween('fecha_inicio', [$hoy, $hoy->copy()->endOfMonth()]);
-                }
-            }
-        });
+
+    public function generarPDF($orderId)
+    {
+        $order = Order::with('event')->findOrFail($orderId);
+
+        // Generar URL del QR
+        $qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?data=' . urlencode('https://onlyplans.com/ticket/' . $order->id) . '&size=200x200';
+
+        // Pasar a la vista
+        $pdf = PDF::loadView('tickets.pdf', compact('order', 'qrUrl'));
+
+        return $pdf->stream('entrada.pdf');
     }
-}
 
-$eventosPersonalizados = $preferences->isEmpty()
-    ? collect()
-    : $query->latest()->take(6)->get();
+    public function mostrarPreferencias()
+    {
+        $user = Auth::user();
+        $preferences = $user->preferences;
 
-return view('dashboard', compact('categorias', 'eventos', 'eventosPersonalizados'));
-}
+        $query = Event::query();
+
+        foreach ($preferences as $pref) {
+            switch ($pref->category) {
+                case 'category':
+                    // value guarda el ID de la categoría
+                    $query->orWhere('category_id', $pref->value);
+                    break;
+
+                case 'price':
+                    if (strtolower($pref->value) === 'gratis') {
+                        $query->orWhere('precio', 0);
+                    } else {
+                        $query->orWhere('precio', '>', 0);
+                    }
+                    break;
+
+                case 'date':
+                    $hoy = Carbon::today();
+
+                    if (strtolower($pref->value) === 'hoy') {
+                        $query->orWhereDate('fecha_inicio', $hoy);
+                    } elseif (strtolower($pref->value) === 'esta semana') {
+                        $query->orWhereBetween('fecha_inicio', [$hoy, $hoy->copy()->endOfWeek()]);
+                    } elseif (strtolower($pref->value) === 'este mes') {
+                        $query->orWhereBetween('fecha_inicio', [$hoy, $hoy->copy()->endOfMonth()]);
+                    }
+                    break;
+            }
+        }
+
+        $eventosPersonalizados = $query->latest()->take(9)->get();
+
+        $eventos = Event::latest()->take(9)->get(); // Eventos normales
+        $categorias = Categoria::all();
+
+        return view('dashboard', compact('eventos', 'categorias', 'eventosPersonalizados'));
+    }
+
+    public function mostrarDashboard()
+    {
+        $user = Auth::user();
+        $categorias = Categoria::all();
+        $eventos = Event::latest()->take(6)->get();
+
+        $preferences = $user->preferences;
+
+        $query = Event::query();
+
+        // Agrupar preferencias por tipo
+        $categoryPrefs = $preferences->where('category', 'category')->pluck('value');
+        $pricePrefs = $preferences->where('category', 'price')->pluck('value');
+        $datePrefs = $preferences->where('category', 'date')->pluck('value');
+
+        // Aplicar filtros solo si hay preferencias
+        if ($preferences->isNotEmpty()) {
+
+            if ($categoryPrefs->isNotEmpty()) {
+                $query->whereIn('category_id', $categoryPrefs);
+            }
+
+            if ($pricePrefs->isNotEmpty()) {
+                $query->where(function ($q) use ($pricePrefs) {
+                    foreach ($pricePrefs as $value) {
+                        if (strtolower($value) === 'gratis') {
+                            $q->orWhere('precio', 0);
+                        } else {
+                            $q->orWhere('precio', '>', 0);
+                        }
+                    }
+                });
+            }
+
+            if ($datePrefs->isNotEmpty()) {
+                $hoy = Carbon::today();
+                $query->where(function ($q) use ($datePrefs, $hoy) {
+                    foreach ($datePrefs as $value) {
+                        $value = strtolower($value);
+                        if ($value === 'hoy') {
+                            $q->orWhereDate('fecha_inicio', $hoy);
+                        } elseif ($value === 'esta semana') {
+                            $q->orWhereBetween('fecha_inicio', [$hoy, $hoy->copy()->endOfWeek()]);
+                        } elseif ($value === 'este mes') {
+                            $q->orWhereBetween('fecha_inicio', [$hoy, $hoy->copy()->endOfMonth()]);
+                        }
+                    }
+                });
+            }
+        }
+
+        $eventosPersonalizados = $preferences->isEmpty()
+            ? collect()
+            : $query->latest()->take(6)->get();
+
+        return view('dashboard', compact('categorias', 'eventos', 'eventosPersonalizados'));
+    }
 }

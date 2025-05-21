@@ -24,9 +24,13 @@
       <h3 class="text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-left">Explora todas las <span class="text-purple-600">Categorías</span></h3>
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
         @foreach($categorias as $categoria)
-          <div class="text-center hover:scale-105 transition animate__animated animate__zoomIn">
-              <img src="{{ asset($categoria->foto) }}" alt="{{ $categoria->nombre }}" class="rounded-full w-16 h-16 md:w-20 md:h-20 object-cover mx-auto" />
-              <p class="text-sm md:text-base">{{ $categoria->nombre }}</p>
+          <div class="text-center group cursor-pointer">
+            <a href="{{ route('eventos', ['categorias[]' => $categoria->id]) }}">
+              <div class="rounded-full w-16 h-16 md:w-20 md:h-20 mx-auto overflow-hidden bg-white shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl group-hover:ring-4 group-hover:ring-purple-300 group-hover:rotate-6">
+                <img src="{{ asset($categoria->foto) }}" alt="{{ $categoria->nombre }}" class="object-cover w-full h-full transition-all duration-300 group-hover:scale-110 group-hover:blur-[1px]" />
+              </div>
+              <p class="text-sm md:text-base mt-2 transition-colors duration-300 group-hover:text-purple-600 font-semibold">{{ $categoria->nombre }}</p>
+            </a>
           </div>
         @endforeach
       </div>
