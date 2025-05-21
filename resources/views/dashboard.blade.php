@@ -34,7 +34,7 @@
 
     <!-- Eventos Populares -->
     <section class="px-6 pb-10 animate__animated animate__fadeInUp">
-      <h3 class="text-2xl md:text-3xl font-bold mb-6 text-left">Eventos Más Populares</h3>
+      <h3 class="text-2xl md:text-3xl font-bold mb-6 text-left">Ultimos Eventos</h3>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         @foreach($eventos as $evento)
           <div class="bg-white dark:bg-gray-700 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300 group relative animate__animated animate__zoomIn">
@@ -118,7 +118,7 @@
 
     <!-- Eventos Online -->
     <section class="px-6 py-10 animate__animated animate__fadeInUp">
-      <h3 class="text-2xl md:text-3xl font-bold mb-6 text-left">Eventos Más Populares Online</h3>
+      <h3 class="text-2xl md:text-3xl font-bold mb-6 text-left">Eventos Para ti</h3>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="bg-white dark:bg-gray-700 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300 group relative animate__animated animate__zoomIn">
           <a href="#">

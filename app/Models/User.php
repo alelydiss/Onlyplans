@@ -88,6 +88,11 @@ public function eventosFavoritos()
     );
 }
 
+public function preferences()
+{
+    return $this->hasMany(UserPreference::class);
+}
+
 
 
 

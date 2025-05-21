@@ -27,4 +27,12 @@ class UserPreferenceController extends Controller
 
         return response()->json(['message' => 'Preferencias guardadas correctamente']);
     }
+
+    public function getUserPreferences()
+    {
+        $user = Auth::user();
+        $preferences = UserPreference::where('user_id', $user->id)->get();
+
+        return response()->json($preferences);
+    }
 }

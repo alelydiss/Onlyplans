@@ -126,3 +126,4 @@ Route::get('/favoritos', [FavoritoController::class, 'index'])->name('favoritos'
 
 Route::post('/guardar-preferencias', [UserPreferenceController::class, 'store'])->name('preferencias.store');
 
+Route::get('/obtener-preferencias', [UserPreferenceController::class, 'getUserPreferences'])->name('obtener-preferencias');
