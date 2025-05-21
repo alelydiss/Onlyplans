@@ -92,8 +92,4 @@ public function preferences()
 {
     return $this->hasMany(UserPreference::class);
 }
-
-
-
-
 }

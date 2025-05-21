@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Event;
+use App\Models\User;
 use App\Models\Order;
 use App\Models\Categoria;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Pagination\Paginator;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 
 class EventController extends Controller
 {
@@ -266,6 +268,54 @@ public function generarPDF($orderId)
     return $pdf->stream('entrada.pdf');
 }
 
+public function mostrarPreferencias()
+{
+    $user = Auth::user();
+
+    $preferences = $user->preferences;
+
+    $query = Event::query();
+
+    foreach ($preferences as $pref) {
+        switch ($pref->category) {
+            case 'categoría':
+                // Aquí asumimos que el campo "value" contiene el nombre de la categoría
+                $query->whereHas('category', function ($q) use ($pref) {
+                    $q->where('nombre', $pref->value);
+                });
+                break;
+
+            case 'precio':
+                if (strtolower($pref->value) === 'gratis') {
+                    $query->where('precio', 0);
+                } else {
+                    $query->where('precio', '>', 0);
+                }
+                break;
+
+            case 'date':
+                $hoy = Carbon::today();
+
+                if (strtolower($pref->value) === 'hoy') {
+                    $query->whereDate('fecha_inicio', $hoy);
+                } elseif (strtolower($pref->value) === 'esta semana') {
+                    $query->whereBetween('fecha_inicio', [$hoy, $hoy->copy()->endOfWeek()]);
+                } elseif (strtolower($pref->value) === 'este mes') {
+                    $query->whereBetween('fecha_inicio', [$hoy, $hoy->copy()->endOfMonth()]);
+                }
+                break;
+        }
+    }
+
+    if ($preferences->isEmpty()) {
+    $eventosPreferencias = Event::latest()->take(9)->get();
+} else {
+
+    $eventosPreferencias = $query->latest()->take(9)->get();
+}
+    return view('dashboard', compact('eventosPreferencias'));
+    
+}
     
 }
 
