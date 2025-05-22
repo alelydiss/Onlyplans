@@ -79,7 +79,7 @@
                             @foreach($categorias as $categoria)
                                 <li>
                                     <label>
-                                        <input type="checkbox" name="categorias[]" value="{{ $categoria->id }}" {{ in_array($categoria->id, request('categorias', [])) ? 'checked' : '' }} class="mr-2" />
+                                        <input type="checkbox" name="categorias[]" value="{{ $categoria->id }}" {{ in_array((string) $categoria->id, (array) request('categorias')) ? 'checked' : '' }} />
                                         {{ $categoria->nombre }}
                                     </label>
                                 </li>
