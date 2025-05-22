@@ -371,4 +371,6 @@ $eventosPersonalizados = $preferences->isEmpty()
 
 return view('dashboard', compact('categorias', 'eventos', 'eventosPersonalizados'));
 }
+
+
 }

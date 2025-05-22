@@ -12,11 +12,16 @@ use App\Http\Controllers\Admin\AdminUsuarioController;
 use App\Http\Controllers\Admin\AdminEventoController;
 use App\Http\Controllers\Admin\AdminCategoriaController;
 use App\Http\Controllers\UserPreferenceController;
+use App\Http\Controllers\UsuarioController;
 use App\Models\Categoria;
 use App\Models\Event;
+use App\Models\User;
+use App\Models\Order;
+use Carbon\Carbon;
 use App\Events\MessageSent;
 use Illuminate\Http\Request;
 use App\Models\Message;
+use Illuminate\Support\Facades\DB;
 
 
 Route::get('/', function () {
@@ -108,18 +113,89 @@ Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/', function () {
-        return view('admin.dashboard');
+
+        $totalUsuarios = User::count();
+        $eventosTotales = Event::count();
+        $ticketsVendidos = Order::sum('cantidad');
+        $ingresosTotales = Order::sum('total');
+        $totalCategorias = Categoria::count();
+
+        // Categorías más populares
+        $categoriasPopulares = Categoria::select('categorias.id', 'categorias.nombre', DB::raw('COUNT(events.id) as total_eventos'))
+            ->leftJoin('events', 'categorias.id', '=', 'events.category_id')
+            ->groupBy('categorias.id', 'categorias.nombre')
+            ->orderByDesc('total_eventos')
+            ->get();
+
+        $totalEventos = $categoriasPopulares->sum('total_eventos');
+
+        // Eventos próximos
+        $eventosProximos = Event::with('category')
+            ->whereDate('fecha_inicio', '>=', Carbon::today())
+            ->orderBy('fecha_inicio')
+            ->take(5)
+            ->get()
+            ->map(function ($evento) {
+                $ticketsVendidos = Order::where('event_id', $evento->id)->sum('cantidad');
+                $evento->ticketsVendidos = $ticketsVendidos;
+                return $evento;
+            });
+            // Últimos 7 días
+$ventasPorDia = Order::where('created_at', '>=', Carbon::now()->subDays(6)->startOfDay())
+    ->selectRaw('DATE(created_at) as fecha, SUM(cantidad) as total')
+    ->groupBy('fecha')
+    ->orderBy('fecha')
+    ->get();
+
+// Formatear datos para el gráfico
+$fechas = [];
+$tickets = [];
+
+$periodo = \Carbon\CarbonPeriod::create(now()->subDays(6), now());
+foreach ($periodo as $date) {
+    $formato = $date->format('Y-m-d');
+    $fechas[] = $date->format('d M');
+    $venta = $ventasPorDia->firstWhere('fecha', $formato);
+    $tickets[] = $venta ? $venta->total : 0;
+}
+
+
+$eventosPorRevisar = Event::where('revisado', false)->take(5)->get();
+
+return view('admin.dashboard', compact(
+    'totalUsuarios',
+    'eventosTotales',
+    'ticketsVendidos',
+    'ingresosTotales',
+    'totalCategorias',
+    'categoriasPopulares',
+    'totalEventos',
+    'fechas',
+    'tickets',
+    'eventosProximos',
+    'eventosPorRevisar'
+));
     })->name('admin.dashboard');
-});
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
-    Route::get('/categorias', [AdminCategoriaController::class, 'index'])->name('admin.categorias');
-    Route::get('/usuarios', [AdminUsuarioController::class, 'index'])->name('admin.usuarios');
     Route::get('/eventos', [AdminEventoController::class, 'index'])->name('admin.eventos');
+    Route::get('/eventos/pendientes', [AdminEventoController::class, 'pendientes'])->name('admin.eventos.pendientes');
+    Route::put('/eventos/{evento}/aprobar', [AdminEventoController::class, 'aprobar'])->name('admin.eventos.aprobar');
+    Route::delete('/eventos/{evento}/rechazar', [AdminEventoController::class, 'rechazar'])->name('admin.eventos.rechazar');
+    Route::get('/evento/{id}', [EventController::class, 'mostrar'])->name('admin.eventos.mostrar');
+        Route::get('/categorias', [AdminCategoriaController::class, 'index'])->name('admin.categorias');
+        Route::get('/usuarios', [AdminCategoriaController::class, 'index'])->name('admin.usuarios');
+
 });
+});
+
 
 Route::get('/favoritos', [FavoritoController::class, 'index'])->name('favoritos');
 
 Route::post('/guardar-preferencias', [UserPreferenceController::class, 'store'])->name('preferencias.store');
 
 Route::get('/obtener-preferencias', [UserPreferenceController::class, 'getUserPreferences'])->name('obtener-preferencias');
+
+#RUTA USUARIOS
+Route::get('/usuarios/totales', [UsuarioController::class, 'totales'])->name('usuarios.totales');
+

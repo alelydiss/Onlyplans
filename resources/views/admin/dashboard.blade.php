@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-4 sm:p-6">
     <div class="max-w-7xl mx-auto">
         <!-- Header con breadcrumbs -->
@@ -26,7 +27,8 @@
                 <div class="flex justify-between items-start">
                     <div>
                         <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Usuarios Totales</p>
-                        <h3 class="text-2xl font-bold text-gray-800 dark:text-white mt-1">1,248</h3>
+                        <h3 class="text-2xl font-bold text-gray-800 dark:text-white mt-1">{{ number_format($totalUsuarios) }}</h3>
+
                     </div>
                     <div class="p-3 rounded-full bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300">
                         <i class="fas fa-users text-lg"></i>
@@ -42,7 +44,7 @@
                 <div class="flex justify-between items-start">
                     <div>
                         <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Eventos Activos</p>
-                        <h3 class="text-2xl font-bold text-gray-800 dark:text-white mt-1">56</h3>
+                        <h3 class="text-2xl font-bold text-gray-800 dark:text-white mt-1">{{ $eventosTotales }}</h3>
                     </div>
                     <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300">
                         <i class="fas fa-calendar-alt text-lg"></i>
@@ -58,7 +60,7 @@
                 <div class="flex justify-between items-start">
                     <div>
                         <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Tickets Vendidos</p>
-                        <h3 class="text-2xl font-bold text-gray-800 dark:text-white mt-1">2,847</h3>
+                        <h3 class="text-2xl font-bold text-gray-800 dark:text-white mt-1">{{ $ticketsVendidos }}</h3>
                     </div>
                     <div class="p-3 rounded-full bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300">
                         <i class="fas fa-ticket-alt text-lg"></i>
@@ -74,7 +76,7 @@
                 <div class="flex justify-between items-start">
                     <div>
                         <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Ingresos Totales</p>
-                        <h3 class="text-2xl font-bold text-gray-800 dark:text-white mt-1">$48,750</h3>
+                        <h3 class="text-2xl font-bold text-gray-800 dark:text-white mt-1">{{ number_format($ingresosTotales, 2) }}€</h3>
                     </div>
                     <div class="p-3 rounded-full bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300">
                         <i class="fas fa-dollar-sign text-lg"></i>
@@ -86,6 +88,7 @@
             </div>
         </div>
 
+        <!-- Gráfico y Estadísticas -->
         <!-- Gráfico y Estadísticas -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
             <!-- Gráfico de ventas -->
@@ -102,210 +105,131 @@
                 <canvas id="salesChart" class="w-full h-72"></canvas>
             </div>
 
+
             <!-- Estadísticas de categorías -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Categorías Populares</h2>
-                    <button onclick="openCategoryModal()" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 text-sm font-medium flex items-center">
-                        <i class="fas fa-edit mr-1"></i> Gestionar
-                    </button>
+<div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Categorías Populares</h2>
+        <button onclick="openCategoryModal()" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 text-sm font-medium flex items-center">
+            <i class="fas fa-edit mr-1"></i> Gestionar
+        </button>
+    </div>
+    <div class="space-y-4">
+        @foreach ($categoriasPopulares as $categoria)
+            @php
+                $porcentaje = $totalEventos > 0 ? round(($categoria->total_eventos / $totalEventos) * 100) : 0;
+                $color = match(true) {
+                    $loop->index == 0 => 'bg-indigo-600',
+                    $loop->index == 1 => 'bg-blue-500',
+                    $loop->index == 2 => 'bg-green-500',
+                    $loop->index == 3 => 'bg-purple-500',
+                    default => 'bg-yellow-500',
+                };
+            @endphp
+            <div>
+                <div class="flex justify-between text-sm mb-1">
+                    <span class="font-medium text-gray-700 dark:text-gray-300">{{ $categoria->nombre }}</span>
+                    <span class="text-gray-500 dark:text-gray-400">{{ $porcentaje }}%</span>
                 </div>
-                <div class="space-y-4">
-                    <div>
-                        <div class="flex justify-between text-sm mb-1">
-                            <span class="font-medium text-gray-700 dark:text-gray-300">Conciertos</span>
-                            <span class="text-gray-500 dark:text-gray-400">42%</span>
-                        </div>
-                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                            <div class="bg-indigo-600 h-2 rounded-full" style="width: 42%"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex justify-between text-sm mb-1">
-                            <span class="font-medium text-gray-700 dark:text-gray-300">Conferencias</span>
-                            <span class="text-gray-500 dark:text-gray-400">28%</span>
-                        </div>
-                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                            <div class="bg-blue-500 h-2 rounded-full" style="width: 28%"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex justify-between text-sm mb-1">
-                            <span class="font-medium text-gray-700 dark:text-gray-300">Talleres</span>
-                            <span class="text-gray-500 dark:text-gray-400">15%</span>
-                        </div>
-                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                            <div class="bg-green-500 h-2 rounded-full" style="width: 15%"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex justify-between text-sm mb-1">
-                            <span class="font-medium text-gray-700 dark:text-gray-300">Deportes</span>
-                            <span class="text-gray-500 dark:text-gray-400">8%</span>
-                        </div>
-                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                            <div class="bg-purple-500 h-2 rounded-full" style="width: 8%"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex justify-between text-sm mb-1">
-                            <span class="font-medium text-gray-700 dark:text-gray-300">Otros</span>
-                            <span class="text-gray-500 dark:text-gray-400">7%</span>
-                        </div>
-                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                            <div class="bg-yellow-500 h-2 rounded-full" style="width: 7%"></div>
-                        </div>
-                    </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                    <div class="{{ $color }} h-2 rounded-full" style="width: {{ $porcentaje }}%"></div>
                 </div>
-                <button class="w-full mt-6 text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 text-sm font-medium flex items-center justify-center">
-                    Ver todas las categorías <i class="fas fa-chevron-right ml-2"></i>
-                </button>
             </div>
+        @endforeach
+    </div>
+    <button class="w-full mt-6 text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 text-sm font-medium flex items-center justify-center">
+        Ver todas las categorías <i class="fas fa-chevron-right ml-2"></i>
+    </button>
+</div>
+
         </div>
 
-        <!-- Eventos Próximos y Revisión Pendiente -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <!-- Eventos próximos -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Eventos Próximos</h2>
-                    <button class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 text-sm font-medium">
-                        Ver todos
+       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <!-- Eventos próximos -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Eventos Próximos</h2>
+            <a href="{{ route('admin.eventos') }}" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 text-sm font-medium">
+                Ver todos
+            </a>
+        </div>
+        <div class="space-y-4">
+            @forelse ($eventosProximos as $evento)
+                @php
+                    $fecha = \Carbon\Carbon::parse($evento->fecha_inicio);
+                @endphp
+                <div class="flex items-start p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition">
+                    <div class="bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300 p-2 rounded-lg mr-4 min-w-[60px]">
+                        <div class="text-center">
+                            <div class="font-bold text-lg">{{ $fecha->format('d') }}</div>
+                            <div class="text-xs uppercase">{{ $fecha->format('M') }}</div>
+                        </div>
+                    </div>
+                    <div class="flex-grow">
+                        <h4 class="font-medium text-gray-800 dark:text-white">{{ $evento->titulo }}</h4>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ number_format($evento->ticketsVendidos) }} tickets vendidos</p>
+                        <div class="flex items-center mt-2 text-xs">
+                            <span class="bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 px-2 py-1 rounded mr-2">
+                                {{ $evento->category->nombre ?? 'Sin categoría' }}
+                            </span>
+                            <span class="text-gray-500 dark:text-gray-400">
+                                <i class="fas fa-map-marker-alt mr-1"></i> {{ $evento->ubicacion }}
+                            </span>
+                        </div>
+                    </div>
+                    <button class="text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400">
+                        <i class="fas fa-ellipsis-v"></i>
                     </button>
                 </div>
-                <div class="space-y-4">
-                    <div class="flex items-start p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition">
-                        <div class="bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300 p-2 rounded-lg mr-4 min-w-[60px]">
-                            <div class="text-center">
-                                <div class="font-bold text-lg">15</div>
-                                <div class="text-xs uppercase">May</div>
-                            </div>
-                        </div>
-                        <div class="flex-grow">
-                            <h4 class="font-medium text-gray-800 dark:text-white">Concierto de Verano</h4>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">2,500 tickets vendidos</p>
-                            <div class="flex items-center mt-2 text-xs">
-                                <span class="bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 px-2 py-1 rounded mr-2">Música</span>
-                                <span class="text-gray-500 dark:text-gray-400"><i class="fas fa-map-marker-alt mr-1"></i> Estadio Nacional</span>
-                            </div>
-                        </div>
-                        <button class="text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400">
-                            <i class="fas fa-ellipsis-v"></i>
-                        </button>
-                    </div>
-                    <div class="flex items-start p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition">
-                        <div class="bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 p-2 rounded-lg mr-4 min-w-[60px]">
-                            <div class="text-center">
-                                <div class="font-bold text-lg">22</div>
-                                <div class="text-xs uppercase">May</div>
-                            </div>
-                        </div>
-                        <div class="flex-grow">
-                            <h4 class="font-medium text-gray-800 dark:text-white">Conferencia Tech</h4>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">1,200 tickets vendidos</p>
-                            <div class="flex items-center mt-2 text-xs">
-                                <span class="bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 px-2 py-1 rounded mr-2">Tecnología</span>
-                                <span class="text-gray-500 dark:text-gray-400"><i class="fas fa-map-marker-alt mr-1"></i> Centro de Convenciones</span>
-                            </div>
-                        </div>
-                        <button class="text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400">
-                            <i class="fas fa-ellipsis-v"></i>
-                        </button>
-                    </div>
-                    <div class="flex items-start p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition">
-                        <div class="bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300 p-2 rounded-lg mr-4 min-w-[60px]">
-                            <div class="text-center">
-                                <div class="font-bold text-lg">05</div>
-                                <div class="text-xs uppercase">Jun</div>
-                            </div>
-                        </div>
-                        <div class="flex-grow">
-                            <h4 class="font-medium text-gray-800 dark:text-white">Festival Gastronómico</h4>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">800 tickets vendidos</p>
-                            <div class="flex items-center mt-2 text-xs">
-                                <span class="bg-yellow-100 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-300 px-2 py-1 rounded mr-2">Gastronomía</span>
-                                <span class="text-gray-500 dark:text-gray-400"><i class="fas fa-map-marker-alt mr-1"></i> Parque Central</span>
-                            </div>
-                        </div>
-                        <button class="text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400">
-                            <i class="fas fa-ellipsis-v"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
+            @empty
+                <p class="text-sm text-gray-500 dark:text-gray-400">No hay eventos próximos.</p>
+            @endforelse
+        </div>
+    </div>
+</div>
 
-            <!-- Eventos pendientes de revisión -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Eventos por Revisar</h2>
-                    <span class="bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-300 text-xs font-medium px-2.5 py-0.5 rounded-full">3 nuevos</span>
+
+<!-- Eventos pendientes de revisión -->
+<div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Eventos por Revisar</h2>
+        <span class="bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-300 text-xs font-medium px-2.5 py-0.5 rounded-full">
+            {{ $eventosPorRevisar->count() }} nuevos
+        </span>
+    </div>
+    <div class="space-y-4">
+        @foreach ($eventosPorRevisar as $evento)
+            <div class="border-l-4 border-yellow-500 pl-4 py-2">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h4 class="font-medium text-gray-800 dark:text-white">{{ $evento->titulo }}</h4>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Creado por: {{ $evento->user->name ?? 'Desconocido' }}</p>
+                    </div>
+                    <span class="text-xs bg-yellow-100 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-300 px-2 py-1 rounded-full">Pendiente</span>
                 </div>
-                <div class="space-y-4">
-                    <div class="border-l-4 border-yellow-500 pl-4 py-2">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h4 class="font-medium text-gray-800 dark:text-white">Exposición de Arte Moderno</h4>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Creado por: Galería Contemporánea</p>
-                            </div>
-                            <span class="text-xs bg-yellow-100 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-300 px-2 py-1 rounded-full">Pendiente</span>
-                        </div>
-                        <div class="flex mt-3 space-x-2">
-                            <button class="text-xs bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-800 px-3 py-1 rounded-full transition">
-                                <i class="fas fa-check mr-1"></i> Aprobar
-                            </button>
-                            <button class="text-xs bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-800 px-3 py-1 rounded-full transition">
-                                <i class="fas fa-times mr-1"></i> Rechazar
-                            </button>
-                            <button class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 px-3 py-1 rounded-full transition">
-                                <i class="fas fa-eye mr-1"></i> Ver
-                            </button>
-                        </div>
-                    </div>
-                    <div class="border-l-4 border-yellow-500 pl-4 py-2">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h4 class="font-medium text-gray-800 dark:text-white">Taller de Fotografía</h4>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Creado por: FotoAcademy</p>
-                            </div>
-                            <span class="text-xs bg-yellow-100 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-300 px-2 py-1 rounded-full">Pendiente</span>
-                        </div>
-                        <div class="flex mt-3 space-x-2">
-                            <button class="text-xs bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-800 px-3 py-1 rounded-full transition">
-                                <i class="fas fa-check mr-1"></i> Aprobar
-                            </button>
-                            <button class="text-xs bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-800 px-3 py-1 rounded-full transition">
-                                <i class="fas fa-times mr-1"></i> Rechazar
-                            </button>
-                            <button class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 px-3 py-1 rounded-full transition">
-                                <i class="fas fa-eye mr-1"></i> Ver
-                            </button>
-                        </div>
-                    </div>
-                    <div class="border-l-4 border-yellow-500 pl-4 py-2">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h4 class="font-medium text-gray-800 dark:text-white">Maratón Ciudad</h4>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Creado por: Club de Corredores</p>
-                            </div>
-                            <span class="text-xs bg-yellow-100 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-300 px-2 py-1 rounded-full">Pendiente</span>
-                        </div>
-                        <div class="flex mt-3 space-x-2">
-                            <button class="text-xs bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-800 px-3 py-1 rounded-full transition">
-                                <i class="fas fa-check mr-1"></i> Aprobar
-                            </button>
-                            <button class="text-xs bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-800 px-3 py-1 rounded-full transition">
-                                <i class="fas fa-times mr-1"></i> Rechazar
-                            </button>
-                            <button class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 px-3 py-1 rounded-full transition">
-                                <i class="fas fa-eye mr-1"></i> Ver
-                            </button>
-                        </div>
-                    </div>
+                <div class="flex mt-3 space-x-2">
+                    <form action="{{ route('admin.eventos.aprobar', $evento) }}" method="PUT" style="display:inline;">
+                        @csrf
+                        @method('PUT')
+                        <button type="submit" class="btn btn-success btn-sm">Aprobar</button>
+                    </form>
+                    <form action="{{ route('admin.eventos.rechazar', $evento) }}" method="POST" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm">Rechazar</button>
+                    </form>
+                    <a href="{{ route('admin.eventos.mostrar', $evento->id) }}" class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 px-3 py-1 rounded-full transition inline-flex items-center">
+                        <i class="fas fa-eye mr-1"></i> Ver
+                    </a>
                 </div>
-                <button class="w-full mt-4 text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 text-sm font-medium flex items-center justify-center">
-                    Ver todos los pendientes <i class="fas fa-chevron-right ml-2"></i>
-                </button>
             </div>
+        @endforeach
+    </div>
+    <a href="{{ route('admin.eventos.pendientes') }}" class="w-full mt-4 text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 text-sm font-medium flex items-center justify-center">
+        Ver todos los pendientes <i class="fas fa-chevron-right ml-2"></i>
+    </a>
+</div>
+
         </div>
 
         <!-- Actividad Reciente y Usuarios Nuevos -->
@@ -606,6 +530,45 @@ options: {
 });
 }
 });
+</script>
+@endpush
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('salesChart').getContext('2d');
+    const salesChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: @json($fechas),
+            datasets: [{
+                label: 'Tickets vendidos',
+                data: @json($tickets),
+                backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                borderColor: 'rgba(99, 102, 241, 1)',
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4,
+                pointRadius: 4,
+                pointBackgroundColor: 'rgba(99, 102, 241, 1)'
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
 </script>
 @endpush
 

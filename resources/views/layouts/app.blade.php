@@ -73,7 +73,8 @@
       </footer>
       @endif
       
-      @yield('scripts')
+      @stack('scripts')
+
     </body>
     <script>
       document.addEventListener('DOMContentLoaded', function () {
