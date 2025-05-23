@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\AdminEventoController;
 use App\Http\Controllers\Admin\AdminCategoriaController;
 use App\Http\Controllers\UserPreferenceController;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\PagoController;
 use App\Models\Categoria;
 use App\Models\Event;
 use App\Models\User;
@@ -196,6 +197,7 @@ Route::post('/guardar-preferencias', [UserPreferenceController::class, 'store'])
 
 Route::get('/obtener-preferencias', [UserPreferenceController::class, 'getUserPreferences'])->name('obtener-preferencias');
 
-#RUTA USUARIOS
 Route::get('/usuarios/totales', [UsuarioController::class, 'totales'])->name('usuarios.totales');
 
+Route::post('/evento/{evento}/checkout', [PagoController::class, 'checkout'])->name('eventos.checkout');
+Route::get('/evento/{evento}/checkout/success', [PagoController::class, 'success'])->name('eventos.checkout.success');

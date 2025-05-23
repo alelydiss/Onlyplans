@@ -301,7 +301,7 @@
                             <button @click="paso = 3" class="text-purple-600 hover:underline">← Atrás</button>
                             <button 
                                 @click="
-                                    fetch('{{ route('eventos.comprar', $evento->id) }}', {
+                                    fetch('{{ route('eventos.checkout', $evento->id) }}', {
                                         method: 'POST',
                                         headers: {
                                             'Content-Type': 'application/json',
@@ -317,17 +317,15 @@
                                     })
                                     .then(r => r.json())
                                     .then(data => {
-                                        alert(data.message);
-                                        mostrarModal = false;
+                                        const stripe = Stripe('{{ config('services.stripe.key') }}');
+                                        stripe.redirectToCheckout({ sessionId: data.id });
                                     })
-                                    .catch(() => alert('Error al procesar la compra'));
+                                    .catch(() => alert('Error al procesar el pago'))
                                 "
                                 class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg transition"
                             >
-                                Confirmar compra
+                                Procesar compra
                             </button>
-
-
                         </div>
                     </div>
                 </div>
@@ -337,6 +335,7 @@
     </div>
 </div>
 {{-- Scripts de mapa y chat --}}
+<script src="https://js.stripe.com/v3/"></script>
 
 <script>
     function initMap() {
