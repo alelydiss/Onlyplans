@@ -111,21 +111,100 @@
         </div>
 
         {{-- Eventos relacionados --}}
-        {{-- <div class="mt-12">
-            <h2 class="text-2xl font-bold mb-4">Otros eventos que podrían gustarte</h2>
-            <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-                @foreach($relacionados as $rel)
-                <div class="bg-white dark:bg-gray-800 shadow rounded-xl overflow-hidden">
-                    <img src="{{ asset('img/evento1.png') }}" alt="{{ $rel->titulo }}" class="w-full h-32 object-cover">
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold">{{ $rel->titulo }}</h3>
-                        <p class="text-sm text-gray-500">{{ \Carbon\Carbon::parse($rel->fecha)->format('d M Y') }}</p>
-                        <a href="{{ route('eventos.show', $rel->id) }}" class="text-purple-600 text-sm mt-2 inline-block">Ver más</a>
+        @if($eventosPersonalizados->isNotEmpty())
+<section class="relative px-6 pb-12 animate__animated animate__fadeInUp mt-8">
+    <div class="max-w-7xl mx-auto">
+        <h3 class="text-2xl md:text-3xl font-bold mb-8 text-left text-gray-800 dark:text-white border-b-2 border-purple-600 pb-2 inline-block">Mas Eventos para ti</h3>
+
+        <!-- Botones de navegación -->
+        <button onclick="scrollCarrusel(-1)" class="absolute left-2 md:left-4 top-1/2 transform -translate-y-1/2 z-10 bg-white dark:bg-gray-800 shadow-lg rounded-full p-3 hover:scale-110 transition-all duration-300 hover:bg-purple-100 dark:hover:bg-gray-700 group">
+            <svg class="w-6 h-6 text-gray-700 dark:text-gray-200 group-hover:text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+        </button>
+
+        <button onclick="scrollCarrusel(1)" class="absolute right-2 md:right-4 top-1/2 transform -translate-y-1/2 z-10 bg-white dark:bg-gray-800 shadow-lg rounded-full p-3 hover:scale-110 transition-all duration-300 hover:bg-purple-100 dark:hover:bg-gray-700 group">
+            <svg class="w-6 h-6 text-gray-700 dark:text-gray-200 group-hover:text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+        </button>
+
+        <!-- Carrusel sin barra de scroll -->
+        <div id="carruselEventos" class="flex space-x-6 overflow-x-hidden pb-6 px-2">
+            @foreach($eventosPersonalizados as $evento)
+            <div class="min-w-[300px] md:min-w-[380px] bg-white dark:bg-gray-700 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 group relative animate__animated animate__zoomIn flex-shrink-0 overflow-hidden border border-gray-100 dark:border-gray-600">
+                <a href="{{ route('evento', $evento->id) }}" class="block">
+                    <div class="relative overflow-hidden">
+                        <img class="w-full h-60 object-cover transition-transform duration-500 group-hover:scale-110"
+                            src="{{ $evento->banner ? asset('storage/' . $evento->banner) : asset('img/default-banner.jpg') }}"
+                            alt="{{ $evento->titulo }}" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                </a>
+                
+                <button 
+                    id="favorito-btn-{{ $evento->id }}"
+                    onclick="toggleFavorito({{ $evento->id }})"
+                    data-evento-id="{{ $evento->id }}"
+                    class="absolute top-4 right-4 p-2 bg-white/90 dark:bg-gray-800/90 rounded-full shadow-lg hover:scale-110 transition-all duration-300 {{ Auth::user() && Auth::user()->favoritos->contains('evento_id', $evento->id) ? 'text-purple-600' : 'text-gray-400 hover:text-purple-500' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                    </svg>
+                </button>
+
+                <div class="p-5 relative">
+                    <span class="absolute -top-4 left-4 bg-purple-600 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-md">
+                        {{ $evento->category->nombre ?? 'Sin categoría' }}
+                    </span>
+                    
+                    <div class="flex items-start gap-4 mb-3">
+                        <div class="text-center text-purple-700 dark:text-purple-300 font-bold text-sm border border-purple-200 dark:border-purple-800 rounded-lg px-2 py-1 bg-purple-50/50 dark:bg-gray-800/50">
+                            <span class="block uppercase tracking-wide">
+                                {{ strtoupper(\Carbon\Carbon::parse($evento->fecha_inicio)->format('M')) }}
+                            </span>
+                            <span class="text-2xl leading-none block">
+                                {{ \Carbon\Carbon::parse($evento->fecha_inicio)->format('d') }}
+                            </span>
+                        </div>
+                        
+                        <div class="flex-1">
+                            <h3 class="text-gray-900 dark:text-white text-lg font-bold line-clamp-2">{{ $evento->titulo }}</h3>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm mt-1 line-clamp-2">{{ Str::limit($evento->descripcion, 80) }}</p>
+                            <p class="text-xs text-purple-600 dark:text-purple-400 mt-2 font-medium">
+                                <svg class="w-4 h-4 inline mr-1 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                {{ \Carbon\Carbon::parse($evento->hora_inicio)->format('H:i') }} - {{ \Carbon\Carbon::parse($evento->hora_fin)->format('H:i') }}
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between items-center text-sm text-gray-700 dark:text-gray-200 pt-3 border-t border-gray-100 dark:border-gray-600">
+                        <div class="flex items-center gap-1.5 font-medium">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <span class="{{ $evento->precio > 0 ? 'text-gray-800 dark:text-white' : 'text-green-600 dark:text-green-400' }}">
+                                {{ $evento->precio > 0 ? number_format($evento->precio, 2) . '€' : 'Gratis' }}
+                            </span>
+                        </div>
+                        
+                        <div class="flex items-center gap-1.5 text-purple-600 dark:text-purple-300 font-medium">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41 1.01 4.5 2.09C12.09 5.01 13.76 4 15.5 4 18 4 20 6 20 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                            <span>{{ $evento->interesados ?? rand(10, 100) }} Interesados</span>
+                        </div>
                     </div>
                 </div>
-                @endforeach
             </div>
-        </div> --}}
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
+
+        {{-- Botón de compra --}}
 
         {{-- Modal de compra --}}
         <div
@@ -337,7 +416,17 @@
 {{-- Scripts de mapa y chat --}}
 @push('scripts')
 <script src="https://js.stripe.com/v3/"></script>
-
+<script>
+function scrollCarrusel(direction) {
+    const carrusel = document.getElementById('carruselEventos');
+    const itemWidth = carrusel.querySelector('div').offsetWidth + 24; // Ancho del item + espacio (gap)
+    
+    carrusel.scrollBy({
+        left: direction * itemWidth,
+        behavior: 'smooth'
+    });
+}
+</script>
 <script>
     function initMap() {
         const map = new google.maps.Map(document.getElementById("map"), {

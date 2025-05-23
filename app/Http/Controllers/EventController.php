@@ -99,19 +99,6 @@ class EventController extends Controller
         return response()->json(['message' => 'Compra registrada correctamente.']);
     }
 
-    public function mostrar($id = null)
-    {
-        if ($id) {
-            // Mostrar un evento específico
-            $evento = Event::with('category', 'user')->findOrFail($id);
-            return view('evento', compact('evento'));
-        } else {
-            // Mostrar todos los eventos en el mapa
-            $eventosmapa = Event::all();
-            return view('mapa', compact('eventosmapa'));
-        }
-    }
-
     public function index(Request $request)
     {
         $query = Event::with('category');
@@ -314,63 +301,85 @@ class EventController extends Controller
         return view('dashboard', compact('eventos', 'categorias', 'eventosPersonalizados'));
     }
 
-    public function mostrarDashboard()
-    {
-        $user = Auth::user();
-        $categorias = Categoria::all();
-        $eventos = Event::latest()->take(6)->get();
+    private function obtenerEventosPersonalizados($user)
+{
+    $preferences = $user->preferences;
+    $query = Event::query();
 
-        $preferences = $user->preferences;
+    $categoryPrefs = $preferences->where('category', 'category')->pluck('value');
+    $pricePrefs = $preferences->where('category', 'price')->pluck('value');
+    $datePrefs = $preferences->where('category', 'date')->pluck('value');
 
-        $query = Event::query();
-
-        // Agrupar preferencias por tipo
-        $categoryPrefs = $preferences->where('category', 'category')->pluck('value');
-        $pricePrefs = $preferences->where('category', 'price')->pluck('value');
-        $datePrefs = $preferences->where('category', 'date')->pluck('value');
-
-        // Aplicar filtros solo si hay preferencias
-        if ($preferences->isNotEmpty()) {
-
-            if ($categoryPrefs->isNotEmpty()) {
-                $query->whereIn('category_id', $categoryPrefs);
-            }
-
-            if ($pricePrefs->isNotEmpty()) {
-                $query->where(function ($q) use ($pricePrefs) {
-                    foreach ($pricePrefs as $value) {
-                        if (strtolower($value) === 'gratis') {
-                            $q->orWhere('precio', 0);
-                        } else {
-                            $q->orWhere('precio', '>', 0);
-                        }
-                    }
-                });
-            }
-
-            if ($datePrefs->isNotEmpty()) {
-                $hoy = Carbon::today();
-                $query->where(function ($q) use ($datePrefs, $hoy) {
-                    foreach ($datePrefs as $value) {
-                        $value = strtolower($value);
-                        if ($value === 'hoy') {
-                            $q->orWhereDate('fecha_inicio', $hoy);
-                        } elseif ($value === 'esta semana') {
-                            $q->orWhereBetween('fecha_inicio', [$hoy, $hoy->copy()->endOfWeek()]);
-                        } elseif ($value === 'este mes') {
-                            $q->orWhereBetween('fecha_inicio', [$hoy, $hoy->copy()->endOfMonth()]);
-                        }
-                    }
-                });
-            }
+    if ($preferences->isNotEmpty()) {
+        if ($categoryPrefs->isNotEmpty()) {
+            $query->whereIn('category_id', $categoryPrefs);
         }
 
-        $eventosPersonalizados = $preferences->isEmpty()
-            ? collect()
-            : $query->latest()->take(6)->get();
+        if ($pricePrefs->isNotEmpty()) {
+            $query->where(function ($q) use ($pricePrefs) {
+                foreach ($pricePrefs as $value) {
+                    if (strtolower($value) === 'gratis') {
+                        $q->orWhere('precio', 0);
+                    } else {
+                        $q->orWhere('precio', '>', 0);
+                    }
+                }
+            });
+        }
 
-        return view('dashboard', compact('categorias', 'eventos', 'eventosPersonalizados'));
+        if ($datePrefs->isNotEmpty()) {
+            $hoy = Carbon::today();
+            $query->where(function ($q) use ($datePrefs, $hoy) {
+                foreach ($datePrefs as $value) {
+                    $value = strtolower($value);
+                    if ($value === 'hoy') {
+                        $q->orWhereDate('fecha_inicio', $hoy);
+                    } elseif ($value === 'esta semana') {
+                        $q->orWhereBetween('fecha_inicio', [$hoy, $hoy->copy()->endOfWeek()]);
+                    } elseif ($value === 'este mes') {
+                        $q->orWhereBetween('fecha_inicio', [$hoy, $hoy->copy()->endOfMonth()]);
+                    }
+                }
+            });
+        }
+
+        return $query->latest()->take(6)->get();
     }
 
+    return collect(); // vacío si no hay preferencias
+}
+
+public function mostrarDashboard()
+{
+    $user = Auth::user();
+    $categorias = Categoria::all();
+    $eventos = Event::latest()->take(6)->get();
+    $eventosPersonalizados = $this->obtenerEventosPersonalizados($user);
+
+    return view('dashboard', compact('categorias', 'eventos', 'eventosPersonalizados'));
+}
+
+public function mostrar($id = null)
+{
+    if ($id) {
+        $evento = Event::with('category', 'user')->findOrFail($id);
+
+        $eventosPersonalizados = collect();
+        if (Auth::check()) {
+            $user = Auth::user();
+            $eventosPersonalizados = $this->obtenerEventosPersonalizados($user);
+
+            // Excluir el evento actual
+            $eventosPersonalizados = $eventosPersonalizados->reject(function ($eventoPersonalizado) use ($id) {
+                return $eventoPersonalizado->id == $id;
+            });
+        }
+
+        return view('evento', compact('evento', 'eventosPersonalizados'));
+    } else {
+        $eventosmapa = Event::all();
+        return view('mapa', compact('eventosmapa'));
+    }
+}
 
 }
