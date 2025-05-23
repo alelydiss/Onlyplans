@@ -335,6 +335,7 @@
     </div>
 </div>
 {{-- Scripts de mapa y chat --}}
+@push('scripts')
 <script src="https://js.stripe.com/v3/"></script>
 
 <script>
@@ -379,4 +380,5 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 </script>
+@endpush
 @endsection

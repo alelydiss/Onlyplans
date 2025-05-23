@@ -104,7 +104,7 @@
 </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
 <!-- Script para vista previa de imagen -->
 <script>
     document.getElementById('banner').addEventListener('change', function () {
@@ -170,4 +170,4 @@
         });
     }
 </script>
-@endsection
+@endpush
