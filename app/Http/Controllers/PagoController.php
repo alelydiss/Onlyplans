@@ -53,12 +53,12 @@ public function success(Request $request, Event $evento)
     if ($session && $session->payment_status === 'paid') {
         // Verifica que la orden no se haya guardado ya (evita duplicados)
         $existingOrder = Order::where('correo', $session->metadata->correo)
-            ->where('event_id', $session->metadata->event_id)
+            ->where('event_id', $session->metadata->evento_id)
             ->where('zona', $session->metadata->zona)
             ->first();
 
         if (!$existingOrder) {
-           $metadata = $session->metadata;
+            $metadata = $session->metadata;
 
             Order::create([
                 'event_id' => $metadata['evento_id'] ?? null,
@@ -70,11 +70,18 @@ public function success(Request $request, Event $evento)
                 'total' => $evento->precio * ($metadata['cantidad'] ?? 1),
                 'user_id' => optional(Auth::user())->id,
             ]);
+
+            \App\Models\Actividad::create([
+                'descripcion' => ($metadata['cantidad'] ?? 1) . ' tickets vendidos para ' . $evento->titulo,
+                'icono' => 'fas fa-ticket-alt',
+                'fecha' => now(),
+            ]);
         }
     }
 
     return redirect()->route('tickets.index')->with('success', '¡Compra realizada con éxito!');
 }
+
 
 
 }

@@ -144,7 +144,7 @@
 
         </div>
 
-       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
     <!-- Eventos próximos -->
     <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
         <div class="flex justify-between items-center mb-6">
@@ -186,7 +186,7 @@
             @endforelse
         </div>
     </div>
-</div>
+
 
 
 <!-- Eventos pendientes de revisión -->
@@ -208,11 +208,12 @@
                     <span class="text-xs bg-yellow-100 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-300 px-2 py-1 rounded-full">Pendiente</span>
                 </div>
                 <div class="flex mt-3 space-x-2">
-                    <form action="{{ route('admin.eventos.aprobar', $evento) }}" method="PUT" style="display:inline;">
+                    <form action="{{ route('admin.eventos.aprobar', $evento) }}" method="POST" style="display:inline;">
                         @csrf
                         @method('PUT')
                         <button type="submit" class="btn btn-success btn-sm">Aprobar</button>
                     </form>
+
                     <form action="{{ route('admin.eventos.rechazar', $evento) }}" method="POST" style="display:inline;">
                         @csrf
                         @method('DELETE')
@@ -229,65 +230,34 @@
         Ver todos los pendientes <i class="fas fa-chevron-right ml-2"></i>
     </a>
 </div>
+</div>
 
         </div>
 
         <!-- Actividad Reciente y Usuarios Nuevos -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <!-- Actividad Reciente -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-                <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-6">Actividad Reciente</h2>
-                <div class="space-y-4">
-                    <div class="flex items-start p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition">
-                        <div class="bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 p-2 rounded-full mr-4">
-                            <i class="fas fa-user-plus text-sm"></i>
-                        </div>
-                        <div class="flex-grow">
-                            <p class="text-gray-800 dark:text-white">Nuevo usuario registrado: <span class="font-medium">Maria García</span></p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Hace 15 minutos</p>
-                        </div>
-                        <button class="text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400">
-                            <i class="fas fa-ellipsis-v"></i>
-                        </button>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Actividad Reciente -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+        <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-6">Actividad Reciente</h2>
+        <div class="space-y-4">
+            @foreach($actividadesRecientes as $actividad)
+                <div class="flex items-start p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition">
+                    <div class="bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 p-2 rounded-full mr-4">
+                        <i class="{{ $actividad->icono }} text-sm"></i>
                     </div>
-                    <div class="flex items-start p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition">
-                        <div class="bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 p-2 rounded-full mr-4">
-                            <i class="fas fa-check-circle text-sm"></i>
-                        </div>
-                        <div class="flex-grow">
-                            <p class="text-gray-800 dark:text-white">Evento aprobado: <span class="font-medium">Concierto Rock Fest</span></p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Hace 2 horas</p>
-                        </div>
-                        <button class="text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400">
-                            <i class="fas fa-ellipsis-v"></i>
-                        </button>
+                    <div class="flex-grow">
+                        <p class="text-gray-800 dark:text-white">{!! $actividad->descripcion !!}</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ $actividad->fecha->diffForHumans() }}</p>
                     </div>
-                    <div class="flex items-start p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition">
-                        <div class="bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300 p-2 rounded-full mr-4">
-                            <i class="fas fa-ticket-alt text-sm"></i>
-                        </div>
-                        <div class="flex-grow">
-                            <p class="text-gray-800 dark:text-white">25 tickets vendidos para <span class="font-medium">Festival Jazz</span></p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Hace 5 horas</p>
-                        </div>
-                        <button class="text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400">
-                            <i class="fas fa-ellipsis-v"></i>
-                        </button>
-                    </div>
-                    <div class="flex items-start p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition">
-                        <div class="bg-yellow-100 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-300 p-2 rounded-full mr-4">
-                            <i class="fas fa-exclamation-triangle text-sm"></i>
-                        </div>
-                        <div class="flex-grow">
-                            <p class="text-gray-800 dark:text-white">Reporte de usuario: <span class="font-medium">Problema con pago</span></p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Hace 8 horas</p>
-                        </div>
-                        <button class="text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400">
-                            <i class="fas fa-ellipsis-v"></i>
-                        </button>
-                    </div>
+                    <button class="text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
                 </div>
-            </div>
+            @endforeach
+        </div>
+    </div>
+</div>
+
 
             <!-- Usuarios Recientes -->
             <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">

@@ -19,6 +19,7 @@ use App\Models\Event;
 use App\Models\User;
 use App\Models\Order;
 use Carbon\Carbon;
+use App\Models\Actividad;
 use App\Events\MessageSent;
 use Illuminate\Http\Request;
 use App\Models\Message;
@@ -151,7 +152,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
                 return $evento;
             });
             // Últimos 7 días
-$ventasPorDia = Order::where('created_at', '>=', Carbon::now()->subDays(6)->startOfDay())
+    $ventasPorDia = Order::where('created_at', '>=', Carbon::now()->subDays(6)->startOfDay())
     ->selectRaw('DATE(created_at) as fecha, SUM(cantidad) as total')
     ->groupBy('fecha')
     ->orderBy('fecha')
@@ -171,6 +172,7 @@ foreach ($periodo as $date) {
 
 
 $eventosPorRevisar = Event::where('revisado', false)->take(5)->get();
+$actividadesRecientes = Actividad::orderBy('fecha', 'desc')->take(10)->get();
 
 return view('admin.dashboard', compact(
     'totalUsuarios',
@@ -183,20 +185,18 @@ return view('admin.dashboard', compact(
     'fechas',
     'tickets',
     'eventosProximos',
-    'eventosPorRevisar'
+    'eventosPorRevisar',
+    'actividadesRecientes'
 ));
     })->name('admin.dashboard');
 
-Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/eventos', [AdminEventoController::class, 'index'])->name('admin.eventos');
     Route::get('/eventos/pendientes', [AdminEventoController::class, 'pendientes'])->name('admin.eventos.pendientes');
     Route::put('/eventos/{evento}/aprobar', [AdminEventoController::class, 'aprobar'])->name('admin.eventos.aprobar');
     Route::delete('/eventos/{evento}/rechazar', [AdminEventoController::class, 'rechazar'])->name('admin.eventos.rechazar');
     Route::get('/evento/{id}', [EventController::class, 'mostrar'])->name('admin.eventos.mostrar');
-        Route::get('/categorias', [AdminCategoriaController::class, 'index'])->name('admin.categorias');
-        Route::get('/usuarios', [AdminCategoriaController::class, 'index'])->name('admin.usuarios');
-
-});
+    Route::get('/categorias', [AdminCategoriaController::class, 'index'])->name('admin.categorias');
+    Route::get('/usuarios', [AdminCategoriaController::class, 'index'])->name('admin.usuarios');
 });
 
 

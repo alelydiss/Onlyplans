@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Mail\CustomResetPasswordMail; // Importa tu Mailable personalizado
 use Illuminate\Support\Facades\Mail;
+use App\Models\Actividad;
 
 class User extends Authenticatable
 {
@@ -91,5 +92,16 @@ public function eventosFavoritos()
 public function preferences()
 {
     return $this->hasMany(UserPreference::class);
+}
+
+protected static function booted()
+{
+    static::created(function ($user) {
+        Actividad::create([
+            'descripcion' => 'Nuevo usuario registrado: ' . $user->name,
+            'icono' => 'fas fa-user-plus',
+            'fecha' => now(),
+        ]);
+    });
 }
 }
