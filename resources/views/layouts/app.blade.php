@@ -42,8 +42,8 @@
             <div>
               <h4 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Enlaces</h4>
               <ul class="space-y-1">
-                <li><a href="#" class="hover:text-indigo-600 hover:underline transition">Términos</a></li>
-                <li><a href="#" class="hover:text-indigo-600 hover:underline transition">Política de Privacidad</a></li>
+                <li><a href="{{ route('terms') }}" class="hover:text-indigo-600 hover:underline transition">Términos</a></li>
+                <li><a href="{{ route('policy') }}" class="hover:text-indigo-600 hover:underline transition">Política de Privacidad</a></li>
               </ul>
             </div>
             

@@ -48,6 +48,15 @@ Route::get('/mapa', function () {
     return view('mapa');
 })->name('mapa');
 
+Route::get('/terms', function () {
+    return view('terms');
+})->name('terms');
+
+Route::get('/policy', function () {
+    return view('policy');
+})->name('policy');
+
+
 Route::get('/intereses', function () {
     $categorias = Categoria::all();
     return view('intereses', compact('categorias'));
