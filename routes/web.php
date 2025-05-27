@@ -195,8 +195,20 @@ return view('admin.dashboard', compact(
     Route::put('/eventos/{evento}/aprobar', [AdminEventoController::class, 'aprobar'])->name('admin.eventos.aprobar');
     Route::delete('/eventos/{evento}/rechazar', [AdminEventoController::class, 'rechazar'])->name('admin.eventos.rechazar');
     Route::get('/evento/{id}', [EventController::class, 'mostrar'])->name('admin.eventos.mostrar');
+
+    /* USUARIOS */
+Route::get('/usuarios', [AdminUsuarioController::class, 'index'])->name('admin.usuarios');
+Route::post('/usuarios', [AdminUsuarioController::class, 'store'])->name('admin.usuarios.store');
+Route::put('/usuarios/{usuario}', [AdminUsuarioController::class, 'update'])->name('admin.usuarios.update');
+Route::delete('/usuarios/{usuario}', [AdminUsuarioController::class, 'destroy'])->name('admin.usuarios.destroy');
+
+
+    /* CATEGORIAS */
     Route::get('/categorias', [AdminCategoriaController::class, 'index'])->name('admin.categorias');
-    Route::get('/usuarios', [AdminCategoriaController::class, 'index'])->name('admin.usuarios');
+    Route::post('/categorias', [AdminCategoriaController::class, 'store'])->name('admin.categorias.store');
+    Route::put('/categorias/{categoria}', [AdminCategoriaController::class, 'update'])->name('admin.categorias.update');
+    Route::delete('/categorias/{categoria}', [AdminCategoriaController::class, 'destroy'])->name('admin.categorias.destroy');
+
 });
 
 
