@@ -7,6 +7,7 @@ use App\Models\Event;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Categoria;
+use App\Models\Asiento;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Pagination\Paginator;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -25,7 +26,7 @@ class EventController extends Controller
 
     public function store(Request $request)
     {
-        // Validación de datos
+        // Validación
         $request->validate([
             'titulo' => 'required|string|max:255',
             'categoria' => 'required|exists:categorias,id',
@@ -39,12 +40,15 @@ class EventController extends Controller
             'latitud' => 'required|numeric',
             'longitud' => 'required|numeric',
             'descripcion' => 'required|string',
-            'ubicacion' => 'nullable|string|max:255', // Ubicación opcional
+            'ubicacion' => 'nullable|string|max:255',
+            'necesita_asientos' => 'required|boolean',
+            'cantidad_asientos' => 'required_if:necesita_asientos,1|nullable|integer|min:1',
+
         ]);
 
-        // Guardar el evento
+        // Guardar evento
         $evento = new Event();
-        $evento->user_id = Auth::id();  // Establecer el ID del usuario autenticado
+        $evento->user_id = Auth::id();
         $evento->category_id = $request->categoria;
         $evento->titulo = $request->titulo;
         $evento->fecha_inicio = $request->fecha_inicio;
@@ -54,18 +58,41 @@ class EventController extends Controller
         $evento->tipo_evento = $request->tipo_evento;
         $evento->precio = $request->tipo_evento === 'gratis' ? 0 : $request->precio;
         $evento->descripcion = $request->descripcion;
-        $evento->ubicacion = $request->ubicacion; // Se agrega ubicación
-        $evento->lat = $request->latitud;  // Latitud
-        $evento->lng = $request->longitud;  // Longitud
+        $evento->ubicacion = $request->ubicacion;
+        $evento->lat = $request->latitud;
+        $evento->lng = $request->longitud;
+        $evento->necesita_asientos = $request->necesita_asientos;
+        $evento->numero_asientos = $request->necesita_asientos ? $request->cantidad_asientos : null;
 
-        // Manejo del archivo banner
         if ($request->hasFile('banner')) {
             $evento->banner = $request->file('banner')->store('banners', 'public');
         }
 
-        // Guardar el evento en la base de datos
         $evento->save();
 
+        // Crear asientos si es necesario
+        if ($request->necesita_asientos && $request->cantidad_asientos > 0) {
+            $total = $request->cantidad_asientos;
+
+            $zonas = [
+                'vip' => round($total * 0.10),
+                'palcos' => round($total * 0.15),
+                'pista' => round($total * 0.35),
+                'grada' => round($total * 0.40),
+            ];
+
+            $contador = 1;
+            foreach ($zonas as $zona => $cantidad) {
+                for ($i = 0; $i < $cantidad; $i++) {
+                    Asiento::create([
+                        'events_id' => $evento->id,
+                        'numero' => $contador++,
+                        'zona' => $zona,
+                        'estado' => 'disponible',
+                    ]);
+                }
+            }
+        }
         return redirect()->route('mapa')->with('success', 'Evento creado con éxito!');
     }
 
