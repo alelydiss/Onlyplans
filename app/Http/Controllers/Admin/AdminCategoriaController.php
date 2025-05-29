@@ -38,8 +38,10 @@ public function index(Request $request)
         ]);
 
         if ($request->hasFile('foto')) {
-            $data['foto'] = $request->file('foto')->store('img', 'public');
-        }
+        $originalName = $request->file('foto')->getClientOriginalName();
+        $data['foto'] = $request->file('foto')->storeAs('img', $originalName, 'public');
+    }
+
 
         Categoria::create($data);
 
@@ -62,9 +64,10 @@ public function index(Request $request)
 
         if ($request->hasFile('foto')) {
             if ($categoria->foto) {
-                Storage::disk('public')->delete($categoria->foto);
+            Storage::disk('public')->delete($categoria->foto);
             }
-            $data['foto'] = $request->file('foto')->store('img', 'public');
+            $originalName = $request->file('foto')->getClientOriginalName();
+            $data['foto'] = $request->file('foto')->storeAs('img', $originalName, 'public');
         }
 
         $categoria->update($data);
