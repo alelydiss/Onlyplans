@@ -121,6 +121,7 @@
     </section>
 
     <!-- Eventos Para ti -->
+    @if($eventosPersonalizados->isNotEmpty())
     <section class="px-6 pb-10 animate__animated animate__fadeInUp mt-5">
       <h3 class="text-2xl md:text-3xl font-bold mb-6 text-left">Eventos Para ti</h3>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -194,6 +195,12 @@
         <a href="{{ route('eventosPersonalizados') }}" class="px-6 py-2 border border-purple-600 text-purple-600 rounded-md hover:bg-purple-600 hover:text-white transition inline-block">Ver Más</a>
       </div>
     </section>
+    @else
+    <section class="px-6 pb-10 animate__animated animate__fadeInUp mt-5">
+      <h3 class="text-2xl md:text-3xl font-bold mb-6 text-left">Eventos Para ti</h3>
+      <p class="text-gray-600 dark:text-gray-300">No hemos encontrado eventos personalizados para ti. ¡Explora otras categorías!</p>
+    </section>
+    @endif
 
   <!-- Banner Especial -->
   <section class="bg-cover bg-center text-white px-6 py-12 text-center" style="background-image: url('img/banner3.png');">

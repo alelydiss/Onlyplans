@@ -43,4 +43,9 @@ public function usuariosFavoritos()
     return $this->belongsToMany(User::class, 'evento_user', 'evento_id', 'user_id');
 }
 
+public function asientos()
+{
+    return $this->hasMany(Asiento::class, 'events_id');
+}
+
 }

@@ -7,6 +7,7 @@ use Stripe\Stripe;
 use Stripe\Checkout\Session;
 use App\Models\Event;
 use App\Models\Order;
+use App\Models\Asiento;
 use Illuminate\Support\Facades\Auth;
 
 class PagoController extends Controller
@@ -24,9 +25,9 @@ public function checkout(Request $request, Event $evento)
                 'product_data' => [
                     'name' => 'Entrada para ' . $evento->titulo,
                 ],
-                'unit_amount' => $evento->precio * 100, // en céntimos
+                'unit_amount' => $evento->precio * 100,
             ],
-            'quantity' => $request->cantidad,
+            'quantity' => (int) $request->cantidad,
         ]],
         'mode' => 'payment',
         'success_url' => route('eventos.checkout.success', $evento->id) . '?session_id={CHECKOUT_SESSION_ID}',
@@ -37,7 +38,7 @@ public function checkout(Request $request, Event $evento)
             'correo' => $request->correo,
             'telefono' => $request->telefono,
             'cantidad' => $request->cantidad,
-            'zona' => $request->zona,
+            'asientos' => json_encode($request->asientos),
         ],
     ]);
 
@@ -45,42 +46,45 @@ public function checkout(Request $request, Event $evento)
 }
 
 
+
 public function success(Request $request, Event $evento)
 {
-    \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-    $session = \Stripe\Checkout\Session::retrieve($request->session_id);
+    Stripe::setApiKey(config('services.stripe.secret'));
+    $session = Session::retrieve($request->session_id);
 
     if ($session && $session->payment_status === 'paid') {
-        // Verifica que la orden no se haya guardado ya (evita duplicados)
-        $existingOrder = Order::where('correo', $session->metadata->correo)
-            ->where('event_id', $session->metadata->evento_id)
-            ->where('zona', $session->metadata->zona)
-            ->first();
+        $metadata = $session->metadata;
 
-        if (!$existingOrder) {
-            $metadata = $session->metadata;
+        // Crear la orden
+        Order::create([
+            'event_id' => $metadata->evento_id ?? null,
+            'nombre' => $metadata->nombre ?? '',
+            'correo' => $metadata->correo ?? '',
+            'telefono' => $metadata->telefono ?? '',
+            'cantidad' => $metadata->cantidad ?? 1,
+            'asientos' => $metadata->asientos ?? '[]',
+            'total' => $evento->precio * ($metadata->cantidad ?? 1),
+            'user_id' => optional(Auth::user())->id,
+        ]);
 
-            Order::create([
-                'event_id' => $metadata['evento_id'] ?? null,
-                'nombre' => $metadata['nombre'] ?? '',
-                'correo' => $metadata['correo'] ?? '',
-                'telefono' => $metadata['telefono'] ?? '',
-                'cantidad' => $metadata['cantidad'] ?? 1,
-                'zona' => $metadata['zona'] ?? '',
-                'total' => $evento->precio * ($metadata['cantidad'] ?? 1),
-                'user_id' => optional(Auth::user())->id,
-            ]);
-
-            \App\Models\Actividad::create([
-                'descripcion' => ($metadata['cantidad'] ?? 1) . ' tickets vendidos para ' . $evento->titulo,
-                'icono' => 'fas fa-ticket-alt',
-                'fecha' => now(),
-            ]);
+        // Cambiar estado de los asientos seleccionados
+        $asientos = json_decode($metadata->asientos ?? '[]', true);
+        if (is_array($asientos) && count($asientos) > 0) {
+           Asiento::whereIn('id', $asientos)
+            ->where('estado', 'disponible')
+            ->update(['estado' => 'reservado']);
         }
+
+        \App\Models\Actividad::create([
+            'descripcion' => ($metadata->cantidad ?? 1) . ' tickets vendidos para ' . $evento->titulo,
+            'icono' => 'fas fa-ticket-alt',
+            'fecha' => now(),
+        ]);
     }
 
     return redirect()->route('tickets.index')->with('success', '¡Compra realizada con éxito!');
 }
+
 
 
 

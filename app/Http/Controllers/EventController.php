@@ -96,39 +96,9 @@ class EventController extends Controller
         return redirect()->route('mapa')->with('success', 'Evento creado con éxito!');
     }
 
-    public function comprar(Request $request, $id)
-    {
-        $request->validate([
-            'nombre' => 'required|string|max:255',
-            'correo' => 'required|email',
-            'telefono' => 'nullable|string|max:20',
-            'cantidad' => 'required|integer|min:1',
-            'zona' => 'required|string',
-        ]);
-
-        // Obtener el evento y su precio
-        $evento = Event::findOrFail($id);
-        $precioTicket = $evento->precio ?? 0;
-
-        $total = $request->cantidad * $precioTicket;
-
-        Order::create([
-            'event_id' => $id,
-            'nombre' => $request->nombre,
-            'correo' => $request->correo,
-            'telefono' => $request->telefono,
-            'cantidad' => $request->cantidad,
-            'zona' => $request->zona,
-            'total' => $total,
-            'user_id' => Auth::id()
-        ]);
-
-        return response()->json(['message' => 'Compra registrada correctamente.']);
-    }
-
     public function index(Request $request)
     {
-        $query = Event::with('category');
+        $query = Event::with('category')->where('revisado', 1);
 
         // Búsqueda por título, ubicación o nombre de categoría
         if ($request->filled('q')) {
@@ -174,7 +144,6 @@ class EventController extends Controller
             $categoriasIds = $request->input('categorias');
             $query->whereIn('category_id', $categoriasIds);
         }
-
 
         // Ordenamiento
         switch ($request->input('orden')) {
@@ -380,8 +349,8 @@ public function mostrarDashboard()
 {
     $user = Auth::user();
     $categorias = Categoria::all();
-    $eventos = Event::latest()->take(6)->get();
-    $eventosPersonalizados = $this->obtenerEventosPersonalizados($user);
+    $eventos = Event::where('revisado', 1)->latest()->take(6)->get();
+    $eventosPersonalizados = $this->obtenerEventosPersonalizados($user)->where('revisado', 1);
 
     return view('dashboard', compact('categorias', 'eventos', 'eventosPersonalizados'));
 }
@@ -389,24 +358,42 @@ public function mostrarDashboard()
 public function mostrar($id = null)
 {
     if ($id) {
-        $evento = Event::with('category', 'user')->findOrFail($id);
+        // Cargar evento solo si está revisado
+        $evento = Event::with('category', 'user', 'asientos')
+            ->where('revisado', 1)
+            ->findOrFail($id);
 
+        // Agrupar los asientos por zona, estructurando para Alpine.js
+        $asientosAgrupados = $evento->asientos
+            ->groupBy('zona')
+            ->map(function ($asientos) {
+                return $asientos->map(fn ($a) => [
+                    'id' => $a->id,
+                    'numero' => $a->numero,
+                    'estado' => $a->estado,
+                ])->values();
+            });
+
+        // Obtener eventos personalizados si el usuario está autenticado
         $eventosPersonalizados = collect();
         if (Auth::check()) {
             $user = Auth::user();
-            $eventosPersonalizados = $this->obtenerEventosPersonalizados($user);
-
-            // Excluir el evento actual
-            $eventosPersonalizados = $eventosPersonalizados->reject(function ($eventoPersonalizado) use ($id) {
-                return $eventoPersonalizado->id == $id;
-            });
+            $eventosPersonalizados = $this->obtenerEventosPersonalizados($user)
+                ->reject(fn ($eventoPersonalizado) => $eventoPersonalizado->id == $id);
         }
 
-        return view('evento', compact('evento', 'eventosPersonalizados'));
+        return view('evento', [
+            'evento' => $evento,
+            'eventosPersonalizados' => $eventosPersonalizados,
+            'asientosAgrupados' => $asientosAgrupados,
+        ]);
     } else {
-        $eventosmapa = Event::all();
+        // Solo mostrar eventos revisados en el mapa
+        $eventosmapa = Event::where('revisado', 1)->get();
         return view('mapa', compact('eventosmapa'));
     }
 }
+
+
 
 }

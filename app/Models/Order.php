@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     protected $fillable = [
-        'event_id', 'nombre', 'correo', 'telefono', 'cantidad', 'zona', 'total','user_id',
+        'event_id', 'nombre', 'correo', 'telefono', 'cantidad', 'asientos', 'total','user_id',
     ];
 
     public function event()

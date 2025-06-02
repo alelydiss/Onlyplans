@@ -81,9 +81,6 @@ Route::post('/evento/{evento}/favorito', [FavoritoController::class, 'toggle'])-
 
 Route::get('/evento/{id}', [EventController::class, 'mostrar'])->name('evento');
 
-Route::post('/eventos/{id}/comprar', [EventController::class, 'comprar'])->name('eventos.comprar');
-
-
 # MIS  ENTRADAS
 Route::get('/mis-tickets', [App\Http\Controllers\EventController::class, 'misEntradas'])->name('tickets.index')->middleware('auth');
 
