@@ -187,17 +187,20 @@ return view('admin.dashboard', compact(
 ));
     })->name('admin.dashboard');
 
+    /* EVENTOS */
     Route::get('/eventos', [AdminEventoController::class, 'index'])->name('admin.eventos');
     Route::get('/eventos/pendientes', [AdminEventoController::class, 'pendientes'])->name('admin.eventos.pendientes');
     Route::put('/eventos/{evento}/aprobar', [AdminEventoController::class, 'aprobar'])->name('admin.eventos.aprobar');
     Route::delete('/eventos/{evento}/rechazar', [AdminEventoController::class, 'rechazar'])->name('admin.eventos.rechazar');
-    Route::get('/evento/{id}', [EventController::class, 'mostrar'])->name('admin.eventos.mostrar');
+    Route::get('/eventos/{id}', [AdminEventoController::class, 'mostrar'])->name('admin.eventos.mostrar');
+    Route::put('/eventos/{evento}', [AdminEventoController::class, 'update'])->name('admin.eventos.update');
+
 
     /* USUARIOS */
-Route::get('/usuarios', [AdminUsuarioController::class, 'index'])->name('admin.usuarios');
-Route::post('/usuarios', [AdminUsuarioController::class, 'store'])->name('admin.usuarios.store');
-Route::put('/usuarios/{usuario}', [AdminUsuarioController::class, 'update'])->name('admin.usuarios.update');
-Route::delete('/usuarios/{usuario}', [AdminUsuarioController::class, 'destroy'])->name('admin.usuarios.destroy');
+    Route::get('/usuarios', [AdminUsuarioController::class, 'index'])->name('admin.usuarios');
+    Route::post('/usuarios', [AdminUsuarioController::class, 'store'])->name('admin.usuarios.store');
+    Route::put('/usuarios/{usuario}', [AdminUsuarioController::class, 'update'])->name('admin.usuarios.update');
+    Route::delete('/usuarios/{usuario}', [AdminUsuarioController::class, 'destroy'])->name('admin.usuarios.destroy');
 
 
     /* CATEGORIAS */
