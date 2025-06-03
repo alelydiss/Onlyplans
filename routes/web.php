@@ -169,7 +169,7 @@ foreach ($periodo as $date) {
 
 
 $eventosPorRevisar = Event::where('revisado', false)->take(5)->get();
-$actividadesRecientes = Actividad::orderBy('fecha', 'desc')->take(10)->get();
+$actividadesRecientes = Actividad::orderBy('fecha', 'desc')->paginate(6);
 
 return view('admin.dashboard', compact(
     'totalUsuarios',

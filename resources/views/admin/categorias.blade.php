@@ -39,80 +39,90 @@
             </div>
         @endif
 
-        <!-- Glassmorphism Create Card -->
-        <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg rounded-2xl shadow-xl border border-white/30 dark:border-gray-700/50 overflow-hidden mb-10 hover:shadow-2xl transition-shadow duration-500">
-            <div class="p-6 sm:p-8">
-                <div class="flex items-center mb-6">
-                    <div class="bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 p-3 rounded-xl mr-4">
-                        <svg class="w-6 h-6 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <!-- Botón Nueva Categoría -->
+<div class="flex justify-end mb-6">
+    <button onclick="openCreateModal()" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+        <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+        </svg>
+        Nueva Categoría
+    </button>
+</div>
+
+<!-- Modal Crear Categoría -->
+<div id="createModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4 transition-opacity duration-300 opacity-0">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md transform transition-all duration-300 scale-95">
+        <div class="p-6 sm:p-8">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-bold text-gray-800 dark:text-white">Nueva Categoría</h3>
+                <button onclick="closeCreateModal()" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 transition-colors duration-200">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <form action="{{ route('admin.categorias.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                @csrf
+                <div class="space-y-2">
+                    <label for="nombre" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombre de la categoría</label>
+                    <div class="relative">
+                        <input type="text" name="nombre" id="nombre" value="{{ old('nombre') }}" required
+                               class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 placeholder-gray-400 dark:placeholder-gray-500">
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    @error('nombre')
+                        <p class="mt-1 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Imagen de categoría</label>
+                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-xl hover:border-indigo-400 dark:hover:border-indigo-500 transition-colors duration-200" id="dropzone">
+                        <div class="space-y-1 text-center" id="upload-container">
+                            <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <div class="flex text-sm text-gray-600 dark:text-gray-400">
+                                <label for="foto" class="relative cursor-pointer bg-white dark:bg-gray-800 rounded-md font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                    <span>Subir archivo</span>
+                                    <input id="foto" name="foto" type="file" class="sr-only" accept="image/*">
+                                </label>
+                                <p class="pl-1">o arrastrar y soltar</p>
+                            </div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG, GIF hasta 5MB</p>
+                        </div>
+                        <div id="preview-container" class="hidden w-full">
+                            <div class="relative">
+                                <img id="image-preview" class="max-h-48 mx-auto rounded-lg shadow-sm" src="" alt="Vista previa de la imagen">
+                                <button type="button" id="remove-image" class="absolute top-2 right-2 bg-gray-800/50 text-white rounded-full p-1 hover:bg-gray-700/70 transition">
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <p id="file-name" class="mt-2 text-sm text-gray-500 dark:text-gray-400 text-center"></p>
+                        </div>
+                    </div>
+                    @error('foto')
+                        <p class="mt-1 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div class="pt-2">
+                    <button type="submit" class="w-full flex justify-center items-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-medium rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5">
+                        <svg class="w-5 h-5 mr-2 -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                         </svg>
-                    </div>
-                    <h2 class="text-xl font-semibold text-gray-800 dark:text-white">Nueva Categoría</h2>
+                        Crear Categoría
+                    </button>
                 </div>
-                
-                <form action="{{ route('admin.categorias.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
-                    @csrf
-                    <div class="space-y-2">
-                        <label for="nombre" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombre de la categoría</label>
-                        <div class="relative">
-                            <input type="text" name="nombre" id="nombre" value="{{ old('nombre') }}" required
-                                   class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 placeholder-gray-400 dark:placeholder-gray-500">
-                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        @error('nombre')
-                            <p class="mt-1 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div class="space-y-2">
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Imagen de categoría</label>
-                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-xl hover:border-indigo-400 dark:hover:border-indigo-500 transition-colors duration-200" id="dropzone">
-                            <div class="space-y-1 text-center" id="upload-container">
-                                <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                                <div class="flex text-sm text-gray-600 dark:text-gray-400">
-                                    <label for="foto" class="relative cursor-pointer bg-white dark:bg-gray-800 rounded-md font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                        <span>Subir archivo</span>
-                                        <input id="foto" name="foto" type="file" class="sr-only" accept="image/*">
-                                    </label>
-                                    <p class="pl-1">o arrastrar y soltar</p>
-                                </div>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG, GIF hasta 5MB</p>
-                            </div>
-                            <div id="preview-container" class="hidden w-full">
-                                <div class="relative">
-                                    <img id="image-preview" class="max-h-48 mx-auto rounded-lg shadow-sm" src="" alt="Vista previa de la imagen">
-                                    <button type="button" id="remove-image" class="absolute top-2 right-2 bg-gray-800/50 text-white rounded-full p-1 hover:bg-gray-700/70 transition">
-                                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                        </svg>
-                                    </button>
-                                </div>
-                                <p id="file-name" class="mt-2 text-sm text-gray-500 dark:text-gray-400 text-center"></p>
-                            </div>
-                        </div>
-                        @error('foto')
-                            <p class="mt-1 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div class="pt-2">
-                        <button type="submit" class="w-full flex justify-center items-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-medium rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5">
-                            <svg class="w-5 h-5 mr-2 -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                            </svg>
-                            Crear Categoría
-                        </button>
-                    </div>
-                </form>
-            </div>
+            </form>
         </div>
+    </div>
+</div>
+
 
         <!-- Floating Categories List -->
         <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg rounded-2xl shadow-xl border border-white/30 dark:border-gray-700/50 overflow-hidden hover:shadow-2xl transition-shadow duration-500">
@@ -292,210 +302,143 @@
 </div>
 
 <script>
-    // Image preview for create form
-    document.getElementById('foto').addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                document.getElementById('image-preview').src = event.target.result;
-                document.getElementById('preview-container').classList.remove('hidden');
-                document.getElementById('upload-container').classList.add('hidden');
-                document.getElementById('file-name').textContent = file.name;
-            };
-            reader.readAsDataURL(file);
-        }
-    });
+    // Utilidad para previsualizar imagen
+    function previewImage(inputId, previewId, containerId, uploadId, fileNameId) {
+        const input = document.getElementById(inputId);
+        input.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById(previewId).src = event.target.result;
+                    document.getElementById(containerId).classList.remove('hidden');
+                    document.getElementById(uploadId).classList.add('hidden');
+                    document.getElementById(fileNameId).textContent = file.name;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
 
+    // Utilidad para remover imagen previsualizada
+    function removeImage(inputId, containerId, uploadId, fileNameId) {
+        document.getElementById(inputId).value = '';
+        document.getElementById(containerId).classList.add('hidden');
+        document.getElementById(uploadId).classList.remove('hidden');
+        document.getElementById(fileNameId).textContent = '';
+    }
+
+    // Inicializar previsualización y remover para crear
+    previewImage('foto', 'image-preview', 'preview-container', 'upload-container', 'file-name');
     document.getElementById('remove-image').addEventListener('click', function() {
-        document.getElementById('foto').value = '';
-        document.getElementById('preview-container').classList.add('hidden');
-        document.getElementById('upload-container').classList.remove('hidden');
-        document.getElementById('file-name').textContent = '';
+        removeImage('foto', 'preview-container', 'upload-container', 'file-name');
     });
 
-    // Image preview for edit form
-    document.getElementById('edit_foto').addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                document.getElementById('edit-image-preview').src = event.target.result;
-                document.getElementById('edit-preview-container').classList.remove('hidden');
-                document.getElementById('edit-upload-container').classList.add('hidden');
-                document.getElementById('edit-file-name').textContent = file.name;
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-
+    // Inicializar previsualización y remover para editar
+    previewImage('edit_foto', 'edit-image-preview', 'edit-preview-container', 'edit-upload-container', 'edit-file-name');
     document.getElementById('edit-remove-image').addEventListener('click', function() {
-        document.getElementById('edit_foto').value = '';
-        document.getElementById('edit-preview-container').classList.add('hidden');
-        document.getElementById('edit-upload-container').classList.remove('hidden');
-        document.getElementById('edit-file-name').textContent = '';
+        removeImage('edit_foto', 'edit-preview-container', 'edit-upload-container', 'edit-file-name');
     });
 
-    // Search functionality
+    // Drag & drop genérico
+    function setupDropzone(dropId, inputId, previewId, containerId, uploadId, fileNameId) {
+        const dropArea = document.getElementById(dropId);
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, e => { e.preventDefault(); e.stopPropagation(); }, false);
+        });
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, () => {
+                dropArea.classList.add('border-indigo-400', 'dark:border-indigo-500');
+            }, false);
+        });
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, () => {
+                dropArea.classList.remove('border-indigo-400', 'dark:border-indigo-500');
+            }, false);
+        });
+        dropArea.addEventListener('drop', function(e) {
+            const files = e.dataTransfer.files;
+            const input = document.getElementById(inputId);
+            if (files.length > 0 && files[0].type.match('image.*')) {
+                input.files = files;
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById(previewId).src = event.target.result;
+                    document.getElementById(containerId).classList.remove('hidden');
+                    document.getElementById(uploadId).classList.add('hidden');
+                    document.getElementById(fileNameId).textContent = files[0].name;
+                };
+                reader.readAsDataURL(files[0]);
+            }
+        }, false);
+    }
+
+    // Inicializar drag & drop para ambos formularios
+    setupDropzone('dropzone', 'foto', 'image-preview', 'preview-container', 'upload-container', 'file-name');
+    setupDropzone('edit-dropzone', 'edit_foto', 'edit-image-preview', 'edit-preview-container', 'edit-upload-container', 'edit-file-name');
+
+    // Buscador
     document.getElementById('search-input').addEventListener('input', function(e) {
         const searchTerm = e.target.value.toLowerCase();
-        const rows = document.querySelectorAll('.category-row');
-        
-        rows.forEach(row => {
-            const name = row.getAttribute('data-name');
-            if (name.includes(searchTerm)) {
-                row.classList.remove('hidden');
-            } else {
-                row.classList.add('hidden');
-            }
+        document.querySelectorAll('.category-row').forEach(row => {
+            row.classList.toggle('hidden', !row.getAttribute('data-name').includes(searchTerm));
         });
     });
 
-    // Modal functions with animations
-    function openEditModal(id, nombre, fotoUrl) {
-        const modal = document.getElementById('editModal');
-        const form = document.getElementById('editForm');
-        const nombreInput = document.getElementById('edit_nombre');
-        const currentPhotoImg = document.getElementById('current-photo-img');
-        const editPreviewContainer = document.getElementById('edit-preview-container');
-        const editUploadContainer = document.getElementById('edit-upload-container');
-
-        form.action = `/admin/categorias/${id}`;
-        nombreInput.value = nombre;
-
-        if (fotoUrl) {
-            currentPhotoImg.src = fotoUrl;
-            currentPhotoImg.classList.remove('hidden');
-        } else {
-            currentPhotoImg.classList.add('hidden');
-        }
-
-        // Reset edit image preview
-        document.getElementById('edit_foto').value = '';
-        editPreviewContainer.classList.add('hidden');
-        editUploadContainer.classList.remove('hidden');
-
+    // Modal Crear
+    function openCreateModal() {
+        const modal = document.getElementById('createModal');
         modal.classList.remove('hidden');
         document.body.classList.add('overflow-hidden');
-        
-        // Trigger animations
         setTimeout(() => {
             modal.classList.add('opacity-100');
             modal.querySelector('div').classList.remove('scale-95');
             modal.querySelector('div').classList.add('scale-100');
         }, 10);
     }
-
-    function closeEditModal() {
-        const modal = document.getElementById('editModal');
-        
-        // Trigger animations
+    function closeCreateModal() {
+        const modal = document.getElementById('createModal');
         modal.classList.remove('opacity-100');
         modal.querySelector('div').classList.remove('scale-100');
         modal.querySelector('div').classList.add('scale-95');
-        
         setTimeout(() => {
             modal.classList.add('hidden');
             document.body.classList.remove('overflow-hidden');
         }, 300);
     }
 
-    // Drag and drop for file upload (create form)
-    const dropArea = document.getElementById('dropzone');
-    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-        dropArea.addEventListener(eventName, preventDefaults, false);
-    });
-
-    function preventDefaults(e) {
-        e.preventDefault();
-        e.stopPropagation();
-    }
-
-    ['dragenter', 'dragover'].forEach(eventName => {
-        dropArea.addEventListener(eventName, highlight, false);
-    });
-
-    ['dragleave', 'drop'].forEach(eventName => {
-        dropArea.addEventListener(eventName, unhighlight, false);
-    });
-
-    function highlight() {
-        dropArea.classList.add('border-indigo-400', 'dark:border-indigo-500');
-    }
-
-    function unhighlight() {
-        dropArea.classList.remove('border-indigo-400', 'dark:border-indigo-500');
-    }
-
-    dropArea.addEventListener('drop', handleDrop, false);
-
-    function handleDrop(e) {
-        const dt = e.dataTransfer;
-        const files = dt.files;
-        const input = document.getElementById('foto');
-        
-        if (files.length > 0 && files[0].type.match('image.*')) {
-            input.files = files;
-            
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                document.getElementById('image-preview').src = event.target.result;
-                document.getElementById('preview-container').classList.remove('hidden');
-                document.getElementById('upload-container').classList.add('hidden');
-                document.getElementById('file-name').textContent = files[0].name;
-            };
-            reader.readAsDataURL(files[0]);
+    // Modal Editar
+    function openEditModal(id, nombre, fotoUrl) {
+        const modal = document.getElementById('editModal');
+        const form = document.getElementById('editForm');
+        const nombreInput = document.getElementById('edit_nombre');
+        const currentPhotoImg = document.getElementById('current-photo-img');
+        form.action = `/admin/categorias/${id}`;
+        nombreInput.value = nombre;
+        if (fotoUrl) {
+            currentPhotoImg.src = fotoUrl;
+            currentPhotoImg.classList.remove('hidden');
+        } else {
+            currentPhotoImg.classList.add('hidden');
         }
+        removeImage('edit_foto', 'edit-preview-container', 'edit-upload-container', 'edit-file-name');
+        modal.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+        setTimeout(() => {
+            modal.classList.add('opacity-100');
+            modal.querySelector('div').classList.remove('scale-95');
+            modal.querySelector('div').classList.add('scale-100');
+        }, 10);
     }
-
-    // Drag and drop for file upload (edit form)
-    const editDropArea = document.getElementById('edit-dropzone');
-    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-        editDropArea.addEventListener(eventName, preventDefaults, false);
-    });
-
-    ['dragenter', 'dragover'].forEach(eventName => {
-        editDropArea.addEventListener(eventName, highlightEdit, false);
-    });
-
-    ['dragleave', 'drop'].forEach(eventName => {
-        editDropArea.addEventListener(eventName, unhighlightEdit, false);
-    });
-
-    function highlightEdit() {
-        editDropArea.classList.add('border-indigo-400', 'dark:border-indigo-500');
+    function closeEditModal() {
+        const modal = document.getElementById('editModal');
+        modal.classList.remove('opacity-100');
+        modal.querySelector('div').classList.remove('scale-100');
+        modal.querySelector('div').classList.add('scale-95');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        }, 300);
     }
-
-    function unhighlightEdit() {
-        editDropArea.classList.remove('border-indigo-400', 'dark:border-indigo-500');
-    }
-
-    editDropArea.addEventListener('drop', handleEditDrop, false);
-
-    function handleEditDrop(e) {
-        const dt = e.dataTransfer;
-        const files = dt.files;
-        const input = document.getElementById('edit_foto');
-        
-        if (files.length > 0 && files[0].type.match('image.*')) {
-            input.files = files;
-            
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                document.getElementById('edit-image-preview').src = event.target.result;
-                document.getElementById('edit-preview-container').classList.remove('hidden');
-                document.getElementById('edit-upload-container').classList.add('hidden');
-                document.getElementById('edit-file-name').textContent = files[0].name;
-            };
-            reader.readAsDataURL(files[0]);
-        }
-    }
-
-    // Close success message when clicking the close button
-    document.querySelectorAll('[data-dismiss="alert"]').forEach(button => {
-        button.addEventListener('click', function() {
-            this.closest('.alert').remove();
-        });
-    });
 </script>
 @endsection
