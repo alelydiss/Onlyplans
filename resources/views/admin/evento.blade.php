@@ -390,38 +390,4 @@
         document.getElementById('submitIcon').classList.add('hidden');
     });
 </script>
-
-<style>
-    .animate-fade-in {
-        animation: fadeIn 0.3s ease-in-out;
-    }
-    
-    .animate-fade-in-up {
-        animation: fadeInUp 0.4s ease-out;
-    }
-    
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-    
-    @keyframes fadeInUp {
-        from { 
-            opacity: 0;
-            transform: translateY(10px);
-        }
-        to { 
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    .hover\:scale-105:hover {
-        transform: scale(1.05);
-    }
-    
-    .hover\:-translate-x-1:hover {
-        transform: translateX(-4px);
-    }
-</style>
 @endsection
