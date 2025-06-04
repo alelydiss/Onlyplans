@@ -67,9 +67,9 @@
                     <label for="nombre" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombre de la categoría</label>
                     <div class="relative">
                         <input type="text" name="nombre" id="nombre" value="{{ old('nombre') }}" required
-                               class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 placeholder-gray-400 dark:placeholder-gray-500">
+                               class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 placeholder-gray-400 dark:placeholder-gray-500 text-gray-900 dark:text-white">
                         <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="h-5 w-5 text-gray-400 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
                             </svg>
                         </div>
@@ -137,9 +137,9 @@
                         <h2 class="text-xl font-semibold text-gray-800 dark:text-white">Tus Categorías</h2>
                     </div>
                     <div class="relative">
-                        <input type="text" id="search-input" placeholder="Buscar categoría..." class="pl-10 pr-4 py-2 text-sm bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200">
+                        <input type="text" id="search-input" placeholder="Buscar categoría..." class="pl-10 pr-4 py-2 text-sm bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-200">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="h-5 w-5 text-gray-400 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
                         </div>
@@ -247,7 +247,7 @@
                         <div class="space-y-2">
                             <label for="edit_nombre" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombre de la categoría</label>
                             <input type="text" name="nombre" id="edit_nombre" required
-                                class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200">
+                                class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500">
                         </div>
 
                         <div class="space-y-2">

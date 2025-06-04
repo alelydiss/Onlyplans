@@ -88,6 +88,11 @@ public function mostrar($id = null)
     }
 }
 
+public function destroy(Event $evento)
+{
+    $evento->delete();
+    return redirect()->route('admin.eventos')->with('success', 'Evento eliminado correctamente.');
+}
 
 public function update(Request $request, Event $evento)
 {

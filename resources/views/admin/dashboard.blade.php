@@ -14,9 +14,6 @@
                 <a href="{{ route('crearEvento') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg flex items-center transition-all">
                     <i class="fas fa-plus mr-2"></i> Crear Evento
                 </a>
-                <button class="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-white px-4 py-2 rounded-lg flex items-center transition-all">
-                    <i class="fas fa-sliders-h mr-2"></i> Configuración
-                </button>
             </div>
         </div>
 
@@ -93,10 +90,10 @@
             <div class="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Ventas de Tickets (últimos 7 días)</h2>
-                    <select class="bg-gray-100 dark:bg-gray-700 border-none text-sm rounded-lg px-3 py-1">
-                        <option>Últimos 7 días</option>
-                        <option>Últimos 30 días</option>
-                        <option>Este año</option>
+                    <select id="salesRange" class="bg-gray-100 dark:bg-gray-700 border-none text-sm rounded-lg px-3 py-1 text-gray-900 dark:text-white">
+                        <option value="7">Últimos 7 días</option>
+                        <option value="30">Últimos 30 días</option>
+                        <option value="365">Este año</option>
                     </select>
                 </div>
                 <!-- Gráfico con Chart.js -->
@@ -259,43 +256,75 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-// Gráfico de ventas
 document.addEventListener('DOMContentLoaded', function () {
     const ctx = document.getElementById('salesChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: @json($fechas),
-            datasets: [{
-                label: 'Tickets Vendidos',
-                data: @json($tickets),
-                backgroundColor: 'rgba(99, 102, 241, 0.1)',
-                borderColor: 'rgba(99, 102, 241, 1)',
-                borderWidth: 2,
-                tension: 0.4,
-                fill: true,
-                pointRadius: 4,
-                pointBackgroundColor: 'rgba(99, 102, 241, 1)'
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { display: false }
+    let salesChart;
+    
+    // Función para inicializar o actualizar el gráfico
+    function initChart(labels, data) {
+        if (salesChart) {
+            salesChart.destroy(); // Destruye el gráfico existente si hay uno
+        }
+        
+        salesChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Tickets Vendidos',
+                    data: data,
+                    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                    borderColor: 'rgba(99, 102, 241, 1)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 4,
+                    pointBackgroundColor: 'rgba(99, 102, 241, 1)'
+                }]
             },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: { 
-                        color: '#6B7280',
-                        precision: 0
-                    }
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
                 },
-                x: {
-                    ticks: { color: '#6B7280' }
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { 
+                            color: '#6B7280',
+                            precision: 0
+                        }
+                    },
+                    x: {
+                        ticks: { color: '#6B7280' }
+                    }
                 }
             }
-        }
+        });
+    }
+    
+    // Inicializar el gráfico con los datos por defecto (7 días)
+    initChart(@json($fechas), @json($tickets));
+    
+    // Manejar el cambio en el select
+    document.getElementById('salesRange').addEventListener('change', function() {
+        const days = this.value;
+        
+        // Mostrar un loader mientras se cargan los datos
+        ctx.canvas.style.opacity = '0.5';
+        
+        // Hacer una petición AJAX para obtener los nuevos datos
+        fetch(`/admin/dashboard/sales-data?days=${days}`)
+            .then(response => response.json())
+            .then(data => {
+                // Actualizar el gráfico con los nuevos datos
+                initChart(data.fechas, data.tickets);
+                ctx.canvas.style.opacity = '1';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                ctx.canvas.style.opacity = '1';
+            });
     });
 });
 </script>

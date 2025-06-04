@@ -168,7 +168,6 @@ foreach ($periodo as $date) {
     $tickets[] = $venta ? $venta->total : 0;
 }
 
-
 $eventosPorRevisar = Event::where('revisado', false)->take(5)->get();
 $actividadesRecientes = Actividad::orderBy('fecha', 'desc')->paginate(6);
 
@@ -195,6 +194,7 @@ return view('admin.dashboard', compact(
     Route::delete('/eventos/{evento}/rechazar', [AdminEventoController::class, 'rechazar'])->name('admin.eventos.rechazar');
     Route::get('/eventos/{id}', [AdminEventoController::class, 'mostrar'])->name('admin.eventos.mostrar');
     Route::put('/eventos/{evento}', [AdminEventoController::class, 'update'])->name('admin.eventos.update');
+    Route::delete('/eventos/{evento}', [AdminEventoController::class, 'destroy'])->name('admin.eventos.destroy');
 
 
     /* USUARIOS */

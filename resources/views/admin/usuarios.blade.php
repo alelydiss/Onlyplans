@@ -84,149 +84,149 @@
                 </button>
             </div>
             <form action="{{ route('admin.usuarios.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
-                    @csrf
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Información Básica -->
-                        <div class="space-y-4">
-                            <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300 border-b pb-2 border-gray-200 dark:border-gray-700">Información Básica</h3>
-                            
-                            <div class="space-y-2">
-                                <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombre*</label>
-                                <input type="text" name="name" id="name" value="{{ old('name') }}" required
-                                       class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 placeholder-gray-400 dark:placeholder-gray-500">
-                                @error('name')
-                                    <p class="mt-1 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            
-                            <div class="space-y-2">
-                                <label for="last_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Apellido</label>
-                                <input type="text" name="last_name" id="last_name" value="{{ old('last_name') }}"
-                                       class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 placeholder-gray-400 dark:placeholder-gray-500">
-                                @error('last_name')
-                                    <p class="mt-1 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            
-                            <div class="space-y-2">
-                                <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email*</label>
-                                <input type="email" name="email" id="email" value="{{ old('email') }}" required
-                                       class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 placeholder-gray-400 dark:placeholder-gray-500">
-                                @error('email')
-                                    <p class="mt-1 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            
-                            <div class="space-y-2">
-                                <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Contraseña*</label>
-                                <input type="password" name="password" id="password" required
-                                       class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 placeholder-gray-400 dark:placeholder-gray-500">
-                                @error('password')
-                                    <p class="mt-1 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
-                                @enderror
-                            </div>
+                @csrf
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Información Básica -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-medium text-gray-700 dark:text-white border-b pb-2 border-gray-200 dark:border-gray-700">Información Básica</h3>
+
+                        <div class="space-y-2">
+                            <label for="name" class="block text-sm font-medium text-gray-700 dark:text-white">Nombre*</label>
+                            <input type="text" name="name" id="name" value="{{ old('name') }}" required
+                                   class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 placeholder-gray-400 dark:placeholder-white text-gray-900 dark:text-white">
+                            @error('name')
+                                <p class="mt-1 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
+                            @enderror
                         </div>
-                        
-                        <!-- Información Adicional -->
-                        <div class="space-y-4">
-                            <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300 border-b pb-2 border-gray-200 dark:border-gray-700">Información Adicional</h3>
-                            
-                            <div class="space-y-2">
-                                <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Teléfono</label>
-                                <input type="text" name="phone" id="phone" value="{{ old('phone') }}"
-                                       class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 placeholder-gray-400 dark:placeholder-gray-500">
-                                @error('phone')
-                                    <p class="mt-1 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            
-                            <div class="space-y-2">
-                                <label for="address" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Dirección</label>
-                                <input type="text" name="address" id="address" value="{{ old('address') }}"
-                                       class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 placeholder-gray-400 dark:placeholder-gray-500">
-                                @error('address')
-                                    <p class="mt-1 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            
-                            <div class="grid grid-cols-2 gap-4">
-                                <div class="space-y-2">
-                                    <label for="city" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Ciudad</label>
-                                    <input type="text" name="city" id="city" value="{{ old('city') }}"
-                                           class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 placeholder-gray-400 dark:placeholder-gray-500">
-                                    @error('city')
-                                        <p class="mt-1 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                
-                                <div class="space-y-2">
-                                    <label for="country" class="block text-sm font-medium text-gray-700 dark:text-gray-300">País</label>
-                                    <input type="text" name="country" id="country" value="{{ old('country') }}"
-                                           class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 placeholder-gray-400 dark:placeholder-gray-500">
-                                    @error('country')
-                                        <p class="mt-1 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                            
-                            <div class="space-y-2">
-                                <label for="role" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Rol*</label>
-                                <select name="role" id="role" required
-                                        class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 placeholder-gray-400 dark:placeholder-gray-500">
-                                    <option value="">Seleccione un rol</option>
-                                    <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>Usuario</option>
-                                    <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Administrador</option>
-                                </select>
-                                @error('role')
-                                    <p class="mt-1 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            
-                            <div class="space-y-2">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Avatar</label>
-                                <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-xl hover:border-indigo-400 dark:hover:border-indigo-500 transition-colors duration-200" id="dropzone">
-                                    <div class="space-y-1 text-center" id="upload-container">
-                                        <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                        <div class="flex text-sm text-gray-600 dark:text-gray-400">
-                                            <label for="avatar" class="relative cursor-pointer bg-white dark:bg-gray-800 rounded-md font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                                <span>Subir archivo</span>
-                                                <input id="avatar" name="avatar" type="file" class="sr-only" accept="image/*">
-                                            </label>
-                                            <p class="pl-1">o arrastrar y soltar</p>
-                                        </div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG, GIF hasta 5MB</p>
-                                    </div>
-                                    <div id="preview-container" class="hidden w-full">
-                                        <div class="relative">
-                                            <img id="image-preview" class="max-h-48 mx-auto rounded-lg shadow-sm" src="" alt="Vista previa de la imagen">
-                                            <button type="button" id="remove-image" class="absolute top-2 right-2 bg-gray-800/50 text-white rounded-full p-1 hover:bg-gray-700/70 transition">
-                                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                                </svg>
-                                            </button>
-                                        </div>
-                                        <p id="file-name" class="mt-2 text-sm text-gray-500 dark:text-gray-400 text-center"></p>
-                                    </div>
-                                </div>
-                                @error('avatar')
-                                    <p class="mt-1 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
-                                @enderror
-                            </div>
+
+                        <div class="space-y-2">
+                            <label for="last_name" class="block text-sm font-medium text-gray-700 dark:text-white">Apellido</label>
+                            <input type="text" name="last_name" id="last_name" value="{{ old('last_name') }}"
+                                   class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 placeholder-gray-400 dark:placeholder-white text-gray-900 dark:text-white">
+                            @error('last_name')
+                                <p class="mt-1 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="email" class="block text-sm font-medium text-gray-700 dark:text-white">Email*</label>
+                            <input type="email" name="email" id="email" value="{{ old('email') }}" required
+                                   class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 placeholder-gray-400 dark:placeholder-white text-gray-900 dark:text-white">
+                            @error('email')
+                                <p class="mt-1 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="password" class="block text-sm font-medium text-gray-700 dark:text-white">Contraseña*</label>
+                            <input type="password" name="password" id="password" required
+                                   class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 placeholder-gray-400 dark:placeholder-white text-gray-900 dark:text-white">
+                            @error('password')
+                                <p class="mt-1 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
 
-                    <div class="pt-2">
-                        <button type="submit" class="w-full flex justify-center items-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-medium rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5">
-                            <svg class="w-5 h-5 mr-2 -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                            </svg>
-                            Crear Usuario
-                        </button>
+                    <!-- Información Adicional -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-medium text-gray-700 dark:text-white border-b pb-2 border-gray-200 dark:border-gray-700">Información Adicional</h3>
+
+                        <div class="space-y-2">
+                            <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-white">Teléfono</label>
+                            <input type="text" name="phone" id="phone" value="{{ old('phone') }}"
+                                   class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 placeholder-gray-400 dark:placeholder-white text-gray-900 dark:text-white">
+                            @error('phone')
+                                <p class="mt-1 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="address" class="block text-sm font-medium text-gray-700 dark:text-white">Dirección</label>
+                            <input type="text" name="address" id="address" value="{{ old('address') }}"
+                                   class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 placeholder-gray-400 dark:placeholder-white text-gray-900 dark:text-white">
+                            @error('address')
+                                <p class="mt-1 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="space-y-2">
+                                <label for="city" class="block text-sm font-medium text-gray-700 dark:text-white">Ciudad</label>
+                                <input type="text" name="city" id="city" value="{{ old('city') }}"
+                                       class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 placeholder-gray-400 dark:placeholder-white text-gray-900 dark:text-white">
+                                @error('city')
+                                    <p class="mt-1 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div class="space-y-2">
+                                <label for="country" class="block text-sm font-medium text-gray-700 dark:text-white">País</label>
+                                <input type="text" name="country" id="country" value="{{ old('country') }}"
+                                       class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 placeholder-gray-400 dark:placeholder-white text-gray-900 dark:text-white">
+                                @error('country')
+                                    <p class="mt-1 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="role" class="block text-sm font-medium text-gray-700 dark:text-white">Rol*</label>
+                            <select name="role" id="role" required
+                                    class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 placeholder-gray-400 dark:placeholder-white text-gray-900 dark:text-white">
+                                <option value="">Seleccione un rol</option>
+                                <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>Usuario</option>
+                                <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Administrador</option>
+                            </select>
+                            @error('role')
+                                <p class="mt-1 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-white">Avatar</label>
+                            <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-xl hover:border-indigo-400 dark:hover:border-indigo-500 transition-colors duration-200" id="dropzone">
+                                <div class="space-y-1 text-center" id="upload-container">
+                                    <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    <div class="flex text-sm text-gray-600 dark:text-gray-400">
+                                        <label for="avatar" class="relative cursor-pointer bg-white dark:bg-gray-800 rounded-md font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                            <span>Subir archivo</span>
+                                            <input id="avatar" name="avatar" type="file" class="sr-only" accept="image/*">
+                                        </label>
+                                        <p class="pl-1">o arrastrar y soltar</p>
+                                    </div>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG, GIF hasta 5MB</p>
+                                </div>
+                                <div id="preview-container" class="hidden w-full">
+                                    <div class="relative">
+                                        <img id="image-preview" class="max-h-48 mx-auto rounded-lg shadow-sm" src="" alt="Vista previa de la imagen">
+                                        <button type="button" id="remove-image" class="absolute top-2 right-2 bg-gray-800/50 text-white rounded-full p-1 hover:bg-gray-700/70 transition">
+                                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <p id="file-name" class="mt-2 text-sm text-gray-500 dark:text-gray-400 text-center"></p>
+                                </div>
+                            </div>
+                            @error('avatar')
+                                <p class="mt-1 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
+                            @enderror
+                        </div>
                     </div>
-                </form>
+                </div>
+
+                <div class="pt-2">
+                    <button type="submit" class="w-full flex justify-center items-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-medium rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5">
+                        <svg class="w-5 h-5 mr-2 -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                        Crear Usuario
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -247,9 +247,9 @@
                         <h2 class="text-xl font-semibold text-gray-800 dark:text-white">Lista de Usuarios</h2>
                     </div>
                     <div class="relative">
-                        <input type="text" id="search-input" placeholder="Buscar usuario..." class="pl-10 pr-4 py-2 text-sm bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200">
+                        <input type="text" id="search-input" placeholder="Buscar usuario..." class="pl-10 pr-4 py-2 text-sm bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="h-5 w-5 text-gray-400 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
                         </div>
@@ -392,65 +392,65 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="space-y-2">
-                                <label for="edit_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombre*</label>
+                                <label for="edit_name" class="block text-sm font-medium text-gray-700 dark:text-white">Nombre*</label>
                                 <input type="text" name="name" id="edit_name" required
-                                    class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200">
+                                    class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-300">
                             </div>
                             
                             <div class="space-y-2">
-                                <label for="edit_last_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Apellido</label>
+                                <label for="edit_last_name" class="block text-sm font-medium text-gray-700 dark:text-white">Apellido</label>
                                 <input type="text" name="last_name" id="edit_last_name"
-                                    class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200">
+                                    class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-300">
                             </div>
                             
                             <div class="space-y-2">
-                                <label for="edit_email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email*</label>
+                                <label for="edit_email" class="block text-sm font-medium text-gray-700 dark:text-white">Email*</label>
                                 <input type="email" name="email" id="edit_email" required
-                                    class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200">
+                                    class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-300">
                             </div>
                             
                             <div class="space-y-2">
-                                <label for="edit_phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Teléfono</label>
+                                <label for="edit_phone" class="block text-sm font-medium text-gray-700 dark:text-white">Teléfono</label>
                                 <input type="text" name="phone" id="edit_phone"
-                                    class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200">
+                                    class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-300">
                             </div>
                             
                             <div class="space-y-2">
-                                <label for="edit_address" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Dirección</label>
+                                <label for="edit_address" class="block text-sm font-medium text-gray-700 dark:text-white">Dirección</label>
                                 <input type="text" name="address" id="edit_address"
-                                    class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200">
+                                    class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-300">
                             </div>
                             
                             <div class="space-y-2">
-                                <label for="edit_city" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Ciudad</label>
+                                <label for="edit_city" class="block text-sm font-medium text-gray-700 dark:text-white">Ciudad</label>
                                 <input type="text" name="city" id="edit_city"
-                                    class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200">
+                                    class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-300">
                             </div>
                             
                             <div class="space-y-2">
-                                <label for="edit_country" class="block text-sm font-medium text-gray-700 dark:text-gray-300">País</label>
+                                <label for="edit_country" class="block text-sm font-medium text-gray-700 dark:text-white">País</label>
                                 <input type="text" name="country" id="edit_country"
-                                    class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200">
+                                    class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-300">
                             </div>
                             
                             <div class="space-y-2">
-                                <label for="edit_role" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Rol*</label>
+                                <label for="edit_role" class="block text-sm font-medium text-gray-700 dark:text-white">Rol*</label>
                                 <select name="role" id="edit_role" required
-                                        class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200">
+                                        class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 text-gray-900 dark:text-white">
                                     <option value="user">Usuario</option>
                                     <option value="admin">Administrador</option>
                                 </select>
                             </div>
                             
                             <div class="space-y-2 md:col-span-2">
-                                <label for="edit_password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Contraseña</label>
+                                <label for="edit_password" class="block text-sm font-medium text-gray-700 dark:text-white">Contraseña</label>
                                 <input type="password" name="password" id="edit_password" placeholder="Dejar en blanco para no cambiar"
-                                    class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200">
+                                    class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-300">
                             </div>
                         </div>
 
                         <div class="space-y-2">
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Avatar</label>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-white">Avatar</label>
                             <div id="currentPhoto" class="mb-3 flex flex-col items-center">
                                 <img src="" alt="Foto actual" class="w-24 h-24 rounded-full object-cover shadow hidden" id="current-photo-img"/>
                                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Imagen actual</p>

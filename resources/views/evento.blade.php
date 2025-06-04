@@ -143,9 +143,9 @@
                             <p class="text-sm text-gray-500">{{ $evento->precio }} €</p>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <button @click="if (cantidad > 1) cantidad--" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-xl">−</button>
+                            <button @click="if (cantidad > 1) cantidad--" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-xl dark:text-black">−</button>
                             <span class="w-8 text-center" x-text="cantidad"></span>
-                            <button @click="cantidad++" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-xl">+</button>
+                            <button @click="cantidad++" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-xl text-black dark:text-black">+</button>
                         </div>
                     </div>
                     <div class="flex justify-between mt-4 text-sm">
@@ -158,13 +158,13 @@
                 {{-- Paso 2 --}}
                 <div x-show="paso === 2" x-transition>
                     <h2 class="text-xl font-semibold mb-4">Detalles del Comprador</h2>
-                    <input type="text" x-model="nombre" @blur="validarCampo('nombre')" placeholder="Nombre completo" class="w-full p-3 mb-1 border rounded-lg" />
+                    <input type="text" x-model="nombre" @blur="validarCampo('nombre')" placeholder="Nombre completo" class="w-full p-3 mb-1 border rounded-lg dark:bg-gray-700 dark:text-white" />
                     <template x-if="errores.nombre"><p class="text-red-600 text-sm mb-2" x-text="errores.nombre"></p></template>
 
-                    <input type="email" x-model="correo" @blur="validarCampo('correo')" placeholder="Correo electrónico" class="w-full p-3 mb-1 border rounded-lg" />
+                    <input type="email" x-model="correo" @blur="validarCampo('correo')" placeholder="Correo electrónico" class="w-full p-3 mb-1 border rounded-lg dark:bg-gray-700 dark:text-white" />
                     <template x-if="errores.correo"><p class="text-red-600 text-sm mb-2" x-text="errores.correo"></p></template>
 
-                    <input type="tel" x-model="telefono" @blur="validarCampo('telefono')" placeholder="Teléfono" class="w-full p-3 mb-1 border rounded-lg" />
+                    <input type="tel" x-model="telefono" @blur="validarCampo('telefono')" placeholder="Teléfono" class="w-full p-3 mb-1 border rounded-lg dark:bg-gray-700 dark:text-white" />
                     <template x-if="errores.telefono"><p class="text-red-600 text-sm mb-2" x-text="errores.telefono"></p></template>
 
                     <div class="flex justify-between mt-6">
