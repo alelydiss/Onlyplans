@@ -50,7 +50,7 @@
 </div>
 
 <!-- Modal Crear Categoría -->
-<div id="createModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4 transition-opacity duration-300 opacity-0">
+<div id="createModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4 transition-opacity duration-300 opacity-0">
     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md transform transition-all duration-300 scale-95">
         <div class="p-6 sm:p-8">
             <div class="flex items-center justify-between mb-4">
@@ -228,7 +228,7 @@
         </div>
 
         <!-- Floating Edit Modal -->
-        <div id="editModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4 transition-opacity duration-300 opacity-0">
+        <div id="editModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4 transition-opacity duration-300 opacity-0">
             <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md transform transition-all duration-300 scale-95">
                 <div class="p-6 sm:p-8">
                     <div class="flex items-center justify-between mb-4">
