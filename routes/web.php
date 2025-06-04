@@ -21,6 +21,7 @@ use App\Models\Order;
 use Carbon\Carbon;
 use App\Models\Actividad;
 use App\Events\MessageSent;
+use App\Http\Controllers\Admin\AdminTicketController;
 use Illuminate\Http\Request;
 use App\Models\Message;
 use Illuminate\Support\Facades\DB;
@@ -208,6 +209,9 @@ return view('admin.dashboard', compact(
     Route::post('/categorias', [AdminCategoriaController::class, 'store'])->name('admin.categorias.store');
     Route::put('/categorias/{categoria}', [AdminCategoriaController::class, 'update'])->name('admin.categorias.update');
     Route::delete('/categorias/{categoria}', [AdminCategoriaController::class, 'destroy'])->name('admin.categorias.destroy');
+
+    /* TICKETS */
+    Route::get('/tickets', [AdminTicketController::class, 'index'])->name('admin.tickets');
 
 });
 
