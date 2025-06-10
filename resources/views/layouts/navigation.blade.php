@@ -11,21 +11,23 @@
             </a>
 
             @guest
-                <!-- Botones para invitados con efecto de cristal mejorado -->
-                <div class="flex space-x-3">
+                <!-- Botones para invitados - Versión mejorada responsive -->
+                <div class="flex space-x-2 sm:space-x-3">
                     <a href="{{ route('login') }}"
-                        class="px-4 py-1.5 rounded-full bg-gradient-to-r from-purple-500 to-indigo-600 text-white text-sm font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.03] hover:from-purple-600 hover:to-indigo-700 flex items-center">
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        class="px-3 sm:px-4 py-1.5 rounded-full bg-gradient-to-r from-purple-500 to-indigo-600 text-white text-sm font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.03] hover:from-purple-600 hover:to-indigo-700 flex items-center whitespace-nowrap">
+                        <svg class="w-4 h-4 mr-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
                         </svg>
-                        Iniciar sesión
+                        <span class="hidden sm:inline">Iniciar sesión</span>
+                        <span class="sm:hidden">Login</span>
                     </a>
                     <a href="{{ route('register') }}"
-                        class="px-4 py-1.5 rounded-full border border-purple-400/50 text-purple-600 dark:text-purple-300 text-sm font-medium hover:bg-purple-500/10 transition-all duration-300 hover:border-purple-500/80 flex items-center">
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        class="px-3 sm:px-4 py-1.5 rounded-full border border-purple-400/50 text-purple-600 dark:text-purple-300 text-sm font-medium hover:bg-purple-500/10 transition-all duration-300 hover:border-purple-500/80 flex items-center whitespace-nowrap">
+                        <svg class="w-4 h-4 mr-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
                         </svg>
-                        Registrarse
+                        <span class="hidden sm:inline">Registrarse</span>
+                        <span class="sm:hidden">Registro</span>
                     </a>
                 </div>
             @else
@@ -154,7 +156,7 @@
                             <span class="relative z-10 flex items-center text-sm font-medium transition-all duration-300
                                 {{ request()->routeIs('eventosPersonalizados') ? 'text-purple-500 dark:text-purple-400' : 'text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white' }}">
                                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                                 </svg>
                                 Planes
                             </span>

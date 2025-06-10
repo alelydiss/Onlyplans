@@ -39,90 +39,107 @@
             </div>
         @endif
 
-        <!-- Botón Nueva Categoría -->
-<div class="flex justify-end mb-6">
-    <button onclick="openCreateModal()" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-        <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-        </svg>
-        Nueva Categoría
-    </button>
-</div>
-
-<!-- Modal Crear Categoría -->
-<div id="createModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4 transition-opacity duration-300 opacity-0">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md transform transition-all duration-300 scale-95">
-        <div class="p-6 sm:p-8">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-xl font-bold text-gray-800 dark:text-white">Nueva Categoría</h3>
-                <button onclick="closeCreateModal()" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 transition-colors duration-200">
-                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
-            </div>
-            <form action="{{ route('admin.categorias.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
-                @csrf
-                <div class="space-y-2">
-                    <label for="nombre" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombre de la categoría</label>
-                    <div class="relative">
-                        <input type="text" name="nombre" id="nombre" value="{{ old('nombre') }}" required
-                               class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 placeholder-gray-400 dark:placeholder-gray-500 text-gray-900 dark:text-white">
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                            <svg class="h-5 w-5 text-gray-400 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                            </svg>
-                        </div>
-                    </div>
-                    @error('nombre')
-                        <p class="mt-1 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
-                    @enderror
-                </div>
-                <div class="space-y-2">
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Imagen de categoría</label>
-                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-xl hover:border-indigo-400 dark:hover:border-indigo-500 transition-colors duration-200" id="dropzone">
-                        <div class="space-y-1 text-center" id="upload-container">
-                            <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                            <div class="flex text-sm text-gray-600 dark:text-gray-400">
-                                <label for="foto" class="relative cursor-pointer bg-white dark:bg-gray-800 rounded-md font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                    <span>Subir archivo</span>
-                                    <input id="foto" name="foto" type="file" class="sr-only" accept="image/*">
-                                </label>
-                                <p class="pl-1">o arrastrar y soltar</p>
-                            </div>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG, GIF hasta 5MB</p>
-                        </div>
-                        <div id="preview-container" class="hidden w-full">
-                            <div class="relative">
-                                <img id="image-preview" class="max-h-48 mx-auto rounded-lg shadow-sm" src="" alt="Vista previa de la imagen">
-                                <button type="button" id="remove-image" class="absolute top-2 right-2 bg-gray-800/50 text-white rounded-full p-1 hover:bg-gray-700/70 transition">
-                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                            <p id="file-name" class="mt-2 text-sm text-gray-500 dark:text-gray-400 text-center"></p>
-                        </div>
-                    </div>
-                    @error('foto')
-                        <p class="mt-1 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
-                    @enderror
-                </div>
-                <div class="pt-2">
-                    <button type="submit" class="w-full flex justify-center items-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-medium rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5">
-                        <svg class="w-5 h-5 mr-2 -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+        <!-- Botones de Acción -->
+        <div class="flex justify-between mb-6">
+            <div class="flex space-x-2">
+                <!-- Botón para cambiar vista -->
+                <div class="inline-flex rounded-md shadow-sm" role="group">
+                    <button id="tableViewBtn" onclick="toggleView('table')" type="button" class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-l-lg bg-indigo-600 text-white hover:bg-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-500 transition-colors duration-200">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                         </svg>
-                        Crear Categoría
+                        Tabla
+                    </button>
+                    <button id="cardsViewBtn" onclick="toggleView('cards')" type="button" class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-r-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 focus:z-10 focus:ring-2 focus:ring-indigo-500 border border-gray-200 dark:border-gray-600 transition-colors duration-200">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+                        </svg>
+                        Cards
                     </button>
                 </div>
-            </form>
+            </div>
+            
+            <button onclick="openCreateModal()" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+                Nueva Categoría
+            </button>
         </div>
-    </div>
-</div>
 
+        <!-- Modal Crear Categoría -->
+        <div id="createModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4 transition-opacity duration-300 opacity-0">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md transform transition-all duration-300 scale-95">
+                <div class="p-6 sm:p-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-800 dark:text-white">Nueva Categoría</h3>
+                        <button onclick="closeCreateModal()" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 transition-colors duration-200">
+                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <form action="{{ route('admin.categorias.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                        @csrf
+                        <div class="space-y-2">
+                            <label for="nombre" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombre de la categoría</label>
+                            <div class="relative">
+                                <input type="text" name="nombre" id="nombre" value="{{ old('nombre') }}" required
+                                       class="block w-full px-4 py-3 bg-white/50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 placeholder-gray-400 dark:placeholder-gray-500 text-gray-900 dark:text-white">
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                    <svg class="h-5 w-5 text-gray-400 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            @error('nombre')
+                                <p class="mt-1 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Imagen de categoría</label>
+                            <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-xl hover:border-indigo-400 dark:hover:border-indigo-500 transition-colors duration-200" id="dropzone">
+                                <div class="space-y-1 text-center" id="upload-container">
+                                    <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    <div class="flex text-sm text-gray-600 dark:text-gray-400">
+                                        <label for="foto" class="relative cursor-pointer bg-white dark:bg-gray-800 rounded-md font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                            <span>Subir archivo</span>
+                                            <input id="foto" name="foto" type="file" class="sr-only" accept="image/*">
+                                        </label>
+                                        <p class="pl-1">o arrastrar y soltar</p>
+                                    </div>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG, GIF hasta 5MB</p>
+                                </div>
+                                <div id="preview-container" class="hidden w-full">
+                                    <div class="relative">
+                                        <img id="image-preview" class="max-h-48 mx-auto rounded-lg shadow-sm" src="" alt="Vista previa de la imagen">
+                                        <button type="button" id="remove-image" class="absolute top-2 right-2 bg-gray-800/50 text-white rounded-full p-1 hover:bg-gray-700/70 transition">
+                                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <p id="file-name" class="mt-2 text-sm text-gray-500 dark:text-gray-400 text-center"></p>
+                                </div>
+                            </div>
+                            @error('foto')
+                                <p class="mt-1 text-sm text-rose-600 dark:text-rose-400">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div class="pt-2">
+                            <button type="submit" class="w-full flex justify-center items-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-medium rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5">
+                                <svg class="w-5 h-5 mr-2 -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                </svg>
+                                Crear Categoría
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
         <!-- Floating Categories List -->
         <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg rounded-2xl shadow-xl border border-white/30 dark:border-gray-700/50 overflow-hidden hover:shadow-2xl transition-shadow duration-500">
@@ -165,7 +182,8 @@
                         </div>
                     </div>
                 @else
-                    <div class="overflow-x-auto">
+                    <!-- Vista de Tabla (por defecto) -->
+                    <div id="tableView" class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                             <thead class="bg-gray-50/50 dark:bg-gray-700/30">
                                 <tr>
@@ -222,6 +240,55 @@
                                 @endforeach
                             </tbody>
                         </table>
+                    </div>
+
+                    <!-- Vista de Cards (oculta por defecto) -->
+                    <div id="cardsView" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        @foreach ($categorias as $categoria)
+                            <div class="category-card group relative bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl shadow-md hover:shadow-lg border border-gray-200/50 dark:border-gray-700/50 overflow-hidden transition-all duration-300 hover:-translate-y-1" data-name="{{ strtolower($categoria->nombre) }}">
+                                <div class="p-5">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <div class="h-12 w-12 rounded-lg bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/20 dark:to-purple-900/20 flex items-center justify-center shadow-sm">
+                                            @if($categoria->foto)
+                                                <img class="h-12 w-12 rounded-lg object-cover" src="{{ asset($categoria->foto) }}" alt="{{ $categoria->nombre }}">
+                                            @else
+                                                <svg class="h-6 w-6 text-indigo-500 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                                </svg>
+                                            @endif
+                                        </div>
+                                        <div class="flex space-x-2">
+                                            <button 
+                                                onclick="openEditModal({{ $categoria->id }}, '{{ addslashes($categoria->nombre) }}', '{{ $categoria->foto ? asset($categoria->foto) : '' }}')"
+                                                class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300 p-1.5 rounded-full hover:bg-indigo-50 dark:hover:bg-gray-700 transition-colors duration-200"
+                                                title="Editar"
+                                            >
+                                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                </svg>
+                                            </button>
+                                            <form action="{{ route('admin.categorias.destroy', $categoria) }}" method="POST" onsubmit="return confirm('¿Estás seguro de eliminar esta categoría?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-rose-600 dark:text-rose-400 hover:text-rose-900 dark:hover:text-rose-300 p-1.5 rounded-full hover:bg-rose-50 dark:hover:bg-gray-700 transition-colors duration-200" title="Eliminar">
+                                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-1">{{ $categoria->nombre }}</h3>
+                                    <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                                        <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        </svg>
+                                        <span>Creado: {{ $categoria->created_at->format('d/m/Y') }}</span>
+                                    </div>
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-400 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            </div>
+                        @endforeach
                     </div>
                 @endif
             </div>
@@ -302,6 +369,44 @@
 </div>
 
 <script>
+    // Función para cambiar entre vistas
+    function toggleView(viewType) {
+        const tableView = document.getElementById('tableView');
+        const cardsView = document.getElementById('cardsView');
+        const tableViewBtn = document.getElementById('tableViewBtn');
+        const cardsViewBtn = document.getElementById('cardsViewBtn');
+        
+        if (viewType === 'table') {
+            tableView.classList.remove('hidden');
+            cardsView.classList.add('hidden');
+            tableViewBtn.classList.remove('bg-white', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+            tableViewBtn.classList.add('bg-indigo-600', 'text-white');
+            cardsViewBtn.classList.remove('bg-indigo-600', 'text-white');
+            cardsViewBtn.classList.add('bg-white', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+            
+            // Guardar preferencia en localStorage
+            localStorage.setItem('categoriasViewPreference', 'table');
+        } else {
+            tableView.classList.add('hidden');
+            cardsView.classList.remove('hidden');
+            tableViewBtn.classList.remove('bg-indigo-600', 'text-white');
+            tableViewBtn.classList.add('bg-white', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+            cardsViewBtn.classList.remove('bg-white', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+            cardsViewBtn.classList.add('bg-indigo-600', 'text-white');
+            
+            // Guardar preferencia en localStorage
+            localStorage.setItem('categoriasViewPreference', 'cards');
+        }
+    }
+
+    // Cargar preferencia de vista al cargar la página
+    document.addEventListener('DOMContentLoaded', function() {
+        const savedView = localStorage.getItem('categoriasViewPreference');
+        if (savedView === 'cards') {
+            toggleView('cards');
+        }
+    });
+
     // Utilidad para previsualizar imagen
     function previewImage(inputId, previewId, containerId, uploadId, fileNameId) {
         const input = document.getElementById(inputId);
@@ -380,7 +485,8 @@
     // Buscador
     document.getElementById('search-input').addEventListener('input', function(e) {
         const searchTerm = e.target.value.toLowerCase();
-        document.querySelectorAll('.category-row').forEach(row => {
+        // Buscar en ambas vistas
+        document.querySelectorAll('.category-row, .category-card').forEach(row => {
             row.classList.toggle('hidden', !row.getAttribute('data-name').includes(searchTerm));
         });
     });

@@ -9,14 +9,14 @@
 
       <!-- Buscador -->
       <div class="mt-8 flex justify-center">
-            <form method="GET" action="{{ route('eventos') }}" class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-xl flex flex-col sm:flex-row gap-4 w-full max-w-5xl">
-                <input type="text" name="q" value="{{ request('q') }}" placeholder="Buscar evento, ciudad o categoría"
-                    class="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500" />
-                <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg transition font-medium shadow">
-                    Buscar
-                </button>
-            </form>
-        </div>
+        <form method="GET" action="{{ route('eventos') }}" class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-xl flex flex-col sm:flex-row gap-4 w-[90vw] max-w-5xl sm:w-full">
+          <input type="text" name="q" value="{{ request('q') }}" placeholder="Buscar evento, ciudad o categoría"
+            class="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500" />
+          <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg transition font-medium shadow">
+            Buscar
+          </button>
+        </form>
+      </div>
     </div>
 
     <!-- Categorías -->

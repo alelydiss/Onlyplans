@@ -60,6 +60,26 @@
             </template>
         </div>
 
+        <div class="flex justify-between mb-6">
+            <div class="flex space-x-2">
+                <!-- Botón para cambiar vista -->
+                <div class="inline-flex rounded-md shadow-sm" role="group">
+                    <button id="tableViewBtn" onclick="toggleView('table')" type="button" class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-l-lg bg-indigo-600 text-white hover:bg-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-500 transition-colors duration-200">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                        </svg>
+                        Tabla
+                    </button>
+                    <button id="cardsViewBtn" onclick="toggleView('cards')" type="button" class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-r-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 focus:z-10 focus:ring-2 focus:ring-indigo-500 border border-gray-200 dark:border-gray-600 transition-colors duration-200">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+                        </svg>
+                        Cards
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <!-- Floating Tickets List -->
         <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg rounded-2xl shadow-xl border border-white/30 dark:border-gray-700/50 overflow-hidden hover:shadow-2xl transition-shadow duration-500">
             <div class="p-6 sm:p-8">
@@ -88,7 +108,7 @@
                     </div>
                 </div>
 
-                <div class="overflow-x-auto">
+                <div id="tableView" class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <thead class="bg-gray-50/50 dark:bg-gray-700/30">
                             <tr>
@@ -127,12 +147,73 @@
                         </tbody>
                     </table>
                 </div>
+
+                <div id="cardsView" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <template x-for="ticket in ticketsFiltrados()" :key="ticket.id">
+                        <div class="p-5 bg-white dark:bg-gray-800 rounded-xl shadow border border-gray-200 dark:border-gray-700 mb-4">
+                            <div class="flex items-center mb-2">
+                                <span class="text-indigo-600 dark:text-indigo-400 font-bold text-lg mr-2" x-text="ticket.id"></span>
+                                <span class="text-gray-700 dark:text-white font-semibold" x-text="ticket.nombre"></span>
+                            </div>
+                            <div class="text-sm text-gray-500 dark:text-gray-300 mb-1">
+                                <span class="font-medium">Correo:</span> <span x-text="ticket.correo"></span>
+                            </div>
+                            <div class="text-sm text-gray-500 dark:text-gray-300 mb-1">
+                                <span class="font-medium">Cantidad:</span> <span x-text="ticket.cantidad"></span>
+                            </div>
+                            <div class="text-sm text-gray-500 dark:text-gray-300">
+                                <span class="font-medium">Asientos:</span>
+                                <span x-text="ticket.asientos.join ? ticket.asientos.join(', ') : ticket.asientos"></span>
+                            </div>
+                        </div>
+                    </template>
+                    <template x-if="ticketsFiltrados().length === 0">
+                        <div class="col-span-full text-center text-sm text-gray-500 dark:text-gray-400 italic py-8">
+                            No se encontraron tickets
+                        </div>
+                    </template>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
 <script>
+    // Función para cambiar entre vistas
+    function toggleView(viewType) {
+        const tableView = document.getElementById('tableView');
+        const cardsView = document.getElementById('cardsView');
+        const tableViewBtn = document.getElementById('tableViewBtn');
+        const cardsViewBtn = document.getElementById('cardsViewBtn');
+        
+        if (viewType === 'table') {
+            tableView.classList.remove('hidden');
+            cardsView.classList.add('hidden');
+            tableViewBtn.classList.remove('bg-white', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+            tableViewBtn.classList.add('bg-indigo-600', 'text-white');
+            cardsViewBtn.classList.remove('bg-indigo-600', 'text-white');
+            cardsViewBtn.classList.add('bg-white', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+            
+            // Guardar preferencia en localStorage
+            localStorage.setItem('categoriasViewPreference', 'table');
+        } else {
+            tableView.classList.add('hidden');
+            cardsView.classList.remove('hidden');
+            tableViewBtn.classList.remove('bg-indigo-600', 'text-white');
+            tableViewBtn.classList.add('bg-white', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+            cardsViewBtn.classList.remove('bg-white', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+            cardsViewBtn.classList.add('bg-indigo-600', 'text-white');
+            
+            // Guardar preferencia en localStorage
+            localStorage.setItem('categoriasViewPreference', 'cards');
+        }
+    }
+
+    // Cargar preferencia de vista al cargar la página
+    document.addEventListener('DOMContentLoaded', function() {
+        const savedView = localStorage.getItem('categoriasViewPreference');
+        if (savedView === 'cards') {
+            toggleView('cards');
+        }
+    });
 function ticketsApp() {
     return {
         busqueda: '',

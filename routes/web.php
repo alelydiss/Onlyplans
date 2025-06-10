@@ -30,7 +30,7 @@ use Illuminate\Support\Facades\DB;
 Route::get('/', function () {
     // Obtener las categorías directamente en la ruta
     $categorias = Categoria::all();
-     $eventos = Event::latest()->take(6)->get();
+    $eventos = Event::where('revisado', 1)->latest()->take(6)->get();
     return view('welcome', compact('categorias', 'eventos'));
 })->name('welcome');
 
