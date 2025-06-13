@@ -22,8 +22,138 @@
     </div>
 
     <div class="max-w-7xl mx-auto py-12 px-4 flex flex-col lg:flex-row gap-8">
-        <!-- Filtros -->
-        <aside class="w-full lg:w-1/5">
+        <!-- Filtros - Versión móvil (acordeón) -->
+        <div class="lg:hidden w-full">
+            <div x-data="{ open: false, priceOpen: false, dateOpen: false, categoryOpen: false }" class="mb-6">
+                <button 
+                    @click="open = !open"
+                    class="w-full flex justify-between items-center bg-white dark:bg-gray-900 p-4 rounded-lg shadow border border-gray-200 dark:border-gray-800"
+                >
+                    <span class="font-medium text-gray-900 dark:text-white">Filtros</span>
+                    <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        class="h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform duration-200" 
+                        :class="{ 'rotate-180': open }"
+                        viewBox="0 0 20 20" 
+                        fill="currentColor"
+                    >
+                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+                
+                <div x-show="open" x-collapse class="mt-2 bg-white dark:bg-gray-900 p-4 rounded-lg shadow border border-gray-200 dark:border-gray-800">
+                    <form method="GET" action="{{ route('eventos') }}">
+                        <!-- Precio -->
+                        <div class="mb-6">
+                            <h3 
+                                @click="priceOpen = !priceOpen"
+                                class="text-sm font-medium text-gray-800 dark:text-gray-300 mb-2 flex justify-between items-center cursor-pointer"
+                            >
+                                Precio
+                                <svg 
+                                    xmlns="http://www.w3.org/2000/svg" 
+                                    class="h-4 w-4 text-gray-500 dark:text-gray-400 transition-transform duration-200" 
+                                    :class="{ 'rotate-180': priceOpen }"
+                                    viewBox="0 0 20 20" 
+                                    fill="currentColor"
+                                >
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </h3>
+                            <div x-show="priceOpen" x-collapse class="text-sm text-gray-700 dark:text-gray-400 space-y-1 pl-2">
+                                <div>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" name="precio[]" value="gratis" {{ in_array('gratis', request('precio', [])) ? 'checked' : '' }} class="mr-2" />
+                                        Gratis
+                                    </label>
+                                </div>
+                                <div>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" name="precio[]" value="pago" {{ in_array('pago', request('precio', [])) ? 'checked' : '' }} class="mr-2" />
+                                        De pago
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Fecha -->
+                        <div class="mb-6">
+                            <h3 
+                                @click="dateOpen = !dateOpen"
+                                class="text-sm font-medium text-gray-800 dark:text-gray-300 mb-2 flex justify-between items-center cursor-pointer"
+                            >
+                                Fecha
+                                <svg 
+                                    xmlns="http://www.w3.org/2000/svg" 
+                                    class="h-4 w-4 text-gray-500 dark:text-gray-400 transition-transform duration-200" 
+                                    :class="{ 'rotate-180': dateOpen }"
+                                    viewBox="0 0 20 20" 
+                                    fill="currentColor"
+                                >
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </h3>
+                            <div x-show="dateOpen" x-collapse class="text-sm text-gray-700 dark:text-gray-400 space-y-1 pl-2">
+                                <div>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" name="fecha[]" value="hoy" {{ in_array('hoy', request('fecha', [])) ? 'checked' : '' }} class="mr-2" />
+                                        Hoy
+                                    </label>
+                                </div>
+                                <div>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" name="fecha[]" value="semana" {{ in_array('semana', request('fecha', [])) ? 'checked' : '' }} class="mr-2" />
+                                        Esta semana
+                                    </label>
+                                </div>
+                                <div>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" name="fecha[]" value="mes" {{ in_array('mes', request('fecha', [])) ? 'checked' : '' }} class="mr-2" />
+                                        Este mes
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Categorías -->
+                        <div class="mb-6">
+                            <h3 
+                                @click="categoryOpen = !categoryOpen"
+                                class="text-sm font-medium text-gray-800 dark:text-gray-300 mb-2 flex justify-between items-center cursor-pointer"
+                            >
+                                Categoría
+                                <svg 
+                                    xmlns="http://www.w3.org/2000/svg" 
+                                    class="h-4 w-4 text-gray-500 dark:text-gray-400 transition-transform duration-200" 
+                                    :class="{ 'rotate-180': categoryOpen }"
+                                    viewBox="0 0 20 20" 
+                                    fill="currentColor"
+                                >
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </h3>
+                            <div x-show="categoryOpen" x-collapse class="text-sm text-gray-700 dark:text-gray-400 space-y-1 pl-2">
+                                @foreach($categorias as $categoria)
+                                    <div>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" name="categorias[]" value="{{ $categoria->id }}" {{ in_array((string) $categoria->id, (array) request('categorias')) ? 'checked' : '' }} class="mr-2" />
+                                            {{ $categoria->nombre }}
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg">
+                            Aplicar filtros
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtros - Versión escritorio -->
+        <aside class="hidden lg:block w-full lg:w-1/5">
             <form method="GET" action="{{ route('eventos') }}">
                 <div class="bg-white dark:bg-gray-900 p-6 rounded-xl shadow space-y-6">
                     <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Filtros</h2>
@@ -33,13 +163,13 @@
                         <h3 class="text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Precio</h3>
                         <ul class="text-sm text-gray-700 dark:text-gray-400 space-y-1">
                             <li>
-                                <label>
+                                <label class="flex items-center">
                                     <input type="checkbox" name="precio[]" value="gratis" {{ in_array('gratis', request('precio', [])) ? 'checked' : '' }} class="mr-2" />
                                     Gratis
                                 </label>
                             </li>
                             <li>
-                                <label>
+                                <label class="flex items-center">
                                     <input type="checkbox" name="precio[]" value="pago" {{ in_array('pago', request('precio', [])) ? 'checked' : '' }} class="mr-2" />
                                     De pago
                                 </label>
@@ -52,19 +182,19 @@
                         <h3 class="text-sm font-medium text-gray-800 dark:text-gray-300 mb-2">Fecha</h3>
                         <ul class="text-sm text-gray-700 dark:text-gray-400 space-y-1">
                             <li>
-                                <label>
+                                <label class="flex items-center">
                                     <input type="checkbox" name="fecha[]" value="hoy" {{ in_array('hoy', request('fecha', [])) ? 'checked' : '' }} class="mr-2" />
                                     Hoy
                                 </label>
                             </li>
                             <li>
-                                <label>
+                                <label class="flex items-center">
                                     <input type="checkbox" name="fecha[]" value="semana" {{ in_array('semana', request('fecha', [])) ? 'checked' : '' }} class="mr-2" />
                                     Esta semana
                                 </label>
                             </li>
                             <li>
-                                <label>
+                                <label class="flex items-center">
                                     <input type="checkbox" name="fecha[]" value="mes" {{ in_array('mes', request('fecha', [])) ? 'checked' : '' }} class="mr-2" />
                                     Este mes
                                 </label>
@@ -78,8 +208,8 @@
                         <ul class="text-sm text-gray-700 dark:text-gray-400 space-y-1">
                             @foreach($categorias as $categoria)
                                 <li>
-                                    <label>
-                                        <input type="checkbox" name="categorias[]" value="{{ $categoria->id }}" {{ in_array((string) $categoria->id, (array) request('categorias')) ? 'checked' : '' }} />
+                                    <label class="flex items-center">
+                                        <input type="checkbox" name="categorias[]" value="{{ $categoria->id }}" {{ in_array((string) $categoria->id, (array) request('categorias')) ? 'checked' : '' }} class="mr-2" />
                                         {{ $categoria->nombre }}
                                     </label>
                                 </li>
@@ -178,4 +308,18 @@
         </main>
     </div>
 </div>
+
+<!-- AlpineJS para los acordeones -->
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+<script>
+    // Inicializar el estado de los acordeones
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('accordion', () => ({
+            open: false,
+            priceOpen: false,
+            dateOpen: false,
+            categoryOpen: false
+        }));
+    });
+</script>
 @endsection

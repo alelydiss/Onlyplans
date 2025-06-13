@@ -21,11 +21,27 @@
         @yield('content')
         
       </main>
-      <button id="toggle-dark"
-        class="fixed bottom-4 right-4 w-14 h-14 bg-white dark:bg-gray-900 text-gray-700 dark:text-yellow-300 border border-gray-300 dark:border-gray-700 rounded-full shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 ease-in-out flex items-center justify-center text-2xl focus:outline-none focus:ring-4 focus:ring-indigo-300 dark:focus:ring-indigo-700"
-        aria-label="Cambiar tema">
-        <span id="theme-icon" class="transition-transform duration-300 ease-in-out">🌙</span>
-      </button>
+      
+
+      <div class="fixed bottom-4 right-4 flex flex-col space-y-2">
+        <button
+          onclick="window.location.href='{{ url('ayuda') }}'"
+          class="w-14 h-14 bg-white dark:bg-gray-900 text-gray-700 dark:text-yellow-300 border border-gray-300 dark:border-gray-700 rounded-full shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 ease-in-out flex items-center justify-center text-2xl focus:outline-none focus:ring-4 focus:ring-indigo-300 dark:focus:ring-indigo-700"
+          aria-label="Redirigir">
+          <span class="transition-transform duration-300 ease-in-out">
+             <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
+          <line x1="12" y1="16" x2="12" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="12" cy="8" r="1" fill="currentColor"/>
+        </svg>
+          </span>
+        </button>
+        <button id="toggle-dark"
+          class="w-14 h-14 bg-white dark:bg-gray-900 text-gray-700 dark:text-yellow-300 border border-gray-300 dark:border-gray-700 rounded-full shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 ease-in-out flex items-center justify-center text-2xl focus:outline-none focus:ring-4 focus:ring-indigo-300 dark:focus:ring-indigo-700"
+          aria-label="Cambiar tema">
+          <span id="theme-icon" class="transition-transform duration-300 ease-in-out">🌙</span>
+        </button>
+      </div>
       
       <!-- Footer -->
       @if (!request()->routeIs('profile.edit'))

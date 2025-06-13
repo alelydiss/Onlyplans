@@ -93,7 +93,7 @@ class EventController extends Controller
                 }
             }
         }
-        return redirect()->route('mapa')->with('success', 'Evento creado con éxito!');
+        return redirect()->route('mapa')->with('success', 'Tu evento ha sido creado. Cuando sea revisado, será visible aquí.');
     }
 
     public function index(Request $request)

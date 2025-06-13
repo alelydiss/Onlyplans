@@ -58,6 +58,9 @@ Route::get('/policy', function () {
     return view('policy');
 })->name('policy');
 
+Route::get('/ayuda', function () {
+    return view('ayuda');
+})->name('ayuda');
 
 Route::get('/intereses', function () {
     $categorias = Categoria::all();
